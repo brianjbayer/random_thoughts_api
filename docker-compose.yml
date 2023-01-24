@@ -1,0 +1,5 @@
+version: '3.8'
+services:
+  app:
+    image: brianjbayer/random_thoughts_api:${APP_TAG:-latest}
+    container_name: ${APP_HOSTNAME:-app}

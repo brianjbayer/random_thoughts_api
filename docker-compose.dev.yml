@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: md5
+      POSTGRES_DB: random_thoughts_api
+      POSTGRES_USER: random_thoughts_api
+      POSTGRES_PASSWORD: banana
+    # By default Postgres runs on port 5432,
+    # map this to localhost port 5432 for access
+    ports:
+    - "5432:5432"
+    # Expose 5432 to other containers in this network
+    expose:
+    - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    image: "${APP_IMAGE:-brianjbayer/random_thoughts_api-dev:latest}"
+    volumes:
+      - ${APP_SRC:-.}:/app
+    environment:
+      DATABASE_URL: postgresql://random_thoughts_api:banana@db:5432/random_thoughts_api
+    ports:
+    - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy

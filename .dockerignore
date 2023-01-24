@@ -1,0 +1,38 @@
+# Standard Rails Docker Ignore File
+
+.git
+.gitignore
+
+### Rails ###
+*.rbc
+capybara-*.html
+.rspec
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/public/system
+/coverage/
+/spec/tmp
+rerun.txt
+pickle-email-*.html
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Keep secrets from being added to the image
+config/initializers/secret_token.rb
+config/master.key
+
+# dotenv
+# Keep environment variable values from being added to image
+.env
+
+## Environment normalization:
+/.bundle
+/vendor/bundle
+
+# Ignore uploaded files in development
+/storage/*
+!/storage/.keep
