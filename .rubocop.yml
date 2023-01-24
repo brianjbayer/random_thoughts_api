@@ -1,0 +1,10 @@
+inherit_from: .rubocop_todo.yml
+
+# Extensions
+require:
+  - rubocop-rails
+  - rubocop-rspec
+
+# Enable any new cops
+AllCops:
+  NewCops: enable
