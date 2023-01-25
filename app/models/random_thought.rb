@@ -1,0 +1,2 @@
+class RandomThought < ApplicationRecord
+end

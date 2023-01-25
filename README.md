@@ -17,6 +17,12 @@ mounted into the container.
 
 ---
 
+## API Endpoints
+This API contains the following endpoints...
+
+* **Show** random thought {id}: `get /random_thoughts/{id}`
+  (e.g. http://localhost:3000/random_thoughts/1)
+
 ## Development
 This project can be developed using the supplied basic, container-based
 development environment which includes `vim`, `git`, `curl`, and `psql`.
@@ -72,6 +78,71 @@ visibility and access.
   be accessed on the host machine with the database connection string
   `postgresql://random_thoughts_api:banana@localhost:5432/random_thoughts_api`
   (e.g. `psql postgresql://random_thoughts_api:banana@localhost:5432/random_thoughts_api`)
+
+---
+
+## Operating
+
+### Database
+This project uses a Rails-supported PostgreSQL database with
+the same configuration in all environments.
+
+Use the `DATABASE_URL`environment variable set to a standard
+database connection string to specify the database.
+
+It is recommended to use the official
+[PostgreSQL Docker image](https://hub.docker.com/_/postgres)
+without a persistent volume (data) for the `development`
+and `test` environments.
+
+#### Seed Data
+
+There is one sample record which can be added repeatedly.
+
+Run the following command to add a seed record...
+```
+bundle exec bin/rails db:seed
+```
+
+### Testing
+If you are using the same database for `development` and `test`,
+run the following command first to set the database for the
+`test` environment...
+```
+bundle exec bin/rails db:environment:set RAILS_ENV=test
+```
+
+Run the following command to run the tests...
+```
+bundle exec rspec
+```
+
+> :warning: If you are using the same database for `development`
+> and `test`, these steps can destroy any data in your
+> `development` database.
+
+### Running the Application
+Run the following command to run the Rails server...
+```
+bundle exec bin/rails server -p 3000 -b 0.0.0.0
+```
+
+---
+
+## Swagger
+
+### To Generate the Swagger File
+
+Run the following command to generate the Swagger file for the
+application...
+```
+bundle exec bin/rails rswag:specs:swaggerize
+```
+
+### Swagger UI
+
+By default the Swagger UI is located at http://localhost:3000/api-docs/
+
 
 ---
 

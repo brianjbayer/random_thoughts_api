@@ -1,0 +1,45 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/random_thoughts/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show random_thought
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/random_thought"
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
+- url: http://localhost:3000
+  description: Local development
+components:
+  schemas:
+    random_thought:
+      type: object
+      properties:
+        id:
+          type: integer
+        thought:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - thought
+      - name
