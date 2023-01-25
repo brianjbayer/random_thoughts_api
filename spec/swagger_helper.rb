@@ -30,8 +30,25 @@ RSpec.configure do |config|
               default: 'www.example.com'
             }
           }
+        },
+        {
+          url: 'http://localhost:3000',
+          description: 'Local development'
         }
-      ]
+      ],
+      components: {
+        schemas: {
+          random_thought: {
+            type: 'object',
+            properties: {
+              id: { type: 'integer' },
+              thought: { type: 'string' },
+              name: { type: 'string' }
+            },
+            required: %w[id thought name]
+          }
+        }
+      }
     }
   }
 

@@ -54,6 +54,7 @@ end
    # Development and Test add RSpec, FactoryBot, and Swagger Specs
    group :development, :test do
      gem 'factory_bot_rails'
+     gem 'faker'
      gem 'rspec-rails'
      # Swagger specs
      gem 'rswag-specs'
