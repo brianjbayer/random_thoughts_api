@@ -1,0 +1,56 @@
+name: On PR Build Push Vet
+
+on:
+  pull_request:
+    branches:
+      - main
+
+# NOTE: Currently only supports Development Environment
+
+# FYI...
+#  Raw Branch Name: ${{ github.head_ref }}
+#  <commit-sha>: ${{ github.event.pull_request.head.sha }}
+
+# Produced images...
+#  1. (Always) Dev Environment Image: <owner/repository>_<normalized-branch>_dev:<commit-sha>
+
+jobs:
+  # Normalize the branch for image name
+  pr-norm-branch:
+    uses: brianjbayer/actions-image-cicd/.github/workflows/normalize_for_image_name.yml@main
+    with:
+      raw_name: ${{ github.head_ref }}
+
+  # Build and Push Images
+  build-and-push-branch-devenv:
+    needs: [pr-norm-branch]
+    uses: brianjbayer/actions-image-cicd/.github/workflows/build_push_image.yml@main
+    with:
+      image: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
+      # buildopts: --target devenv
+    secrets:
+      registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
+      registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+  # Vetting
+  vet-unit-tests:
+    needs: [pr-norm-branch, build-and-push-branch-devenv]
+    runs-on: ubuntu-latest
+    env:
+      DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: dockercomposerun tests on development environment
+        run: "BROWSERTESTS_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun ./script/run tests"
+
+  vet-swagger-file-currency:
+    needs: [pr-norm-branch, build-and-push-branch-devenv]
+    runs-on: ubuntu-latest
+    env:
+      DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: dockercomposerun swaggerize on development environment
+        run: "BROWSERTESTS_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun ./script/run swaggerize"
+      - name: git diff Swagger File(s) to ensure no changes
+        run: git diff --exit-code swagger

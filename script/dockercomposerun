@@ -1,0 +1,81 @@
+#!/bin/sh
+# This script runs the project docker-compose framework.
+#
+# NOTE: Currently, only the development environment is supported
+#
+# - The arguments to this script are passed to the APP service
+#   as command override
+#
+# - Any environment variables set when calling this script are passed
+#   through to the docker-compose framework
+#   (e.g. configuration other than the defaults)
+#
+# ----------------------------------------------------------------------
+
+usage() {
+  echo "Usage: $0 [CMD]"
+}
+
+err_exit() {
+  local err_msg="$1"
+  local err_code=$2
+  echo "${err_msg}  --  Exit:[${err_code}]" 1>&2
+  usage
+  exit $err_code
+}
+
+# Exit script on any errors
+set -e
+
+echo 'DOCKER VERSIONS...'
+docker --version
+docker-compose --version
+echo ''
+
+echo 'DOCKER-COMPOSE COMMAND...'
+docker_compose_command='docker-compose -f docker-compose.yml '
+
+echo "...Using Development Environment with APP_IMAGE:[${APP_IMAGE}]"
+docker_compose_command="${docker_compose_command} -f docker-compose.dev.yml "
+
+echo 'DOCKER-COMPOSE CONFIGURATION...'
+$docker_compose_command config
+echo ''
+
+echo 'DOCKER-COMPOSE PULLING...'
+set +e
+$docker_compose_command pull
+echo '...Allowing pull errors (for local images)'
+set -e
+echo ''
+
+echo 'DOCKER IMAGES...'
+docker images
+echo ''
+
+echo "DOCKER-COMPOSE RUNNING [$@]..."
+# Allow to fail but catch return code
+set +e
+# Specify the --service-ports option to expose app's PORTS 
+# on host machine (by default docker-compose run does not
+# expose host ports)
+$docker_compose_command run --service-ports app "$@"
+run_return_code=$?
+# NOTE return code must be caught before any other command
+set -e
+echo ''
+
+if [ $run_return_code -eq 0 ]; then
+    run_disposition='PASSED'
+else
+    run_disposition='FAILED'
+fi
+echo "...RUN [${run_disposition}] WITH RETURN CODE [${run_return_code}]"
+echo ''
+
+echo 'DOCKER-COMPOSE DOWN...'
+$docker_compose_command down
+echo ''
+
+echo "EXITING WITH ${run_disposition} RUN RETURN CODE ${run_return_code}"
+exit $run_return_code

@@ -55,15 +55,13 @@ the docker-compose framework.
 1. Run the following command to run the containerized development
    environment...
    ```
-   docker-compose -f docker-compose.yml -f docker-compose.dev.yml run --service-ports app
+   ./script/dockercomposerun
    ```
 
-#### To Stop the Containerized Development Environment
-
-1. Run the following command to stop the containerized development
-   environment...
+2. To exit the containerized development environment, run the
+   following command ...
    ```
-   docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
+   exit
    ```
 
 ### Mappings to Host Machine
@@ -114,7 +112,7 @@ bundle exec bin/rails db:environment:set RAILS_ENV=test
 
 Run the following command to run the tests...
 ```
-bundle exec rspec
+./script/run tests
 ```
 
 > :warning: If you are using the same database for `development`
@@ -124,7 +122,12 @@ bundle exec rspec
 ### Running the Application
 Run the following command to run the Rails server...
 ```
-bundle exec bin/rails server -p 3000 -b 0.0.0.0
+./script/run server
+```
+
+or to run the server in detached mode...
+```
+./script/run server -d
 ```
 
 ---
@@ -136,7 +139,7 @@ bundle exec bin/rails server -p 3000 -b 0.0.0.0
 Run the following command to generate the Swagger file for the
 application...
 ```
-bundle exec bin/rails rswag:specs:swaggerize
+./script/run swaggerize
 ```
 
 ### Swagger UI
