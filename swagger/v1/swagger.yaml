@@ -21,6 +21,30 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/random_thought"
+        '404':
+          description: not found
+          content:
+            application/json:
+              examples:
+                not_found:
+                  value:
+                    status: 404
+                    error: not_found
+                    message: Couldn't find RandomThought with 'id'=??
+              schema:
+                "$ref": "#/components/schemas/error"
+        '500':
+          description: internal server error
+          content:
+            application/json:
+              examples:
+                internal_server_error:
+                  value:
+                    status: 500
+                    error: internal_server_error
+                    message: "..."
+              schema:
+                "$ref": "#/components/schemas/error"
 servers:
 - url: https://{defaultHost}
   variables:
@@ -43,3 +67,16 @@ components:
       - id
       - thought
       - name
+    error:
+      type: object
+      properties:
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+      required:
+      - status
+      - error
+      - message

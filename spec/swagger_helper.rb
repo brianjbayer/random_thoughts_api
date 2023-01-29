@@ -46,6 +46,15 @@ RSpec.configure do |config|
               name: { type: 'string' }
             },
             required: %w[id thought name]
+          },
+          error: {
+            type: 'object',
+            properties: {
+              status: { type: 'integer' },
+              error: { type: 'string' },
+              message: { type: 'string' }
+            },
+            required: %w[status error message]
           }
         }
       }
