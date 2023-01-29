@@ -56,6 +56,40 @@ RSpec.describe 'random_thoughts', type: :request do
 
         run_test!
       end
+
+      response(404, 'not found') do
+        let(:id) { 0 }
+        schema '$ref' => '#/components/schemas/error'
+        example 'application/json', :not_found, {
+          status: 404,
+          error: 'not_found',
+          message: "Couldn't find RandomThought with 'id'=??"
+        }
+
+        run_test!
+      end
+
+      # THIS TEST IS SKIPPED
+      # Unable to produce the test conditions for 500
+      response(500, 'internal server error') do
+        let(:id) { create(:random_thought).id }
+        schema '$ref' => '#/components/schemas/error'
+        example 'application/json', :internal_server_error, {
+          status: 500,
+          error: 'internal_server_error',
+          message: '...'
+        }
+
+        before do |example|
+          submit_request(example.metadata)
+        end
+
+        it 'returns a 500 response' do |example|
+          # SKIP !!!
+          skip
+          assert_response_matches_metadata(example.metadata)
+        end
+      end
     end
 
     # patch('update random_thought') do
