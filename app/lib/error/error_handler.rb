@@ -17,6 +17,11 @@ module Error
         rescue_from ActiveRecord::RecordNotFound do |e|
           render_response(404, :not_found, e.to_s)
         end
+
+        rescue_from ActionController::ParameterMissing,
+                    ActionDispatch::Http::Parameters::ParseError do |e|
+          render_response(400, :bad_request, e.to_s)
+        end
       end
     end
 

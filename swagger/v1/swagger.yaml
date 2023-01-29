@@ -4,6 +4,39 @@ info:
   title: API V1
   version: v1
 paths:
+  "/random_thoughts":
+    post:
+      summary: create random_thought
+      parameters: []
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/random_thought"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              examples:
+                empty_request:
+                  value:
+                    status: 400
+                    error: bad_request
+                    message: param is missing or the value is empty:...
+                invalid_request:
+                  value:
+                    status: 400
+                    error: bad_request
+                    message: Error occurred while parsing request parameters
+              schema:
+                "$ref": "#/components/schemas/error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/new_random_thought"
   "/random_thoughts/{id}":
     parameters:
     - name: id
@@ -54,6 +87,16 @@ servers:
   description: Local development
 components:
   schemas:
+    new_random_thought:
+      type: object
+      properties:
+        thought:
+          type: string
+        name:
+          type: string
+      required:
+      - thought
+      - name
     random_thought:
       type: object
       properties:
