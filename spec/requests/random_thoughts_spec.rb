@@ -4,7 +4,7 @@ require 'swagger_helper'
 
 RSpec.describe 'random_thoughts', type: :request do
 
-  # path '/random_thoughts' do
+  path '/random_thoughts' do
 
     # get('list random_thoughts') do
     #   response(200, 'successful') do
@@ -20,20 +20,46 @@ RSpec.describe 'random_thoughts', type: :request do
     #   end
     # end
 
-  #   post('create random_thought') do
-  #     response(200, 'successful') do
+    post('create random_thought') do
+      consumes 'application/json'
+      produces 'application/json'
+      parameter name: :random_thought,
+                in: :body,
+                schema: { '$ref' => '#/components/schemas/new_random_thought' }
 
-  #       after do |example|
-  #         example.metadata[:response][:content] = {
-  #           'application/json' => {
-  #             example: JSON.parse(response.body, symbolize_names: true)
-  #           }
-  #         }
-  #       end
-  #       run_test!
-  #     end
-  #   end
-  # end
+      response(201, 'created') do
+        let(:random_thought) { build(:random_thought) }
+        schema '$ref' => '#/components/schemas/random_thought'
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+
+        run_test!
+      end
+
+      response(400, 'bad request') do
+        let(:random_thought) { {} }
+        schema '$ref' => '#/components/schemas/error'
+        example 'application/json', :empty_request, {
+          status: 400,
+          error: 'bad_request',
+          message: 'param is missing or the value is empty:...'
+        }
+        example 'application/json', :invalid_request, {
+          status: 400,
+          error: 'bad_request',
+          message: 'Error occurred while parsing request parameters'
+        }
+
+        run_test!
+      end
+    end
+  end
 
   path '/random_thoughts/{id}' do
     parameter name: 'id', in: :path, type: :string, description: 'id'

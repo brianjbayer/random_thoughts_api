@@ -23,6 +23,15 @@ This API contains the following endpoints...
 * **Show** random thought {id}: `get /random_thoughts/{id}`
   (e.g. http://localhost:3000/random_thoughts/1)
 
+* **Create** random thought: `post /random_thoughts/`
+  with Request Body...
+  ```json
+  {
+    "thought": "string",
+    "name": "string"
+  }
+  ```
+
 ## Development
 This project can be developed using the supplied basic, container-based
 development environment which includes `vim`, `git`, `curl`, and `psql`.

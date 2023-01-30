@@ -38,6 +38,14 @@ RSpec.configure do |config|
       ],
       components: {
         schemas: {
+          new_random_thought: {
+            type: 'object',
+            properties: {
+              thought: { type: 'string' },
+              name: { type: 'string' }
+            },
+            required: %w[thought name]
+          },
           random_thought: {
             type: 'object',
             properties: {

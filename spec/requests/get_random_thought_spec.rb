@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../support/shared_examples/random_thought_response'
 
 RSpec.describe 'get /random_thoughts/{id}' do
   context 'when {id} exists' do
@@ -14,13 +15,7 @@ RSpec.describe 'get /random_thoughts/{id}' do
       expect(json_body['id']).to eql(random_thought.id)
     end
 
-    it 'returns "thought": thought' do
-      expect(json_body['thought']).to eql(random_thought.thought)
-    end
-
-    it 'returns "name": name' do
-      expect(json_body['name']).to eql(random_thought.name)
-    end
+    it_behaves_like 'random thought response'
   end
 
   context 'when {id} does not exists' do
