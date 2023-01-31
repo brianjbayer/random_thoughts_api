@@ -13,7 +13,7 @@ gem "pg", "~> 1.1"
 gem "puma", "~> 5.0"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-# gem "jbuilder"
+gem "jbuilder"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -47,15 +47,18 @@ group :development do
 end
 
 # --- CUSTOM GEMS ---
-   # Add Swagger/OpenAPI endpoints to all environments
-   gem 'rswag-api'
-   gem 'rswag-ui'
+# Pagination
+gem 'kaminari'
 
-   # Development and Test add RSpec, FactoryBot, and Swagger Specs
-   group :development, :test do
-     gem 'factory_bot_rails'
-     gem 'faker'
-     gem 'rspec-rails'
-     # Swagger specs
-     gem 'rswag-specs'
-   end
+# Add Swagger/OpenAPI endpoints to all environments
+gem 'rswag-api'
+gem 'rswag-ui'
+
+# Development and Test add RSpec, FactoryBot, and Swagger Specs
+group :development, :test do
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'rspec-rails'
+  # Swagger specs
+  gem 'rswag-specs'
+end

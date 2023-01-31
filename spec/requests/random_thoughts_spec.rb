@@ -3,22 +3,32 @@
 require 'swagger_helper'
 
 RSpec.describe 'random_thoughts', type: :request do
-
   path '/random_thoughts' do
+    get('list random_thoughts') do
+      consumes 'application/json'
+      produces 'application/json'
+      parameter name: 'page',
+                in: :query,
+                type: :integer,
+                description: 'page number',
+                required: false
 
-    # get('list random_thoughts') do
-    #   response(200, 'successful') do
+      response(200, 'successful') do
+        let!(:random_thought) { create(:random_thought) }
 
-    #     after do |example|
-    #       example.metadata[:response][:content] = {
-    #         'application/json' => {
-    #           example: JSON.parse(response.body, symbolize_names: true)
-    #         }
-    #       }
-    #     end
-    #     run_test!
-    #   end
-    # end
+        schema '$ref' => '#/components/schemas/paginated_random_thoughts'
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+
+        run_test!
+      end
+    end
 
     post('create random_thought') do
       consumes 'application/json'

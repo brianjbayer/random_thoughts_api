@@ -1,5 +1,11 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe RandomThought, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe RandomThought do
+  it 'returns most recent first' do
+    create_list(:random_thought, 20)
+    most_recent = create(:random_thought)
+    expect(described_class.first).to eql(most_recent)
+  end
 end
