@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: dockercomposerun tests on development environment
-        run: "BROWSERTESTS_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun ./script/run tests"
+        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun ./script/run tests"
 
   vet-swagger-file-currency:
     needs: [pr-norm-branch, build-and-push-branch-devenv]
@@ -51,6 +51,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: dockercomposerun swaggerize on development environment
-        run: "BROWSERTESTS_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun ./script/run swaggerize"
+        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun ./script/run swaggerize"
       - name: git diff Swagger File(s) to ensure no changes
         run: git diff --exit-code swagger
