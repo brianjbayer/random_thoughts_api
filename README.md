@@ -20,6 +20,9 @@ mounted into the container.
 ## API Endpoints
 This API contains the following endpoints...
 
+* **Index** all random thoughts: `get /random_thoughts?page={num}`
+  (e.g. http://localhost:3000/random_thoughts?page=2)
+
 * **Show** random thought {id}: `get /random_thoughts/{id}`
   (e.g. http://localhost:3000/random_thoughts/1)
 

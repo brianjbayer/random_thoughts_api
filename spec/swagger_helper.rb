@@ -55,6 +55,34 @@ RSpec.configure do |config|
             },
             required: %w[id thought name]
           },
+          paginated_random_thoughts: {
+            type: 'object',
+            properties: {
+              data: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/random_thought' }
+              },
+              meta: {
+                '$ref' => '#/components/schemas/pagination'
+              }
+            },
+            required: %w[data meta]
+          },
+          pagination: {
+            type: 'object',
+            properties: {
+              current_page: { type: 'integer' },
+              next_page: { type: 'integer', nullable: true },
+              prev_page: { type: 'integer', nullable: true },
+              total_pages: { type: 'integer' },
+              total_count: { type: 'integer' }
+            },
+            required: %w[current_page
+                         next_page
+                         prev_page
+                         total_pages
+                         total_count]
+          },
           error: {
             type: 'object',
             properties: {
