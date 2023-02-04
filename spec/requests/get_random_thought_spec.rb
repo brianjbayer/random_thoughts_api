@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../support/shared_examples/not_found_response'
 require_relative '../support/shared_examples/random_thought_response'
 
 RSpec.describe 'get /random_thoughts/{id}' do
@@ -18,23 +19,13 @@ RSpec.describe 'get /random_thoughts/{id}' do
     it_behaves_like 'random thought response'
   end
 
-  context 'when {id} does not exists' do
+  context 'when {id} does not exist' do
     let(:not_random_thought) { build(:random_thought).id = 0 }
 
     before do
       get random_thought_path(not_random_thought)
     end
 
-    it 'returns "status": 404' do
-      expect(json_body['status']).to be(404)
-    end
-
-    it 'returns "error": "not_found"' do
-      expect(json_body['error']).to eql('not_found')
-    end
-
-    it 'returns "message": ...' do
-      expect(json_body['message']).to include("Couldn't find ")
-    end
+    it_behaves_like 'not_found response'
   end
 end

@@ -94,6 +94,33 @@ paths:
                     message: "..."
               schema:
                 "$ref": "#/components/schemas/error"
+    patch:
+      summary: update random_thought
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/random_thought"
+        '404':
+          description: not found
+          content:
+            application/json:
+              examples:
+                not_found:
+                  value:
+                    status: 404
+                    error: not_found
+                    message: Couldn't find RandomThought with 'id'=??
+              schema:
+                "$ref": "#/components/schemas/error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/update_random_thought"
 servers:
 - url: https://{defaultHost}
   variables:
@@ -126,6 +153,13 @@ components:
       - id
       - thought
       - name
+    update_random_thought:
+      type: object
+      properties:
+        thought:
+          type: string
+        name:
+          type: string
     paginated_random_thoughts:
       type: object
       properties:

@@ -55,6 +55,13 @@ RSpec.configure do |config|
             },
             required: %w[id thought name]
           },
+          update_random_thought: {
+            type: 'object',
+            properties: {
+              thought: { type: 'string' },
+              name: { type: 'string' }
+            }
+          },
           paginated_random_thoughts: {
             type: 'object',
             properties: {
