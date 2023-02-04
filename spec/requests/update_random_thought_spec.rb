@@ -5,9 +5,15 @@ require_relative '../support/shared_examples/not_found_response'
 
 RSpec.describe 'patch /random_thoughts/{id}' do
   context 'when {id} exists' do
-    let(:random_thought) { create(:random_thought) }
+    let!(:random_thought) { create(:random_thought) }
     let(:new_thought) { 'I like turtles' }
-    let(:new_name) { ' Jonathan "Zombie Kid" Ware' }
+    let(:new_name) { 'Jonathan "Zombie Kid" Ware' }
+
+    it 'does not change the number of RandomThoughts' do
+      expect do
+        patch_random_thought(random_thought, new_thought:, new_name:)
+      end.not_to change(RandomThought, :count)
+    end
 
     it 'updates thought when supplied' do
       patch_random_thought(random_thought, new_thought:)

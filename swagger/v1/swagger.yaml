@@ -121,6 +121,27 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/update_random_thought"
+    delete:
+      summary: delete random_thought
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/random_thought"
+        '404':
+          description: not found
+          content:
+            application/json:
+              examples:
+                not_found:
+                  value:
+                    status: 404
+                    error: not_found
+                    message: Couldn't find RandomThought with 'id'=??
+              schema:
+                "$ref": "#/components/schemas/error"
 servers:
 - url: https://{defaultHost}
   variables:

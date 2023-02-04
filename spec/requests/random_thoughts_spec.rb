@@ -172,34 +172,39 @@ RSpec.describe 'random_thoughts', type: :request do
       end
     end
 
-    # put('update random_thought') do
-    #   response(200, 'successful') do
-    #     let(:id) { '123' }
+    delete('delete random_thought') do
+      consumes 'application/json'
+      produces 'application/json'
 
-    #     after do |example|
-    #       example.metadata[:response][:content] = {
-    #         'application/json' => {
-    #           example: JSON.parse(response.body, symbolize_names: true)
-    #         }
-    #       }
-    #     end
-    #     run_test!
-    #   end
-    # end
+      response(200, 'successful') do
+        let(:id) { create(:random_thought).id }
 
-    # delete('delete random_thought') do
-    #   response(200, 'successful') do
-    #     let(:id) { '123' }
+        schema '$ref' => '#/components/schemas/random_thought'
 
-    #     after do |example|
-    #       example.metadata[:response][:content] = {
-    #         'application/json' => {
-    #           example: JSON.parse(response.body, symbolize_names: true)
-    #         }
-    #       }
-    #     end
-    #     run_test!
-    #   end
-    # end
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+
+        run_test!
+      end
+
+      response(404, 'not found') do
+        let(:id) { 0 }
+        let(:update) { build(:random_thought) }
+
+        schema '$ref' => '#/components/schemas/error'
+        example 'application/json', :not_found, {
+          status: 404,
+          error: 'not_found',
+          message: "Couldn't find RandomThought with 'id'=??"
+        }
+
+        run_test!
+      end
+    end
   end
 end

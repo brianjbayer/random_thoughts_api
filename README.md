@@ -44,6 +44,8 @@ This API contains the following endpoints...
   }
   ```
 
+* **Delete** random thought {id}: `delete /random_thoughts/{id}`
+
 ## Development
 This project can be developed using the supplied basic, container-based
 development environment which includes `vim`, `git`, `curl`, and `psql`.
