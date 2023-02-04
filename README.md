@@ -35,6 +35,15 @@ This API contains the following endpoints...
   }
   ```
 
+* **Update** random thought {id}: `patch /random_thoughts/{id}`
+  with Request Body...
+  ```json
+  {
+    "thought": "string",
+    "name": "string"
+  }
+  ```
+
 ## Development
 This project can be developed using the supplied basic, container-based
 development environment which includes `vim`, `git`, `curl`, and `psql`.

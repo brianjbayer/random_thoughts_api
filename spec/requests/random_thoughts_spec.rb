@@ -39,6 +39,7 @@ RSpec.describe 'random_thoughts', type: :request do
 
       response(201, 'created') do
         let(:random_thought) { build(:random_thought) }
+
         schema '$ref' => '#/components/schemas/random_thought'
 
         after do |example|
@@ -54,6 +55,7 @@ RSpec.describe 'random_thoughts', type: :request do
 
       response(400, 'bad request') do
         let(:random_thought) { {} }
+
         schema '$ref' => '#/components/schemas/error'
         example 'application/json', :empty_request, {
           status: 400,
@@ -80,6 +82,7 @@ RSpec.describe 'random_thoughts', type: :request do
 
       response(200, 'successful') do
         let(:id) { create(:random_thought).id }
+
         schema '$ref' => '#/components/schemas/random_thought'
 
         after do |example|
@@ -95,6 +98,7 @@ RSpec.describe 'random_thoughts', type: :request do
 
       response(404, 'not found') do
         let(:id) { 0 }
+
         schema '$ref' => '#/components/schemas/error'
         example 'application/json', :not_found, {
           status: 404,
@@ -109,6 +113,7 @@ RSpec.describe 'random_thoughts', type: :request do
       # Unable to produce the test conditions for 500
       response(500, 'internal server error') do
         let(:id) { create(:random_thought).id }
+
         schema '$ref' => '#/components/schemas/error'
         example 'application/json', :internal_server_error, {
           status: 500,
@@ -128,20 +133,44 @@ RSpec.describe 'random_thoughts', type: :request do
       end
     end
 
-    # patch('update random_thought') do
-    #   response(200, 'successful') do
-    #     let(:id) { '123' }
+    patch('update random_thought') do
+      consumes 'application/json'
+      produces 'application/json'
+      parameter name: :update,
+                in: :body,
+                schema: { '$ref' => '#/components/schemas/update_random_thought' }
 
-    #     after do |example|
-    #       example.metadata[:response][:content] = {
-    #         'application/json' => {
-    #           example: JSON.parse(response.body, symbolize_names: true)
-    #         }
-    #       }
-    #     end
-    #     run_test!
-    #   end
-    # end
+      response(200, 'successful') do
+        let(:id) { create(:random_thought).id }
+        let(:update) { build(:random_thought, thought: 'new thought', name: 'new name') }
+
+        schema '$ref' => '#/components/schemas/random_thought'
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+
+        run_test!
+      end
+
+      response(404, 'not found') do
+        let(:id) { 0 }
+        let(:update) { build(:random_thought) }
+
+        schema '$ref' => '#/components/schemas/error'
+        example 'application/json', :not_found, {
+          status: 404,
+          error: 'not_found',
+          message: "Couldn't find RandomThought with 'id'=??"
+        }
+
+        run_test!
+      end
+    end
 
     # put('update random_thought') do
     #   response(200, 'successful') do
