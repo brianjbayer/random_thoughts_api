@@ -82,18 +82,6 @@ paths:
                     message: Couldn't find RandomThought with 'id'=??
               schema:
                 "$ref": "#/components/schemas/error"
-        '500':
-          description: internal server error
-          content:
-            application/json:
-              examples:
-                internal_server_error:
-                  value:
-                    status: 500
-                    error: internal_server_error
-                    message: "..."
-              schema:
-                "$ref": "#/components/schemas/error"
     patch:
       summary: update random_thought
       parameters: []
@@ -104,6 +92,23 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/random_thought"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              examples:
+                empty_request:
+                  value:
+                    status: 400
+                    error: bad_request
+                    message: param is missing or the value is empty:...
+                invalid_request:
+                  value:
+                    status: 400
+                    error: bad_request
+                    message: Error occurred while parsing request parameters
+              schema:
+                "$ref": "#/components/schemas/error"
         '404':
           description: not found
           content:
