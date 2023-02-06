@@ -3,8 +3,17 @@
 require 'rails_helper'
 require_relative '../support/shared_examples/bad_request_response'
 require_relative '../support/shared_examples/random_thought_response'
+require_relative '../support/shared_examples/unprocessable_entity_response'
 
 RSpec.describe 'post /random_thoughts/' do
+  shared_examples 'RandomThought not created' do
+    it 'does not create a new RandomThought', :skip_before do
+      expect do
+        post_empty_request
+      end.not_to change(RandomThought, :count)
+    end
+  end
+
   context 'when valid create request' do
     let(:random_thought) { build(:random_thought) }
 
@@ -26,16 +35,24 @@ RSpec.describe 'post /random_thoughts/' do
       post_empty_request unless example.metadata[:skip_before]
     end
 
-    it 'does not create a new RandomThought', :skip_before do
-      expect do
-        post_empty_request
-      end.not_to change(RandomThought, :count)
-    end
+    it_behaves_like 'RandomThought not created'
 
     it_behaves_like 'bad_request response'
   end
 
   # TODO: Testing invalid json does not seem to be possible
+
+  context 'when validations fail for create request' do
+    let(:not_valid) { build(:random_thought, thought: '', name: '') }
+
+    before do |example|
+      post_random_thought(not_valid) unless example.metadata[:skip_before]
+    end
+
+    it_behaves_like 'RandomThought not created'
+
+    it_behaves_like 'unprocessable_entity response'
+  end
 
   private
 

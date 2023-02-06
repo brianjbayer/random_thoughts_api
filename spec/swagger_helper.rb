@@ -41,8 +41,8 @@ RSpec.configure do |config|
           new_random_thought: {
             type: 'object',
             properties: {
-              thought: { type: 'string' },
-              name: { type: 'string' }
+              thought: { type: 'string', minLength: 1 },
+              name: { type: 'string', minLength: 1 }
             },
             required: %w[thought name]
           },
@@ -58,8 +58,8 @@ RSpec.configure do |config|
           update_random_thought: {
             type: 'object',
             properties: {
-              thought: { type: 'string' },
-              name: { type: 'string' }
+              thought: { type: 'string', minLength: 1 },
+              name: { type: 'string', minLength: 1 }
             }
           },
           paginated_random_thoughts: {

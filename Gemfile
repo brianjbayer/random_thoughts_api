@@ -62,3 +62,7 @@ group :development, :test do
   # Swagger specs
   gem 'rswag-specs'
 end
+
+group :test do
+  gem 'shoulda-matchers'
+end
