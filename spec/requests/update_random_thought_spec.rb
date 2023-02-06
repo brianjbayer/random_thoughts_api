@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../support/shared_examples/bad_request_response'
 require_relative '../support/shared_examples/not_found_response'
 
 RSpec.describe 'patch /random_thoughts/{id}' do
@@ -44,6 +45,16 @@ RSpec.describe 'patch /random_thoughts/{id}' do
     end
 
     it_behaves_like 'not_found response'
+  end
+
+  context 'when update parameters are missing in update request' do
+    let!(:random_thought) { create(:random_thought) }
+
+    before do
+      patch random_thought_path(random_thought), params: {}, as: :json
+    end
+
+    it_behaves_like 'bad_request response'
   end
 
   private

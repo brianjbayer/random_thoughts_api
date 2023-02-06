@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../support/shared_examples/bad_request_response'
 require_relative '../support/shared_examples/random_thought_response'
 
 RSpec.describe 'post /random_thoughts/' do
@@ -31,17 +32,7 @@ RSpec.describe 'post /random_thoughts/' do
       end.not_to change(RandomThought, :count)
     end
 
-    it 'returns "status": 400' do
-      expect(json_body['status']).to be(400)
-    end
-
-    it 'returns "error": "bad_request"' do
-      expect(json_body['error']).to eql('bad_request')
-    end
-
-    it 'returns "message" indicating parameters are missing' do
-      expect(json_body['message']).to include('param is missing or the value is empty')
-    end
+    it_behaves_like 'bad_request response'
   end
 
   # TODO: Testing invalid json does not seem to be possible

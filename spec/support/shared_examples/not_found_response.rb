@@ -9,7 +9,7 @@ RSpec.shared_examples 'not_found response' do
     expect(json_body['error']).to eql('not_found')
   end
 
-  it 'returns "message": ...' do
+  it 'returns "message": indicating it could not find' do
     expect(json_body['message']).to include("Couldn't find ")
   end
 end
