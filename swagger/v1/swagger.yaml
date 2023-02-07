@@ -48,6 +48,19 @@ paths:
                     message: Error occurred while parsing request parameters
               schema:
                 "$ref": "#/components/schemas/error"
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              examples:
+                unprocessable_entity:
+                  value:
+                    status: 422
+                    error: unprocessable_entity
+                    message: 'Validation failed: Thought can''t be blank, Name can''t
+                      be blank'
+              schema:
+                "$ref": "#/components/schemas/error"
       requestBody:
         content:
           application/json:
@@ -121,6 +134,19 @@ paths:
                     message: Couldn't find RandomThought with 'id'=??
               schema:
                 "$ref": "#/components/schemas/error"
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              examples:
+                unprocessable_entity:
+                  value:
+                    status: 422
+                    error: unprocessable_entity
+                    message: 'Validation failed: Thought can''t be blank, Name can''t
+                      be blank'
+              schema:
+                "$ref": "#/components/schemas/error"
       requestBody:
         content:
           application/json:
@@ -161,8 +187,10 @@ components:
       properties:
         thought:
           type: string
+          minLength: 1
         name:
           type: string
+          minLength: 1
       required:
       - thought
       - name
@@ -184,8 +212,10 @@ components:
       properties:
         thought:
           type: string
+          minLength: 1
         name:
           type: string
+          minLength: 1
     paginated_random_thoughts:
       type: object
       properties:

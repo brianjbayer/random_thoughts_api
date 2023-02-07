@@ -13,6 +13,16 @@ RSpec.describe 'random_thoughts' do
     }
   end
 
+  shared_context 'when unprocessable entity' do
+    let(:empty_values) { build(:random_thought, thought: '', name: '') }
+    schema '$ref' => '#/components/schemas/error'
+    example 'application/json', :unprocessable_entity, {
+      status: 422,
+      error: 'unprocessable_entity',
+      message: "Validation failed: Thought can't be blank, Name can't be blank"
+    }
+  end
+
   shared_context 'when bad request' do
     let(:bad_request) { {} }
     schema '$ref' => '#/components/schemas/error'
@@ -63,6 +73,12 @@ RSpec.describe 'random_thoughts' do
         let(:random_thought) { bad_request }
         run_test!
       end
+
+      response(422, 'unprocessable entity') do
+        include_context 'when unprocessable entity'
+        let(:random_thought) { empty_values }
+        run_test!
+      end
     end
   end
 
@@ -109,6 +125,13 @@ RSpec.describe 'random_thoughts' do
       response(404, 'not found') do
         include_context 'when not found'
         let(:update) { build(:random_thought) }
+        run_test!
+      end
+
+      response(422, 'unprocessable entity') do
+        include_context 'when unprocessable entity'
+        let(:id) { create(:random_thought).id }
+        let(:update) { empty_values }
         run_test!
       end
     end
