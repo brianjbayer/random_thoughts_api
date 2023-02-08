@@ -47,31 +47,58 @@ This API contains the following endpoints...
 * **Delete** random thought {id}: `delete /random_thoughts/{id}`
 
 ## Development
-This project can be developed using the supplied basic, container-based
-development environment which includes `vim`, `git`, `curl`, and `psql`.
+This project can be developed using the supplied basic,
+container-based development environment which includes
+`vim`, `git`, `curl`, and `psql`.
 
-The containerized development environment contains this application
-along with an orchestrated PostgreSQL container.
+The containerized development environment contains this
+application along with an orchestrated PostgreSQL container.
 
-The development environment application container volume mounts your
-local source code to recognize and persist any changes.
+The development environment application container volume mounts
+your local source code to recognize and persist any changes.
 
-By default the development environment application container executes
-the `bash` shell providing a command line interface into the
-application container.
+By default the development environment application container
+executes the `bash` shell providing a command line interface
+into the application container.
 
-### To Build the Development Environment Image
+### To Develop Using the Container-Based Development Environment
+The easiest way to run the containerized development environment
+is with the docker-compose framework using the `dockercomposerun`
+script.
 
 > **PREREQUISITE:** Docker must be installed and running
 
-1. Run the following command to build the image...
+1. Run the following command to run the containerized development
+   environment...
    ```
-   docker build --no-cache -t brianjbayer/random_thoughts_api-dev .
+   ./script/dockercomposerun
    ```
 
-### To Run the Containerized Development Environment
-The easiest way to run the containerized development environment is with
-the docker-compose framework.
+   > This will pull and run the latest development environment
+   > image of this project along with the latest `postgres`
+   > image.
+
+2. To exit the containerized development environment, run the
+   following command ...
+   ```
+   exit
+   ```
+
+#### Building Your Own Development Environment Image
+You can also build and run your own development environment
+image.  This is helpful when you are updating gems or
+changing the `Dockerfile`.
+
+1. Run the following command to build your image...
+   ```
+   docker build --no-cache -t local-random_thoughts_api-dev .
+   ```
+
+2. Run the following command to run the containerized development
+   environment using your image...
+   ```
+   APP_IMAGE=local-random_thoughts_api-dev ./script/dockercomposerun
+   ```
 
 #### To Start the Containerized Development Environment
 
