@@ -84,7 +84,7 @@ script.
    exit
    ```
 
-#### Building Your Own Development Environment Image
+#### Building And Running Your Own Development Environment Image
 You can also build and run your own development environment
 image.  This is helpful when you are updating gems or
 changing the `Dockerfile`.
@@ -98,20 +98,6 @@ changing the `Dockerfile`.
    environment using your image...
    ```
    APP_IMAGE=local-random_thoughts_api-dev ./script/dockercomposerun
-   ```
-
-#### To Start the Containerized Development Environment
-
-1. Run the following command to run the containerized development
-   environment...
-   ```
-   ./script/dockercomposerun
-   ```
-
-2. To exit the containerized development environment, run the
-   following command ...
-   ```
-   exit
    ```
 
 ### Mappings to Host Machine
