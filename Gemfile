@@ -54,8 +54,8 @@ gem 'kaminari'
 gem 'rswag-api'
 gem 'rswag-ui'
 
-# Development and Test add RSpec, FactoryBot, and Swagger Specs
 group :development, :test do
+  gem 'bundler-audit'
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'rspec-rails'

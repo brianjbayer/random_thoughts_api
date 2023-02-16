@@ -130,7 +130,6 @@ without a persistent volume (data) for the `development`
 and `test` environments.
 
 #### Seed Data
-
 There is one sample record which can be added repeatedly.
 
 Run the following command to add a seed record...
@@ -154,6 +153,18 @@ Run the following command to run the tests...
 > :warning: If you are using the same database for `development`
 > and `test`, these steps can destroy any data in your
 > `development` database.
+
+### Dependency Static Security Scanning
+This project includes the
+[`bundler-audit`](https://github.com/rubysec/bundler-audit)
+gem for statically scanning the gems for any known security
+vulnerabilities.
+
+Run the following command to run the dependency security scan...
+```
+./script/run depsecscan
+```
+
 
 ### Running the Application
 Run the following command to run the Rails server...
@@ -195,5 +206,9 @@ By default the Swagger UI is located at http://localhost:3000/api-docs/
 
 * [PostgreSQL](https://www.postgresql.org/) - Database
 * [RSpec](http://rspec.info/) - Test Framework
-* [Factory Bot](https://github.com/thoughtbot/factory_bot) - Test Data Factory Framework
-* [rswag](https://github.com/rswag/rswag) - Swagger/OpenAPI Tooling
+* [Factory Bot](https://github.com/thoughtbot/factory_bot) - Test
+  Data Factory Framework
+* [rswag](https://github.com/rswag/rswag) - Swagger/OpenAPI
+  Tooling
+* [bundler-audit](https://github.com/rubysec/bundler-audit) - Dependency
+  Static Security
