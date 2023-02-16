@@ -59,6 +59,11 @@ case "$action" in
     run_command="bundle exec rspec $@"
   ;;
 
+  "depsecscan")
+    shift
+    run_command="bundle exec bundle-audit check --update $@"
+  ;;
+
   "swaggerize")
     shift
     run_command="bundle exec bin/rails rswag:specs:swaggerize $@"
