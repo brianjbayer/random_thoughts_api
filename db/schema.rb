@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_06_223049) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_16_195842) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "citext"
   enable_extension "plpgsql"
 
   create_table "random_thoughts", force: :cascade do |t|
@@ -20,6 +21,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_223049) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_at"], name: "index_random_thoughts_on_created_at"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.citext "email", null: false
+    t.string "display_name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
 end
