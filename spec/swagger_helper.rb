@@ -75,6 +75,23 @@ RSpec.configure do |config|
             },
             required: %w[data meta]
           },
+          new_user: {
+            type: 'object',
+            properties: {
+              email: { type: 'string', minLength: 1, maxLength: 254 },
+              display_name: { type: 'string', minLength: 1 }
+            },
+            required: %w[email display_name]
+          },
+          user: {
+            type: 'object',
+            properties: {
+              id: { type: 'integer' },
+              email: { type: 'string', minLength: 1, maxLength: 254 },
+              display_name: { type: 'string', minLength: 1 }
+            },
+            required: %w[id email display_name]
+          },
           pagination: {
             type: 'object',
             properties: {

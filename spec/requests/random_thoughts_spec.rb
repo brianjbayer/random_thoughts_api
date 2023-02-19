@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'swagger_helper'
+require_relative '../support/shared_contexts/when_bad_request'
+require_relative '../support/shared_examples/unprocessable_entity_schema'
 
 RSpec.describe 'random_thoughts' do
   shared_context 'when not found' do
@@ -10,31 +12,6 @@ RSpec.describe 'random_thoughts' do
       status: 404,
       error: 'not_found',
       message: "Couldn't find RandomThought with 'id'=??"
-    }
-  end
-
-  shared_context 'when unprocessable entity' do
-    let(:empty_values) { build(:random_thought, thought: '', name: '') }
-    schema '$ref' => '#/components/schemas/error'
-    example 'application/json', :unprocessable_entity, {
-      status: 422,
-      error: 'unprocessable_entity',
-      message: "Validation failed: Thought can't be blank, Name can't be blank"
-    }
-  end
-
-  shared_context 'when bad request' do
-    let(:bad_request) { {} }
-    schema '$ref' => '#/components/schemas/error'
-    example 'application/json', :empty_request, {
-      status: 400,
-      error: 'bad_request',
-      message: 'param is missing or the value is empty:...'
-    }
-    example 'application/json', :invalid_request, {
-      status: 400,
-      error: 'bad_request',
-      message: 'Error occurred while parsing request parameters'
     }
   end
 
@@ -49,7 +26,9 @@ RSpec.describe 'random_thoughts' do
                 required: false
 
       response(200, 'successful') do
+        # rubocop:disable RSpec/LetSetup
         let!(:random_thought) { create(:random_thought) }
+        # rubocop:enable RSpec/LetSetup
         schema '$ref' => '#/components/schemas/paginated_random_thoughts'
         run_test!
       end
@@ -75,7 +54,9 @@ RSpec.describe 'random_thoughts' do
       end
 
       response(422, 'unprocessable entity') do
-        include_context 'when unprocessable entity'
+        msg = "Validation failed: Thought can't be blank, Name can't be blank"
+        it_behaves_like 'unprocessable entity schema', msg
+        let(:empty_values) { build(:random_thought, thought: '', name: '') }
         let(:random_thought) { empty_values }
         run_test!
       end
@@ -129,8 +110,10 @@ RSpec.describe 'random_thoughts' do
       end
 
       response(422, 'unprocessable entity') do
-        include_context 'when unprocessable entity'
+        msg = "Validation failed: Thought can't be blank, Name can't be blank"
+        it_behaves_like 'unprocessable entity schema', msg
         let(:id) { create(:random_thought).id }
+        let(:empty_values) { build(:random_thought, thought: '', name: '') }
         let(:update) { empty_values }
         run_test!
       end
