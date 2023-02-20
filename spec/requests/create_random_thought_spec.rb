@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative '../support/random_thought_helper'
+require_relative '../support/helpers/random_thought_helper'
 require_relative '../support/shared_examples/bad_request_response'
 require_relative '../support/shared_examples/is_created_from_request'
 require_relative '../support/shared_examples/not_created_from_request'
@@ -26,7 +26,7 @@ RSpec.describe 'post /random_thoughts/' do
   end
 
   context 'when parameters are missing in create request' do
-    subject(:request) { post random_thoughts_path, params: {} }
+    subject(:request) { post random_thoughts_path, params: empty_json_body }
 
     before do |example|
       request unless example.metadata[:skip_before]

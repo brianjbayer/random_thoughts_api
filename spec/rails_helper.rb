@@ -10,7 +10,7 @@ require 'rspec/rails'
 # --- CUSTOM REQUIRES ---
 require_relative 'support/factory_bot'
 
-require_relative 'support/api_helper'
+require_relative 'support/helpers/api_helper'
 require_relative 'support/matchers/be_random_thought_json'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

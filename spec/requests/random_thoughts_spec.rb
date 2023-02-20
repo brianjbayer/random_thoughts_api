@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require 'swagger_helper'
-require_relative '../support/random_thought_helper'
-require_relative '../support/shared_contexts/when_bad_request'
+require_relative '../support/helpers/random_thought_helper'
+require_relative '../support/shared_examples/bad_request_schema'
 require_relative '../support/shared_examples/unprocessable_entity_schema'
 
 RSpec.describe 'random_thoughts' do
@@ -51,8 +51,8 @@ RSpec.describe 'random_thoughts' do
       end
 
       response(400, 'bad request') do
-        include_context 'when bad request'
-        let(:random_thought) { bad_request }
+        let(:random_thought) { empty_json_body }
+        it_behaves_like 'bad request schema'
         run_test!
       end
 
@@ -100,9 +100,9 @@ RSpec.describe 'random_thoughts' do
       end
 
       response(400, 'bad request') do
-        include_context 'when bad request'
         let(:id) { create(:random_thought).id }
-        let(:update) { bad_request }
+        let(:update) { empty_json_body }
+        it_behaves_like 'bad request schema'
         run_test!
       end
 

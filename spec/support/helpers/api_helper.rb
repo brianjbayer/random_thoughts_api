@@ -4,6 +4,10 @@ module ApiHelper
   def json_body
     JSON.parse(response.body)
   end
+
+  def empty_json_body
+    {}
+  end
 end
 
 RSpec.configure do |config|
