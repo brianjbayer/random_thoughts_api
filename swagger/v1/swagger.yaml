@@ -173,6 +173,57 @@ paths:
                     message: Couldn't find RandomThought with 'id'=??
               schema:
                 "$ref": "#/components/schemas/error"
+  "/users":
+    post:
+      summary: create user
+      parameters: []
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/user"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              examples:
+                empty_request:
+                  value:
+                    status: 400
+                    error: bad_request
+                    message: param is missing or the value is empty:...
+                invalid_request:
+                  value:
+                    status: 400
+                    error: bad_request
+                    message: Error occurred while parsing request parameters
+              schema:
+                "$ref": "#/components/schemas/error"
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              examples:
+                unprocessable_entity:
+                  value:
+                    status: 422
+                    error: unprocessable_entity
+                    message: 'Validation failed: Email can''t be blank, Email must
+                      match URI::MailTo::EMAIL_REGEXP, Display name can''t be blank'
+                email_exists:
+                  value:
+                    status: 422
+                    error: unprocessable_entity
+                    message: 'Validation failed: Email has already been taken'
+              schema:
+                "$ref": "#/components/schemas/error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/new_user"
 servers:
 - url: https://{defaultHost}
   variables:
@@ -228,6 +279,35 @@ components:
       required:
       - data
       - meta
+    new_user:
+      type: object
+      properties:
+        email:
+          type: string
+          minLength: 1
+          maxLength: 254
+        display_name:
+          type: string
+          minLength: 1
+      required:
+      - email
+      - display_name
+    user:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          minLength: 1
+          maxLength: 254
+        display_name:
+          type: string
+          minLength: 1
+      required:
+      - id
+      - email
+      - display_name
     pagination:
       type: object
       properties:

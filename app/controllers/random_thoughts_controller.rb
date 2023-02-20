@@ -2,6 +2,8 @@
 
 # Implements CRUD operations for RandomThought
 class RandomThoughtsController < ApplicationController
+  include RenderResponseConcern
+
   before_action :find_random_thought, only: %i[show update destroy]
 
   def index
@@ -14,17 +16,17 @@ class RandomThoughtsController < ApplicationController
 
   def create
     @random_thought = RandomThought.create!(random_thought_params)
-    render_random_thought_response(:created)
+    render_show_response(:created)
   end
 
   def update
     @random_thought.update!(random_thought_params)
-    render_random_thought_response(:ok)
+    render_show_response(:ok)
   end
 
   def destroy
     @random_thought.destroy!
-    render_random_thought_response(:ok)
+    render_show_response(:ok)
   end
 
   private
@@ -35,10 +37,5 @@ class RandomThoughtsController < ApplicationController
 
   def find_random_thought
     @random_thought = RandomThought.find(params[:id])
-  end
-
-  def render_random_thought_response(status)
-    # FYI: render 'show' renders random_thoughts/show.json.jbuilder
-    render 'show', status:
   end
 end
