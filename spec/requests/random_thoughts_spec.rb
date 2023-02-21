@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 require 'swagger_helper'
+require_relative '../support/random_thought_helper'
 require_relative '../support/shared_contexts/when_bad_request'
 require_relative '../support/shared_examples/unprocessable_entity_schema'
 
 RSpec.describe 'random_thoughts' do
+  include RandomThoughtHelper
+
   shared_context 'when not found' do
     let(:id) { 0 }
     schema '$ref' => '#/components/schemas/error'
@@ -39,11 +42,11 @@ RSpec.describe 'random_thoughts' do
       produces 'application/json'
       parameter name: :random_thought,
                 in: :body,
-                schema: { '$ref' => '#/components/schemas/new_random_thought' }
+                schema: { '$ref' => '#/components/schemas/create_random_thought' }
 
       response(201, 'created') do
-        let(:random_thought) { build(:random_thought) }
-        schema '$ref' => '#/components/schemas/random_thought'
+        let(:random_thought) { build_random_thought_body(build(:random_thought)) }
+        schema '$ref' => '#/components/schemas/random_thought_response'
         run_test!
       end
 
@@ -56,7 +59,7 @@ RSpec.describe 'random_thoughts' do
       response(422, 'unprocessable entity') do
         msg = "Validation failed: Thought can't be blank, Name can't be blank"
         it_behaves_like 'unprocessable entity schema', msg
-        let(:empty_values) { build(:random_thought, thought: '', name: '') }
+        let(:empty_values) { build_random_thought_body(build(:random_thought, :empty)) }
         let(:random_thought) { empty_values }
         run_test!
       end
@@ -72,7 +75,7 @@ RSpec.describe 'random_thoughts' do
 
       response(200, 'successful') do
         let(:id) { create(:random_thought).id }
-        schema '$ref' => '#/components/schemas/random_thought'
+        schema '$ref' => '#/components/schemas/random_thought_response'
         run_test!
       end
 
@@ -91,8 +94,8 @@ RSpec.describe 'random_thoughts' do
 
       response(200, 'successful') do
         let(:id) { create(:random_thought).id }
-        let(:update) { build(:random_thought) }
-        schema '$ref' => '#/components/schemas/random_thought'
+        let(:update) { build_random_thought_body(build(:random_thought)) }
+        schema '$ref' => '#/components/schemas/random_thought_response'
         run_test!
       end
 
@@ -105,7 +108,7 @@ RSpec.describe 'random_thoughts' do
 
       response(404, 'not found') do
         include_context 'when not found'
-        let(:update) { build(:random_thought) }
+        let(:update) { build_random_thought_body(build(:random_thought)) }
         run_test!
       end
 
@@ -113,7 +116,7 @@ RSpec.describe 'random_thoughts' do
         msg = "Validation failed: Thought can't be blank, Name can't be blank"
         it_behaves_like 'unprocessable entity schema', msg
         let(:id) { create(:random_thought).id }
-        let(:empty_values) { build(:random_thought, thought: '', name: '') }
+        let(:empty_values) { build_random_thought_body(build(:random_thought, :empty)) }
         let(:update) { empty_values }
         run_test!
       end
@@ -125,7 +128,7 @@ RSpec.describe 'random_thoughts' do
 
       response(200, 'successful') do
         let(:id) { create(:random_thought).id }
-        schema '$ref' => '#/components/schemas/random_thought'
+        schema '$ref' => '#/components/schemas/random_thought_response'
         run_test!
       end
 

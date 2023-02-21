@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../support/random_thought_helper'
 require_relative '../support/shared_examples/bad_request_response'
 require_relative '../support/shared_examples/is_created_from_request'
 require_relative '../support/shared_examples/not_created_from_request'
@@ -8,6 +9,8 @@ require_relative '../support/shared_examples/random_thought_response'
 require_relative '../support/shared_examples/unprocessable_entity_response'
 
 RSpec.describe 'post /random_thoughts/' do
+  include RandomThoughtHelper
+
   context 'when valid create request' do
     subject(:request) { post_random_thought(random_thought) }
 
@@ -39,7 +42,7 @@ RSpec.describe 'post /random_thoughts/' do
   context 'when validations fail for create request' do
     subject(:request) { post_random_thought(not_valid) }
 
-    let(:not_valid) { build(:random_thought, thought: '', name: '') }
+    let(:not_valid) { build(:random_thought, :empty) }
 
     before do |example|
       request unless example.metadata[:skip_before]
@@ -53,11 +56,6 @@ RSpec.describe 'post /random_thoughts/' do
   private
 
   def post_random_thought(random_thought)
-    post random_thoughts_path, params: {
-      random_thought: {
-        thought: random_thought.thought,
-        name: random_thought.name
-      }
-    }
+    post random_thoughts_path, params: build_random_thought_body(random_thought)
   end
 end

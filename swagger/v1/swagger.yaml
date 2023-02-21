@@ -30,7 +30,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/random_thought"
+                "$ref": "#/components/schemas/random_thought_response"
         '400':
           description: bad request
           content:
@@ -65,7 +65,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/new_random_thought"
+              "$ref": "#/components/schemas/create_random_thought"
   "/random_thoughts/{id}":
     parameters:
     - name: id
@@ -82,7 +82,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/random_thought"
+                "$ref": "#/components/schemas/random_thought_response"
         '404':
           description: not found
           content:
@@ -104,7 +104,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/random_thought"
+                "$ref": "#/components/schemas/random_thought_response"
         '400':
           description: bad request
           content:
@@ -160,7 +160,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/random_thought"
+                "$ref": "#/components/schemas/random_thought_response"
         '404':
           description: not found
           content:
@@ -245,7 +245,14 @@ components:
       required:
       - thought
       - name
-    random_thought:
+    create_random_thought:
+      type: object
+      properties:
+        random_thought:
+          "$ref": "#/components/schemas/new_random_thought"
+      required:
+      - random_thought
+    random_thought_response:
       type: object
       properties:
         id:
@@ -258,7 +265,7 @@ components:
       - id
       - thought
       - name
-    update_random_thought:
+    updated_random_thought:
       type: object
       properties:
         thought:
@@ -267,13 +274,20 @@ components:
         name:
           type: string
           minLength: 1
+    update_random_thought:
+      type: object
+      properties:
+        random_thought:
+          "$ref": "#/components/schemas/updated_random_thought"
+      required:
+      - random_thought
     paginated_random_thoughts:
       type: object
       properties:
         data:
           type: array
           items:
-            "$ref": "#/components/schemas/random_thought"
+            "$ref": "#/components/schemas/random_thought_response"
         meta:
           "$ref": "#/components/schemas/pagination"
       required:

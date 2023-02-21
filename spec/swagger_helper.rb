@@ -46,7 +46,14 @@ RSpec.configure do |config|
             },
             required: %w[thought name]
           },
-          random_thought: {
+          create_random_thought: {
+            type: 'object',
+            properties: {
+              random_thought: { '$ref' => '#/components/schemas/new_random_thought' }
+            },
+            required: %w[random_thought]
+          },
+          random_thought_response: {
             type: 'object',
             properties: {
               id: { type: 'integer' },
@@ -55,19 +62,26 @@ RSpec.configure do |config|
             },
             required: %w[id thought name]
           },
-          update_random_thought: {
+          updated_random_thought: {
             type: 'object',
             properties: {
               thought: { type: 'string', minLength: 1 },
               name: { type: 'string', minLength: 1 }
             }
           },
+          update_random_thought: {
+            type: 'object',
+            properties: {
+              random_thought: { '$ref' => '#/components/schemas/updated_random_thought' }
+            },
+            required: %w[random_thought]
+          },
           paginated_random_thoughts: {
             type: 'object',
             properties: {
               data: {
                 type: :array,
-                items: { '$ref' => '#/components/schemas/random_thought' }
+                items: { '$ref' => '#/components/schemas/random_thought_response' }
               },
               meta: {
                 '$ref' => '#/components/schemas/pagination'
