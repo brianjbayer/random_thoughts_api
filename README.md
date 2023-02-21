@@ -30,8 +30,10 @@ This API contains the following endpoints...
   with Request Body...
   ```json
   {
-    "thought": "string",
-    "name": "string"
+    "random_thought": {
+      "thought": "string",
+      "name": "string"
+    }
   }
   ```
 
@@ -39,8 +41,10 @@ This API contains the following endpoints...
   with Request Body...
   ```json
   {
-    "thought": "string",
-    "name": "string"
+    "random_thought": {
+      "thought": "string",
+      "name": "string"
+    }
   }
   ```
 
