@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_context 'when bad request' do
-  let(:bad_request) { {} }
+RSpec.shared_examples 'bad request schema' do
   schema '$ref' => '#/components/schemas/error'
   example 'application/json', :empty_request, {
     status: 400,

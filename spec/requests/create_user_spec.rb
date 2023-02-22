@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require_relative '../support/helpers/user_helper'
 require_relative '../support/shared_examples/bad_request_response'
 require_relative '../support/shared_examples/is_created_from_request'
 require_relative '../support/shared_examples/not_created_from_request'
 require_relative '../support/shared_examples/unprocessable_entity_response'
 
 RSpec.describe 'post /users/' do
+  include UserHelper
+
   context 'when valid create request for a new user' do
     subject(:request) { post_user(new_user) }
 
@@ -29,7 +32,7 @@ RSpec.describe 'post /users/' do
   end
 
   context 'when parameters are missing in create request' do
-    subject(:request) { post users_path, params: {} }
+    subject(:request) { post users_path, params: empty_json_body }
 
     before do |example|
       request unless example.metadata[:skip_before]
@@ -64,7 +67,7 @@ RSpec.describe 'post /users/' do
   context 'when validations fail for create request' do
     subject(:request) { post_user(not_valid) }
 
-    let(:not_valid) { build(:user, email: '', display_name: '') }
+    let(:not_valid) { build(:user, :empty) }
 
     before do |example|
       request unless example.metadata[:skip_before]
@@ -78,11 +81,6 @@ RSpec.describe 'post /users/' do
   private
 
   def post_user(user)
-    post users_path, params: {
-      user: {
-        email: user.email,
-        display_name: user.display_name
-      }
-    }
+    post users_path, params: build_user_body(user)
   end
 end

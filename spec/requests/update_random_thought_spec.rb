@@ -49,7 +49,7 @@ RSpec.describe 'patch /random_thoughts/{id}' do
 
     context 'when update parameters are missing in update request' do
       before do
-        patch random_thought_path(random_thought), params: {}, as: :json
+        patch random_thought_path(random_thought), params: empty_json_body, as: :json
       end
 
       it_behaves_like 'RandomThought not updated'

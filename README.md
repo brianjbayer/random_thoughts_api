@@ -20,35 +20,50 @@ mounted into the container.
 ## API Endpoints
 This API contains the following endpoints...
 
-* **Index** all random thoughts: `get /random_thoughts?page={num}`
-  (e.g. http://localhost:3000/random_thoughts?page=2)
-
-* **Show** random thought {id}: `get /random_thoughts/{id}`
-  (e.g. http://localhost:3000/random_thoughts/1)
-
-* **Create** random thought: `post /random_thoughts/`
-  with Request Body...
-  ```json
-  {
-    "random_thought": {
-      "thought": "string",
-      "name": "string"
+* User endpoints...
+  * **Create** user: `post /users/`
+    with Request Body...
+    ```json
+    {
+      "user": {
+        "email": "string",
+        "display_name": "string",
+        "password": "stringst",
+        "password_confirmation": "stringst"
+      }
     }
-  }
-  ```
+    ```
 
-* **Update** random thought {id}: `patch /random_thoughts/{id}`
-  with Request Body...
-  ```json
-  {
-    "random_thought": {
-      "thought": "string",
-      "name": "string"
+* Random Thoughts endpoints...
+  * **Index** all random thoughts: `get /random_thoughts?page={num}`
+    (e.g. http://localhost:3000/random_thoughts?page=2)
+
+  * **Show** random thought {id}: `get /random_thoughts/{id}`
+    (e.g. http://localhost:3000/random_thoughts/1)
+
+  * **Create** random thought: `post /random_thoughts/`
+    with Request Body...
+    ```json
+    {
+      "random_thought": {
+        "thought": "string",
+        "name": "string"
+      }
     }
-  }
-  ```
+    ```
 
-* **Delete** random thought {id}: `delete /random_thoughts/{id}`
+  * **Update** random thought {id}: `patch /random_thoughts/{id}`
+    with Request Body...
+    ```json
+    {
+      "random_thought": {
+        "thought": "string",
+        "name": "string"
+      }
+    }
+    ```
+
+  * **Delete** random thought {id}: `delete /random_thoughts/{id}`
 
 ## Development
 This project can be developed using the supplied basic,

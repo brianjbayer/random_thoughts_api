@@ -183,7 +183,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/user"
+                "$ref": "#/components/schemas/user_response"
         '400':
           description: bad request
           content:
@@ -211,7 +211,9 @@ paths:
                     status: 422
                     error: unprocessable_entity
                     message: 'Validation failed: Email can''t be blank, Email must
-                      match URI::MailTo::EMAIL_REGEXP, Display name can''t be blank'
+                      match URI::MailTo::EMAIL_REGEXP, Display name can''t be blank,
+                      Password can''t be blank, Password is too short (minimum is
+                      8 characters)'
                 email_exists:
                   value:
                     status: 422
@@ -223,7 +225,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/new_user"
+              "$ref": "#/components/schemas/create_user"
 servers:
 - url: https://{defaultHost}
   variables:
@@ -303,10 +305,23 @@ components:
         display_name:
           type: string
           minLength: 1
+        password:
+          type: string
+          minLength: 8
+        password_confirmation:
+          type: string
+          minLength: 8
       required:
       - email
       - display_name
-    user:
+      - password
+      - password_confirmation
+    create_user:
+      type: object
+      properties:
+        user:
+          "$ref": "#/components/schemas/new_user"
+    user_response:
       type: object
       properties:
         id:

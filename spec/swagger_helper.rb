@@ -93,11 +93,19 @@ RSpec.configure do |config|
             type: 'object',
             properties: {
               email: { type: 'string', minLength: 1, maxLength: 254 },
-              display_name: { type: 'string', minLength: 1 }
+              display_name: { type: 'string', minLength: 1 },
+              password: { type: 'string', minLength: User::PASSWORD_MIN_LENGTH },
+              password_confirmation: { type: 'string', minLength: User::PASSWORD_MIN_LENGTH }
             },
-            required: %w[email display_name]
+            required: %w[email display_name password password_confirmation]
           },
-          user: {
+          create_user: {
+            type: 'object',
+            properties: {
+              user: { '$ref' => '#/components/schemas/new_user' }
+            }
+          },
+          user_response: {
             type: 'object',
             properties: {
               id: { type: 'integer' },

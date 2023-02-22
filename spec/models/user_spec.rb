@@ -39,5 +39,11 @@ RSpec.describe User do
     describe 'display_name' do
       it { is_expected.to validate_presence_of(:display_name) }
     end
+
+    describe 'password' do
+      # Note that has_secure_password validates presence of password
+      it { is_expected.to have_secure_password }
+      it { is_expected.to validate_length_of(:password).is_at_least(User::PASSWORD_MIN_LENGTH) }
+    end
   end
 end
