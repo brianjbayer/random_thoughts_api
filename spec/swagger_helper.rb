@@ -114,6 +114,28 @@ RSpec.configure do |config|
             },
             required: %w[id email display_name]
           },
+          login_credentials: {
+            type: 'object',
+            properties: {
+              email: { type: 'string' },
+              password: { type: 'string' }
+            },
+            required: %w[email password]
+          },
+          login: {
+            type: 'object',
+            properties: {
+              authentication: { '$ref' => '#/components/schemas/login_credentials' }
+            }
+          },
+          login_response: {
+            type: 'object',
+            properties: {
+              message: { type: 'string' },
+              token: { type: 'string' }
+            },
+            required: %w[message token]
+          },
           pagination: {
             type: 'object',
             properties: {
