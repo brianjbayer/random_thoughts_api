@@ -48,6 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
+      APP_JWT_SECRET: ${{ secrets.APP_JWT_SECRET }}
     steps:
       - uses: actions/checkout@v1
       - name: dockercomposerun tests on development environment
@@ -58,6 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
+      APP_JWT_SECRET: not-used-but-needed
     steps:
       - uses: actions/checkout@v1
       - name: dockercomposerun swaggerize on development environment
