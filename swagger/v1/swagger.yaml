@@ -17,7 +17,7 @@ paths:
                 successful_login:
                   value:
                     status: 200
-                    message: Successfully logged in user
+                    message: User logged in successfully
                     token: xxxxxxxx.xxxxxxxxxx.xxxxxx
               schema:
                 "$ref": "#/components/schemas/login_response"

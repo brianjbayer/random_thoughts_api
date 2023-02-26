@@ -47,6 +47,9 @@ group :development do
 end
 
 # --- CUSTOM GEMS ---
+# JSON Web Token for Authentication
+gem 'jwt'
+
 # Pagination
 gem 'kaminari'
 

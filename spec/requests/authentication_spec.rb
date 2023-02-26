@@ -21,7 +21,7 @@ RSpec.describe 'authentications' do
         schema '$ref' => '#/components/schemas/login_response'
         example 'application/json', :successful_login, {
           status: 200,
-          message: 'Successfully logged in user',
+          message: 'User logged in successfully',
           token: 'xxxxxxxx.xxxxxxxxxx.xxxxxx'
         }
         run_test!

@@ -11,15 +11,35 @@ RSpec.describe 'post /login' do
   let(:valid_user) { create(:user) }
 
   context 'when valid login credentials' do
-    it 'logs that the user has been authenticated' do
+    let(:secret) { Rails.configuration.jwt_secret }
+    let(:decoded_jwt) { JWT.decode(json_body['token'], secret, true, { algorithm: 'HS256' }) }
+    let(:jwt_claims) { decoded_jwt.first }
+
+    before do |example|
+      post_login(valid_user) unless example.metadata[:skip_before]
+    end
+
+    it 'logs that the user has been authenticated', :skip_before do
       allow(Rails.logger).to receive(:info)
       post_login(valid_user)
       expect(Rails.logger).to have_received(:info).with("Login: Authenticated user [#{valid_user.email}]")
     end
+
+    it 'returns HS256-encoded JWT in "token"' do
+      expect { decoded_jwt }.not_to raise_error
+    end
+
+    it 'returns JWT with "user:" id' do
+      expect(jwt_claims['user']).to eql(valid_user.id)
+    end
+
+    it 'returns "message" indicating user logged in successfully' do
+      expect(json_body['message']).to include('User logged in successfully')
+    end
   end
 
   context 'when incorrect password' do
-    before do |_example|
+    before do
       valid_user.password = 'invalid'
       post_login(valid_user)
     end

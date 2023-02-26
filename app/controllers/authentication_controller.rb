@@ -2,18 +2,26 @@
 
 # Implements application authentication actions
 class AuthenticationController < ApplicationController
+  include JsonWebToken
+
   # Post /authentication/login
   def login
     @user = User.find_by(email: params[:authentication][:email])
     if @user&.authenticate(params[:authentication][:password])
-      # TODO: For now just log successful login and return 200
+      token = jwt_encode({ user: @user.id }, 'authentication')
       logger.info "Login: Authenticated user [#{@user.email}]"
-      render status: :ok, json: {
-        message: 'Successfully logged in user',
-        token: 'TODO: return JWT'
-      }
+      render_logged_in(token)
     else
       render_error_response(:unauthorized, 'Invalid login')
     end
+  end
+
+  private
+
+  def render_logged_in(token)
+    render status: :ok, json: {
+      message: 'User logged in successfully',
+      token:
+    }
   end
 end
