@@ -217,7 +217,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/user_response"
+                "$ref": "#/components/schemas/same_user_response"
         '400':
           description: bad request
           content:
@@ -260,6 +260,51 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/create_user"
+  "/users/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show user
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - "$ref": "#/components/schemas/same_user_response"
+                - "$ref": "#/components/schemas/different_user_response"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    status: 401
+                    error: unauthorized
+                    message: Signature verification failed
+              schema:
+                "$ref": "#/components/schemas/error"
+        '404':
+          description: not found
+          content:
+            application/json:
+              examples:
+                not_found:
+                  value:
+                    status: 404
+                    error: not_found
+                    message: Couldn't find User with 'id'=??
+              schema:
+                "$ref": "#/components/schemas/error"
 servers:
 - url: https://{defaultHost}
   variables:
@@ -268,6 +313,10 @@ servers:
 - url: http://localhost:3000
   description: Local development
 components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
   schemas:
     new_random_thought:
       type: object
@@ -355,7 +404,7 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/new_user"
-    user_response:
+    same_user_response:
       type: object
       properties:
         id:
@@ -370,6 +419,14 @@ components:
       required:
       - id
       - email
+      - display_name
+    different_user_response:
+      type: object
+      properties:
+        display_name:
+          type: string
+          minLength: 1
+      required:
       - display_name
     login_credentials:
       type: object

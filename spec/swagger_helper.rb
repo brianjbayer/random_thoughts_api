@@ -37,6 +37,12 @@ RSpec.configure do |config|
         }
       ],
       components: {
+        securitySchemes: {
+          bearer: {
+            type: :http,
+            scheme: :bearer
+          }
+        },
         schemas: {
           new_random_thought: {
             type: 'object',
@@ -105,7 +111,7 @@ RSpec.configure do |config|
               user: { '$ref' => '#/components/schemas/new_user' }
             }
           },
-          user_response: {
+          same_user_response: {
             type: 'object',
             properties: {
               id: { type: 'integer' },
@@ -113,6 +119,13 @@ RSpec.configure do |config|
               display_name: { type: 'string', minLength: 1 }
             },
             required: %w[id email display_name]
+          },
+          different_user_response: {
+            type: 'object',
+            properties: {
+              display_name: { type: 'string', minLength: 1 }
+            },
+            required: %w[display_name]
           },
           login_credentials: {
             type: 'object',

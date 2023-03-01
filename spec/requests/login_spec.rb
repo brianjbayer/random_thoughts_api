@@ -5,6 +5,12 @@ require 'rails_helper'
 require_relative '../support/helpers/login_helper'
 require_relative '../support/shared_examples/unauthorized_response'
 
+class LoginMessage
+  def self.invalid_login
+    'Invalid login'
+  end
+end
+
 RSpec.describe 'post /login' do
   include LoginHelper
 
@@ -44,7 +50,7 @@ RSpec.describe 'post /login' do
       post_login(valid_user)
     end
 
-    it_behaves_like 'unauthorized response'
+    it_behaves_like 'unauthorized response', LoginMessage.invalid_login
   end
 
   context 'when incorrect email' do
@@ -53,7 +59,7 @@ RSpec.describe 'post /login' do
       post_login(valid_user)
     end
 
-    it_behaves_like 'unauthorized response'
+    it_behaves_like 'unauthorized response', LoginMessage.invalid_login
   end
 
   private

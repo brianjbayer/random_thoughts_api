@@ -2,11 +2,19 @@
 
 # Implements CRUD operations for User
 class UsersController < ApplicationController
+  include AuthorizeUserConcern
   include RenderResponseConcern
+
+  before_action :authorize_request, only: %i[show]
+  before_action :find_user, only: %i[show]
+
+  def show
+    # before_actions and show view
+  end
 
   def create
     @user = User.create!(user_params)
-    render_show_response(:created)
+    render status: :created
   end
 
   private
@@ -16,5 +24,9 @@ class UsersController < ApplicationController
                                  :display_name,
                                  :password,
                                  :password_confirmation)
+  end
+
+  def find_user
+    @user = User.find(params[:id])
   end
 end

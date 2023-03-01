@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples 'unauthorized response' do
+RSpec.shared_examples 'unauthorized response' do |message|
   it 'returns "status": 401' do
     expect(json_body['status']).to be(401)
   end
@@ -9,7 +9,7 @@ RSpec.shared_examples 'unauthorized response' do
     expect(json_body['error']).to eql('unauthorized')
   end
 
-  it 'returns "message" indicating invalid login' do
-    expect(json_body['message']).to include('Invalid login')
+  it "returns \"message\" indicating #{message}" do
+    expect(json_body['message']).to include(message)
   end
 end

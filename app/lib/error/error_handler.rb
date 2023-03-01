@@ -26,6 +26,17 @@ module Error
                     ActionDispatch::Http::Parameters::ParseError do |e|
           render_error_response(:bad_request, e.to_s)
         end
+
+        #--- JWT Errors ---
+        # JWT::DecodeError is the base decoding error
+        rescue_from JWT::DecodeError do |e|
+          render_error_response(:unauthorized, e.to_s)
+        end
+
+        rescue_from JWT::InvalidAudError, JWT::InvalidIssuerError do |e|
+          # Don't leak the expected value which comes after '.'
+          render_error_response(:unauthorized, e.to_s.split('.')[0])
+        end
       end
     end
 
