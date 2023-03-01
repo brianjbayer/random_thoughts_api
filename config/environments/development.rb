@@ -1,4 +1,8 @@
-require "active_support/core_ext/integer/time"
+# Based on defaults
+require Rails.root.join('config/environments/default')
+
+# TODO: Remove during default configuration refactor
+# require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.

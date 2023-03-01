@@ -4,4 +4,5 @@ services:
     image: brianjbayer/random_thoughts_api:${APP_TAG:-latest}
     container_name: ${APP_HOSTNAME:-app}
     environment:
+      - RAILS_LOG_TO_STDOUT
       - APP_JWT_SECRET
