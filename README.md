@@ -103,23 +103,8 @@ script.
 
 #### PREREQUISITES
 In order to run the containerized development environment...
+
 1. Docker must be installed and running
-
-2. You must set the required environment variable `APP_JWT_SECRET`
-   > Note that to even generate a secret for setting `APP_JWT_SECRET`
-   > using the `rails secret` command, you must have already set
-   > `APP_JWT_SECRET` with an initial value.  You can use this
-   > hack...
-   > ```
-   > export APP_JWT_SECRET=chicken-to-lay-first-egg
-
-Provided that you have already set `APP_JWT_SECRET` to some initial
-value, to generate a suitable secret for setting `APP_JWT_SECRET`,
-you can use the `rails secret` command, for example...
-```
-APP_JWT_SECRET=$(bundle exec bin/rails secret)
-```
-
 
 #### Running the Containerized Development Environment
 1. Run the following command to run the containerized development
@@ -170,6 +155,25 @@ visibility and access.
 ---
 
 ## Operating
+
+### PREREQUISITES
+In order to run the rails commands for this application...
+
+1. You must set the required environment variable `APP_JWT_SECRET`
+   > Note that to even generate a secret for setting `APP_JWT_SECRET`
+   > using the `rails secret` command, you must have already set
+   > `APP_JWT_SECRET` with an initial value.  You can use this
+   > hack...
+   > ```
+   > export APP_JWT_SECRET=chicken-to-lay-first-egg
+   > ```
+
+Provided that you have already set `APP_JWT_SECRET` to some initial
+value, to generate a suitable secret for setting `APP_JWT_SECRET`,
+you can use the `rails secret` command, for example...
+```
+APP_JWT_SECRET=$(bundle exec bin/rails secret)
+```
 
 ### Database
 This project uses a Rails-supported PostgreSQL database with
