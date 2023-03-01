@@ -3,20 +3,17 @@
 require 'swagger_helper'
 require_relative '../support/helpers/random_thought_helper'
 require_relative '../support/shared_examples/bad_request_schema'
+require_relative '../support/shared_examples/not_found_schema'
 require_relative '../support/shared_examples/unprocessable_entity_schema'
+
+class RandomThoughtMessage
+  def self.not_found
+    "Couldn't find RandomThought with 'id'=??"
+  end
+end
 
 RSpec.describe 'random_thoughts' do
   include RandomThoughtHelper
-
-  shared_context 'when not found' do
-    let(:id) { 0 }
-    schema '$ref' => '#/components/schemas/error'
-    example 'application/json', :not_found, {
-      status: 404,
-      error: 'not_found',
-      message: "Couldn't find RandomThought with 'id'=??"
-    }
-  end
 
   path '/random_thoughts' do
     get('list random_thoughts') do
@@ -80,7 +77,8 @@ RSpec.describe 'random_thoughts' do
       end
 
       response(404, 'not found') do
-        include_context 'when not found'
+        let(:id) { 0 }
+        it_behaves_like 'not found schema', RandomThoughtMessage.not_found
         run_test!
       end
     end
@@ -107,8 +105,9 @@ RSpec.describe 'random_thoughts' do
       end
 
       response(404, 'not found') do
-        include_context 'when not found'
         let(:update) { build_random_thought_body(build(:random_thought)) }
+        let(:id) { 0 }
+        it_behaves_like 'not found schema', RandomThoughtMessage.not_found
         run_test!
       end
 
@@ -133,7 +132,8 @@ RSpec.describe 'random_thoughts' do
       end
 
       response(404, 'not found') do
-        include_context 'when not found'
+        let(:id) { 0 }
+        it_behaves_like 'not found schema', RandomThoughtMessage.not_found
         run_test!
       end
     end

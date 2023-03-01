@@ -19,9 +19,25 @@ mounted into the container.
 
 ## API Endpoints
 This API contains the following endpoints...
+* Authentication endpoints...
+  * **Login** user: `post /login`
+    with Request Body...
+    ```json
+    {
+      "authentication": {
+        "email": "string",
+        "password": "string"
+      }
+    }
+    ```
 
 * User endpoints...
-  * **Create** user: `post /users/`
+  * **Show** user {id}: `get /users/{id}`
+    (e.g. http://localhost:3000/users/1)
+    > **Requires** Authorization JWT from login
+    > in request header
+
+  * **Create** user: `post /users`
     with Request Body...
     ```json
     {
@@ -41,7 +57,7 @@ This API contains the following endpoints...
   * **Show** random thought {id}: `get /random_thoughts/{id}`
     (e.g. http://localhost:3000/random_thoughts/1)
 
-  * **Create** random thought: `post /random_thoughts/`
+  * **Create** random thought: `post /random_thoughts`
     with Request Body...
     ```json
     {
@@ -85,8 +101,27 @@ The easiest way to run the containerized development environment
 is with the docker-compose framework using the `dockercomposerun`
 script.
 
-> **PREREQUISITE:** Docker must be installed and running
+#### PREREQUISITES
+In order to run the containerized development environment...
+1. Docker must be installed and running
 
+2. You must set the required environment variable `APP_JWT_SECRET`
+   > Note that to even generate a secret for setting `APP_JWT_SECRET`
+   > using the `rails secret` command, you must have already set
+   > `APP_JWT_SECRET` with an initial value.  You can use this
+   > hack...
+   > ```
+   > export APP_JWT_SECRET=chicken-to-lay-first-egg
+
+Provided that you have already set `APP_JWT_SECRET` to some initial
+value, to generate a suitable secret for setting `APP_JWT_SECRET`,
+you can use the `rails secret` command, for example...
+```
+APP_JWT_SECRET=$(bundle exec bin/rails secret)
+```
+
+
+#### Running the Containerized Development Environment
 1. Run the following command to run the containerized development
    environment...
    ```
@@ -224,6 +259,7 @@ By default the Swagger UI is located at http://localhost:3000/api-docs/
 ### Support
 
 * [PostgreSQL](https://www.postgresql.org/) - Database
+* [JWT](https://github.com/jwt/ruby-jwt) - Authorization
 * [RSpec](http://rspec.info/) - Test Framework
 * [Factory Bot](https://github.com/thoughtbot/factory_bot) - Test
   Data Factory Framework

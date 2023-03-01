@@ -1,12 +1,25 @@
 # frozen_string_literal: true
 
 require 'swagger_helper'
+require_relative '../support/helpers/jwt_helper'
 require_relative '../support/helpers/user_helper'
 require_relative '../support/shared_examples/bad_request_schema'
+require_relative '../support/shared_examples/not_found_schema'
 require_relative '../support/shared_examples/unprocessable_entity_schema'
+
+class UserMessage
+  def self.not_found
+    "Couldn't find User with 'id'=??"
+  end
+end
 
 RSpec.describe 'users' do
   include UserHelper
+  include JwtHelper
+
+  # rubocop:disable RSpec/VariableName
+  let(:Authorization) { "Bearer #{jwt}" }
+  # rubocop:enable RSpec/VariableName
 
   path '/users' do
     post('create user') do
@@ -18,7 +31,7 @@ RSpec.describe 'users' do
 
       response(201, 'created') do
         let(:user) { build_user_body(build(:user)) }
-        schema '$ref' => '#/components/schemas/user_response'
+        schema '$ref' => '#/components/schemas/same_user_response'
         run_test!
       end
 
@@ -41,6 +54,44 @@ RSpec.describe 'users' do
         }
         let(:empty_values) { build(:user, :empty) }
         let(:user) { empty_values }
+        run_test!
+      end
+    end
+  end
+
+  path '/users/{id}' do
+    parameter name: 'id', in: :path, type: :string, description: 'id'
+
+    get('show user') do
+      consumes 'application/json'
+      produces 'application/json'
+      security [bearer: []]
+
+      response(200, 'successful') do
+        let(:jwt) { valid_jwt(create(:user).id) }
+        let(:id) { create(:user).id }
+
+        schema oneOf: [{ '$ref' => '#/components/schemas/same_user_response' },
+                       { '$ref' => '#/components/schemas/different_user_response' }]
+        run_test!
+      end
+
+      response(401, 'unauthorized') do
+        let(:id) { create(:user).id }
+        let(:jwt) { invalid_signature_jwt(id) }
+        schema '$ref' => '#/components/schemas/error'
+        example 'application/json', :unauthorized, {
+          status: 401,
+          error: 'unauthorized',
+          message: 'Signature verification failed'
+        }
+        run_test!
+      end
+
+      response(404, 'not found') do
+        let(:jwt) { valid_jwt(create(:user).id) }
+        let(:id) { 0 }
+        it_behaves_like 'not found schema', UserMessage.not_found
         run_test!
       end
     end

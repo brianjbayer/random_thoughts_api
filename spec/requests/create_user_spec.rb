@@ -5,15 +5,16 @@ require_relative '../support/helpers/user_helper'
 require_relative '../support/shared_examples/bad_request_response'
 require_relative '../support/shared_examples/is_created_from_request'
 require_relative '../support/shared_examples/not_created_from_request'
+require_relative '../support/shared_examples/same_user_response'
 require_relative '../support/shared_examples/unprocessable_entity_response'
 
 RSpec.describe 'post /users/' do
   include UserHelper
 
   context 'when valid create request for a new user' do
-    subject(:request) { post_user(new_user) }
+    subject(:request) { post_user(user) }
 
-    let(:new_user) { build(:user) }
+    let(:user) { build(:user) }
 
     before do |example|
       request unless example.metadata[:skip_before]
@@ -21,14 +22,7 @@ RSpec.describe 'post /users/' do
 
     it_behaves_like 'is created from request', User
 
-    # TODO: it_behaves_like 'user response'
-    it 'returns "email": email' do
-      expect(json_body['email']).to eql(new_user.email)
-    end
-
-    it 'returns "display_name": display_name' do
-      expect(json_body['display_name']).to eql(new_user.display_name)
-    end
+    it_behaves_like 'same user response'
   end
 
   context 'when parameters are missing in create request' do
@@ -42,8 +36,6 @@ RSpec.describe 'post /users/' do
 
     it_behaves_like 'bad_request response'
   end
-
-  # TODO: Testing invalid json does not seem to be possible
 
   context 'when user already exists' do
     subject(:request) { post_user(duplicate_user) }
