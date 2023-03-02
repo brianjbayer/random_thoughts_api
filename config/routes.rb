@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   post '/login', to: 'authentication#login', defaults: { format: 'json' }
+  get  '/logout', to: 'authentication#logout', defaults: { format: 'json' }
 
   get  '/users/:id', to: 'users#show', as: 'user', defaults: { format: 'json' }
   post '/users', to: 'users#create', defaults: { format: 'json' }

@@ -2,10 +2,12 @@
 
 require 'swagger_helper'
 
+require_relative '../support/helpers/jwt_helper'
 require_relative '../support/helpers/login_helper'
 require_relative '../support/shared_examples/bad_request_schema'
 
 RSpec.describe 'authentications' do
+  include JwtHelper
   include LoginHelper
 
   path '/login' do
@@ -20,7 +22,6 @@ RSpec.describe 'authentications' do
         let(:login) { build_login_body(create(:user)) }
         schema '$ref' => '#/components/schemas/login_response'
         example 'application/json', :successful_login, {
-          status: 200,
           message: 'User logged in successfully',
           token: 'xxxxxxxx.xxxxxxxxxx.xxxxxx'
         }
@@ -35,6 +36,40 @@ RSpec.describe 'authentications' do
           status: 401,
           error: 'unauthorized',
           message: 'Invalid login'
+        }
+        run_test!
+      end
+    end
+  end
+
+  path '/logout' do
+    get('logout') do
+      consumes 'application/json'
+      produces 'application/json'
+      security [bearer: []]
+
+      response(200, 'logged out') do
+        # rubocop:disable RSpec/VariableName
+        let(:Authorization) { "Bearer #{jwt}" }
+        # rubocop:enable RSpec/VariableName
+        let(:jwt) { valid_jwt(create(:user)) }
+
+        schema '$ref' => '#/components/schemas/logout_response'
+        example 'application/json', :successful_logout, {
+          message: 'User logged out successfully'
+        }
+        run_test!
+      end
+
+      response(401, 'unauthorized') do
+        # rubocop:disable RSpec/VariableName
+        let(:Authorization) { '' }
+        # rubocop:enable RSpec/VariableName
+        schema '$ref' => '#/components/schemas/error'
+        example 'application/json', :unauthorized, {
+          status: 401,
+          error: 'unauthorized',
+          message: 'Nil JSON web token'
         }
         run_test!
       end

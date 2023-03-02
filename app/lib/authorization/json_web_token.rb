@@ -37,7 +37,7 @@ module Authorization
     private
 
     def required_claims
-      %w[aud exp iss user]
+      %w[aud exp iss user auth]
     end
 
     def valid_secret

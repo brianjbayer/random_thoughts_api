@@ -149,6 +149,13 @@ RSpec.configure do |config|
             },
             required: %w[message token]
           },
+          logout_response: {
+            type: 'object',
+            properties: {
+              message: { type: 'string' }
+            },
+            required: %w[message]
+          },
           pagination: {
             type: 'object',
             properties: {

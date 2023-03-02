@@ -45,5 +45,39 @@ RSpec.describe User do
       it { is_expected.to have_secure_password }
       it { is_expected.to validate_length_of(:password).is_at_least(User::PASSWORD_MIN_LENGTH) }
     end
+
+    describe 'authorization_min' do
+      it { is_expected.to validate_presence_of(:authorization_min) }
+      it { is_expected.to validate_numericality_of(:authorization_min).only_integer }
+    end
+  end
+
+  describe 'methods' do
+    subject(:user) { create(:user) }
+
+    describe 'auth_revoked?' do
+      it 'returns true when authorization_min > value' do
+        user.authorization_min = Faker::Number.number
+        expect(user.auth_revoked?(user.authorization_min - 1)).to be(true)
+      end
+
+      it 'returns false when authorization_min = value' do
+        user.authorization_min = Faker::Number.number
+        expect(user.auth_revoked?(user.authorization_min)).to be(false)
+      end
+
+      it 'returns false when authorization_min < value' do
+        user.authorization_min = Faker::Number.number
+        expect(user.auth_revoked?(user.authorization_min + 1)).to be(false)
+      end
+    end
+
+    describe 'revoke_auth' do
+      it 'increments authorization_min by 1' do
+        initial_value = user.authorization_min
+        user.revoke_auth
+        expect(user.reload.authorization_min).to eql(initial_value + 1)
+      end
+    end
   end
 end
