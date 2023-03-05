@@ -31,6 +31,11 @@ This API contains the following endpoints...
     }
     ```
 
+  * **Logout** user: `get /logout`
+    (e.g. http://localhost:3000/logout)
+    > **Requires** Authorization JWT from login
+    > in request header
+
 * User endpoints...
   * **Show** user {id}: `get /users/{id}`
     (e.g. http://localhost:3000/users/1)

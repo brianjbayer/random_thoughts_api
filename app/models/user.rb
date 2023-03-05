@@ -19,7 +19,15 @@ class User < ApplicationRecord
   validates :display_name, presence: true
 
   has_secure_password
-  # TODO: When update is implemented...
-  # https://stackoverflow.com/questions/6486305/has-secure-password-how-to-require-minimum-length
-  validates :password, length: { minimum: PASSWORD_MIN_LENGTH }
+  validates :password, presence: true, length: { minimum: PASSWORD_MIN_LENGTH }, allow_nil: true
+
+  validates :authorization_min, presence: true, numericality: { only_integer: true }
+
+  def auth_revoked?(auth_value)
+    authorization_min > auth_value
+  end
+
+  def revoke_auth
+    update!(authorization_min: self.authorization_min += 1)
+  end
 end

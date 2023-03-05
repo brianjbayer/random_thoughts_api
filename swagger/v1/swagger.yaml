@@ -16,7 +16,6 @@ paths:
               examples:
                 successful_login:
                   value:
-                    status: 200
                     message: User logged in successfully
                     token: xxxxxxxx.xxxxxxxxxx.xxxxxx
               schema:
@@ -38,6 +37,34 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/login"
+  "/logout":
+    get:
+      summary: logout
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: logged out
+          content:
+            application/json:
+              examples:
+                successful_logout:
+                  value:
+                    message: User logged out successfully
+              schema:
+                "$ref": "#/components/schemas/logout_response"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    status: 401
+                    error: unauthorized
+                    message: Nil JSON web token
+              schema:
+                "$ref": "#/components/schemas/error"
   "/random_thoughts":
     get:
       summary: list random_thoughts
@@ -453,6 +480,13 @@ components:
       required:
       - message
       - token
+    logout_response:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+      - message
     pagination:
       type: object
       properties:

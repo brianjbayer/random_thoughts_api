@@ -68,7 +68,8 @@ RSpec.describe 'users' do
       security [bearer: []]
 
       response(200, 'successful') do
-        let(:jwt) { valid_jwt(create(:user).id) }
+        # NOTE: This is intended to test different users
+        let(:jwt) { valid_jwt(create(:user)) }
         let(:id) { create(:user).id }
 
         schema oneOf: [{ '$ref' => '#/components/schemas/same_user_response' },
@@ -77,8 +78,9 @@ RSpec.describe 'users' do
       end
 
       response(401, 'unauthorized') do
-        let(:id) { create(:user).id }
-        let(:jwt) { invalid_signature_jwt(id) }
+        let(:user) { create(:user) }
+        let(:id) { user.id }
+        let(:jwt) { invalid_signature_jwt(user) }
         schema '$ref' => '#/components/schemas/error'
         example 'application/json', :unauthorized, {
           status: 401,
@@ -89,7 +91,7 @@ RSpec.describe 'users' do
       end
 
       response(404, 'not found') do
-        let(:jwt) { valid_jwt(create(:user).id) }
+        let(:jwt) { valid_jwt(create(:user)) }
         let(:id) { 0 }
         it_behaves_like 'not found schema', UserMessage.not_found
         run_test!
