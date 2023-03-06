@@ -15,13 +15,22 @@ class RandomThoughtsController < ApplicationController
   end
 
   def create
-    @random_thought = RandomThought.create!(random_thought_params)
-    render_show_response(:created)
+    @random_thought = RandomThought.new(random_thought_params)
+    if @random_thought.save
+      render_show_response(:created)
+    else
+      # NOTE: Bad Requests are handled by error handler
+      render_validation_error_response(@random_thought)
+    end
   end
 
   def update
-    @random_thought.update!(random_thought_params)
-    render_show_response(:ok)
+    if @random_thought.update(random_thought_params)
+      render_show_response(:ok)
+    else
+      # NOTE: Bad Requests are handled by error handler
+      render_validation_error_response(@random_thought)
+    end
   end
 
   def destroy

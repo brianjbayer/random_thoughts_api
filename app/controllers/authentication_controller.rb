@@ -15,7 +15,7 @@ class AuthenticationController < ApplicationController
       logger.info "Login: Authenticated user [#{@user.email}]"
       render_logged_in(token)
     else
-      render_error_response(:unauthorized, 'Invalid login')
+      render_error_status_and_json(:unauthorized, 'Invalid login')
     end
   end
 
