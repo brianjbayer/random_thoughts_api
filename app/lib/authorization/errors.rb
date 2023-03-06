@@ -10,5 +10,13 @@ module Authorization
         super('Unauthorized: User logged out or access revoked')
       end
     end
+
+    # Custom exception when user is not authorized for action
+    # (i.e. id is not current user's id)
+    class UnauthorizedUserError < AuthorizationError
+      def initialize
+        super('Unauthorized: User does not authorization for this action')
+      end
+    end
   end
 end

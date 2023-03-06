@@ -4,7 +4,7 @@ require 'rails_helper'
 require_relative '../support/helpers/random_thought_helper'
 require_relative '../support/shared_examples/bad_request_response'
 require_relative '../support/shared_examples/is_created_from_request'
-require_relative '../support/shared_examples/not_created_from_request'
+require_relative '../support/shared_examples/is_not_created_from_request'
 require_relative '../support/shared_examples/random_thought_response'
 require_relative '../support/shared_examples/unprocessable_entity_response'
 
@@ -32,7 +32,7 @@ RSpec.describe 'post /random_thoughts/' do
       request unless example.metadata[:skip_before]
     end
 
-    it_behaves_like 'not created from request', RandomThought
+    it_behaves_like 'is not created from request', RandomThought
 
     it_behaves_like 'bad_request response'
   end
@@ -48,7 +48,7 @@ RSpec.describe 'post /random_thoughts/' do
       request unless example.metadata[:skip_before]
     end
 
-    it_behaves_like 'not created from request', RandomThought
+    it_behaves_like 'is not created from request', RandomThought
 
     it_behaves_like 'unprocessable_entity response'
   end

@@ -2,8 +2,6 @@
 
 # Implements CRUD operations for RandomThought
 class RandomThoughtsController < ApplicationController
-  include RenderResponseConcern
-
   before_action :find_random_thought, only: %i[show update destroy]
 
   def index

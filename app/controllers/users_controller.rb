@@ -2,11 +2,9 @@
 
 # Implements CRUD operations for User
 class UsersController < ApplicationController
-  include AuthorizeUserConcern
-  include RenderResponseConcern
-
-  before_action :authorize_request, only: %i[show]
-  before_action :find_user, only: %i[show]
+  before_action :authorize_request, only: %i[show destroy]
+  before_action :find_user, only: %i[show destroy]
+  before_action :authorize_current_user, only: %i[destroy]
 
   def show
     # before_actions and show view
@@ -20,6 +18,11 @@ class UsersController < ApplicationController
       # NOTE: Bad Requests are handled by error handler
       render_validation_error_response(@user)
     end
+  end
+
+  def destroy
+    @user.destroy!
+    render_show_response(:ok)
   end
 
   private

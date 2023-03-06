@@ -5,6 +5,7 @@ require 'swagger_helper'
 require_relative '../support/helpers/jwt_helper'
 require_relative '../support/helpers/login_helper'
 require_relative '../support/shared_examples/bad_request_schema'
+require_relative '../support/shared_examples/unauthorized_schema'
 
 RSpec.describe 'authentications' do
   include JwtHelper
@@ -31,12 +32,7 @@ RSpec.describe 'authentications' do
       response(401, 'unauthorized') do
         # FYI: Totally empty, missing credentials, bad credentials all end up here
         let(:login) { empty_json_body }
-        schema '$ref' => '#/components/schemas/error'
-        example 'application/json', :unauthorized, {
-          status: 401,
-          error: 'unauthorized',
-          message: 'Invalid login'
-        }
+        it_behaves_like 'unauthorized schema', 'Invalid login'
         run_test!
       end
     end
@@ -65,12 +61,7 @@ RSpec.describe 'authentications' do
         # rubocop:disable RSpec/VariableName
         let(:Authorization) { '' }
         # rubocop:enable RSpec/VariableName
-        schema '$ref' => '#/components/schemas/error'
-        example 'application/json', :unauthorized, {
-          status: 401,
-          error: 'unauthorized',
-          message: 'Nil JSON web token'
-        }
+        it_behaves_like 'unauthorized schema', 'Nil JSON web token'
         run_test!
       end
     end

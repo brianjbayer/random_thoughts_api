@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Module for Authorizing a user from JWT in request header
-module AuthorizeUserConcern
+module JwtAuthorizer
   extend ActiveSupport::Concern
   include Authorization::JsonWebToken
   include Authorization::Errors
@@ -11,6 +11,10 @@ module AuthorizeUserConcern
       decoded_jwt = decode_authentication_jwt(request_authorization_token)
       @current_user = User.find(decoded_jwt['user'])
       validate_token(@current_user, decoded_jwt)
+    end
+
+    def authorize_current_user
+      raise Authorization::Errors::UnauthorizedUserError unless current_user?(@user)
     end
   end
 
@@ -23,5 +27,9 @@ module AuthorizeUserConcern
 
   def validate_token(user, token)
     raise Authorization::Errors::TokenRevokedError if user.auth_revoked?(token['auth'])
+  end
+
+  def current_user?(user)
+    user == @current_user
   end
 end
