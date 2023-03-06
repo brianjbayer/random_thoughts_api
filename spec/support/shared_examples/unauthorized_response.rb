@@ -1,15 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'unauthorized response' do |message|
-  it 'returns "status": 401' do
-    expect(json_body['status']).to be(401)
-  end
-
-  it 'returns "error": "unauthorized"' do
-    expect(json_body['error']).to eql('unauthorized')
-  end
-
-  it "returns \"message\" indicating #{message}" do
-    expect(json_body['message']).to include(message)
+  it "returns error JSON with 401, \"unauthorized\", and indicates #{message}" do
+    expect(json_body).to be_error_json(401, 'unauthorized', message)
   end
 end

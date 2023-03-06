@@ -22,16 +22,8 @@ RSpec.describe ApplicationController do
       expect(response.content_type).to eql('application/json; charset=utf-8')
     end
 
-    it 'returns "status": 500' do
-      expect(json_body['status']).to be(500)
-    end
-
-    it 'returns "error": "internal_server_error"' do
-      expect(json_body['error']).to eql('internal_server_error')
-    end
-
-    it 'returns "message": ...' do
-      expect(json_body['message']).to include('ruh roh')
+    it 'returns error JSON with 500, "internal_server_error", and supplied message' do
+      expect(json_body).to be_error_json(500, 'internal_server_error', 'ruh roh')
     end
   end
 end
