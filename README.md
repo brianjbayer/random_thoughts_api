@@ -55,6 +55,10 @@ This API contains the following endpoints...
     }
     ```
 
+  * **Delete** user {id}: `delete /users/{id}`
+    > **Requires** Authorization JWT from login
+    > in request header
+
 * Random Thoughts endpoints...
   * **Index** all random thoughts: `get /random_thoughts?page={num}`
     (e.g. http://localhost:3000/random_thoughts?page=2)

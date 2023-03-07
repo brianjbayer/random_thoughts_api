@@ -332,6 +332,41 @@ paths:
                     message: Couldn't find User with 'id'=??
               schema:
                 "$ref": "#/components/schemas/error"
+    delete:
+      summary: delete user
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/same_user_response"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    status: 401
+                    error: unauthorized
+                    message: Expected a different algorithm
+              schema:
+                "$ref": "#/components/schemas/error"
+        '404':
+          description: not found
+          content:
+            application/json:
+              examples:
+                not_found:
+                  value:
+                    status: 404
+                    error: not_found
+                    message: Couldn't find User with 'id'=??
+              schema:
+                "$ref": "#/components/schemas/error"
 servers:
 - url: https://{defaultHost}
   variables:

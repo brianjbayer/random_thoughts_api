@@ -11,10 +11,13 @@ RSpec.describe 'get /user/{id}' do
   include JwtHelper
 
   let(:user) { create(:user) }
-  let(:request_without_jwt) { get user_path(user), params: {} }
-  let(:request_with_jwt) { get_user(user, jwt) }
 
-  it_behaves_like 'jwt_authorization'
+  describe 'authorization' do
+    let(:request_without_jwt) { get user_path(user), params: {} }
+    let(:request_with_jwt) { get_user(user, jwt) }
+
+    it_behaves_like 'jwt_authorization'
+  end
 
   context 'when valid authorization' do
     let(:valid_auth_jwt) { valid_jwt(user) }

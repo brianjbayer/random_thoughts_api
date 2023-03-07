@@ -4,7 +4,7 @@ require 'rails_helper'
 require_relative '../support/helpers/user_helper'
 require_relative '../support/shared_examples/bad_request_response'
 require_relative '../support/shared_examples/is_created_from_request'
-require_relative '../support/shared_examples/not_created_from_request'
+require_relative '../support/shared_examples/is_not_created_from_request'
 require_relative '../support/shared_examples/same_user_response'
 require_relative '../support/shared_examples/unprocessable_entity_response'
 
@@ -32,7 +32,7 @@ RSpec.describe 'post /users/' do
       request unless example.metadata[:skip_before]
     end
 
-    it_behaves_like 'not created from request', User
+    it_behaves_like 'is not created from request', User
 
     it_behaves_like 'bad_request response'
   end
@@ -51,7 +51,7 @@ RSpec.describe 'post /users/' do
       expect(json_body['message']).to include('Email has already been taken')
     end
 
-    it_behaves_like 'not created from request', User
+    it_behaves_like 'is not created from request', User
 
     it_behaves_like 'unprocessable_entity response'
   end
@@ -65,7 +65,7 @@ RSpec.describe 'post /users/' do
       request unless example.metadata[:skip_before]
     end
 
-    it_behaves_like 'not created from request', User
+    it_behaves_like 'is not created from request', User
 
     it_behaves_like 'unprocessable_entity response'
   end

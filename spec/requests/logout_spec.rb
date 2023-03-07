@@ -9,10 +9,13 @@ RSpec.describe 'get /logout' do
   include JwtHelper
 
   let(:user) { create(:user) }
-  let(:request_without_jwt) { get logout_path }
-  let(:request_with_jwt) { get_logout(jwt) }
 
-  it_behaves_like 'jwt_authorization'
+  describe 'authorization' do
+    let(:request_without_jwt) { get logout_path }
+    let(:request_with_jwt) { get_logout(jwt) }
+
+    it_behaves_like 'jwt_authorization'
+  end
 
   context 'when authorized' do
     let(:valid_auth_jwt) { valid_jwt(user) }

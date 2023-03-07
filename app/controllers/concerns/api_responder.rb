@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Module for rendering Common Response in Controllers
-module RenderResponseConcern
+module ApiResponder
   extend ActiveSupport::Concern
   included do
     def render_show_response(status)

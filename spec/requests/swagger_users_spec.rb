@@ -5,6 +5,7 @@ require_relative '../support/helpers/jwt_helper'
 require_relative '../support/helpers/user_helper'
 require_relative '../support/shared_examples/bad_request_schema'
 require_relative '../support/shared_examples/not_found_schema'
+require_relative '../support/shared_examples/unauthorized_schema'
 require_relative '../support/shared_examples/unprocessable_entity_schema'
 
 class UserMessage
@@ -81,12 +82,36 @@ RSpec.describe 'users' do
         let(:user) { create(:user) }
         let(:id) { user.id }
         let(:jwt) { invalid_signature_jwt(user) }
-        schema '$ref' => '#/components/schemas/error'
-        example 'application/json', :unauthorized, {
-          status: 401,
-          error: 'unauthorized',
-          message: 'Signature verification failed'
-        }
+        it_behaves_like 'unauthorized schema', 'Signature verification failed'
+        run_test!
+      end
+
+      response(404, 'not found') do
+        let(:jwt) { valid_jwt(create(:user)) }
+        let(:id) { 0 }
+        it_behaves_like 'not found schema', UserMessage.not_found
+        run_test!
+      end
+    end
+
+    delete('delete user') do
+      consumes 'application/json'
+      produces 'application/json'
+      security [bearer: []]
+
+      response(200, 'successful') do
+        let(:user) { create(:user) }
+        let(:jwt) { valid_jwt(user) }
+        let(:id) { user.id }
+        schema '$ref' => '#/components/schemas/same_user_response'
+        run_test!
+      end
+
+      response(401, 'unauthorized') do
+        let(:user) { create(:user) }
+        let(:id) { user.id }
+        let(:jwt) { invalid_algorithm_jwt(user) }
+        it_behaves_like 'unauthorized schema', 'Expected a different algorithm'
         run_test!
       end
 

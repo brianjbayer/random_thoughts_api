@@ -3,7 +3,6 @@
 # Implements application authentication actions
 class AuthenticationController < ApplicationController
   include Authorization::JsonWebToken
-  include AuthorizeUserConcern
 
   before_action :authorize_request, only: %i[logout]
 
