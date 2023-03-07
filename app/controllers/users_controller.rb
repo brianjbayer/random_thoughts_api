@@ -2,9 +2,9 @@
 
 # Implements CRUD operations for User
 class UsersController < ApplicationController
-  before_action :authorize_request, only: %i[show destroy]
-  before_action :find_user, only: %i[show destroy]
-  before_action :authorize_current_user, only: %i[destroy]
+  before_action :authorize_request, only: %i[show update destroy]
+  before_action :find_user, only: %i[show update destroy]
+  before_action :authorize_current_user, only: %i[update destroy]
 
   def show
     # before_actions and show view
@@ -14,6 +14,15 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       render status: :created
+    else
+      # NOTE: Bad Requests are handled by error handler
+      render_validation_error_response(@user)
+    end
+  end
+
+  def update
+    if @user.update(user_params)
+      render_show_response(:ok)
     else
       # NOTE: Bad Requests are handled by error handler
       render_validation_error_response(@user)

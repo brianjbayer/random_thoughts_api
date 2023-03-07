@@ -332,6 +332,79 @@ paths:
                     message: Couldn't find User with 'id'=??
               schema:
                 "$ref": "#/components/schemas/error"
+    patch:
+      summary: update user
+      security:
+      - bearer: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/same_user_response"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              examples:
+                empty_request:
+                  value:
+                    status: 400
+                    error: bad_request
+                    message: param is missing or the value is empty:...
+                invalid_request:
+                  value:
+                    status: 400
+                    error: bad_request
+                    message: Error occurred while parsing request parameters
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    status: 401
+                    error: unauthorized
+                    message: Signature has expired
+              schema:
+                "$ref": "#/components/schemas/error"
+        '404':
+          description: not found
+          content:
+            application/json:
+              examples:
+                not_found:
+                  value:
+                    status: 404
+                    error: not_found
+                    message: Couldn't find User with 'id'=??
+              schema:
+                "$ref": "#/components/schemas/error"
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              examples:
+                unprocessable_entity:
+                  value:
+                    status: 422
+                    error: unprocessable_entity
+                    message: 'Validation failed: Email can''t be blank, Email must
+                      match URI::MailTo::EMAIL_REGEXP, Display name can''t be blank,
+                      Password can''t be blank, Password is too short (minimum is
+                      8 characters)'
+              schema:
+                "$ref": "#/components/schemas/error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/update_user"
     delete:
       summary: delete user
       security:
@@ -490,6 +563,29 @@ components:
           minLength: 1
       required:
       - display_name
+    updated_user:
+      type: object
+      properties:
+        email:
+          type: string
+          minLength: 1
+          maxLength: 254
+        display_name:
+          type: string
+          minLength: 1
+        password:
+          type: string
+          minLength: 8
+        password_confirmation:
+          type: string
+          minLength: 8
+    update_user:
+      type: object
+      properties:
+        user:
+          "$ref": "#/components/schemas/updated_user"
+      required:
+      - user
     login_credentials:
       type: object
       properties:

@@ -2,14 +2,10 @@
 
 module UserHelper
   def build_user_body(user)
-    # We build this explicitly (vs. as_json) to populate password* attributes
-    {
-      user: {
-        email: user.email,
-        display_name: user.display_name,
-        password: user.password,
-        password_confirmation: user.password_confirmation
-      }
-    }
+    user_body = user.attributes.slice('email', 'display_name')
+    # NOTE: password attributes must be handled explicitly
+    user_body['password'] = user.password
+    user_body['password_confirmation'] = user.password_confirmation
+    { user: user_body }
   end
 end

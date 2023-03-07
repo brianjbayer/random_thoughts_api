@@ -55,6 +55,21 @@ This API contains the following endpoints...
     }
     ```
 
+  * **Update** user {id}: `patch /users/{id}`
+    with Request Body...
+    ```json
+    {
+      "user": {
+        "email": "string",
+        "display_name": "string",
+        "password": "stringst",
+        "password_confirmation": "stringst"
+      }
+    }
+    ```
+    > **Requires** Authorization JWT from login
+    > in request header
+
   * **Delete** user {id}: `delete /users/{id}`
     > **Requires** Authorization JWT from login
     > in request header
@@ -231,7 +246,6 @@ Run the following command to run the dependency security scan...
 ```
 ./script/run depsecscan
 ```
-
 
 ### Running the Application
 Run the following command to run the Rails server...

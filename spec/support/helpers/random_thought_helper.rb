@@ -2,11 +2,7 @@
 
 module RandomThoughtHelper
   def build_random_thought_body(random_thought)
-    {
-      random_thought: {
-        thought: random_thought.thought,
-        name: random_thought.name
-      }
-    }
+    body = random_thought.attributes.slice('thought', 'name')
+    { random_thought: body }
   end
 end
