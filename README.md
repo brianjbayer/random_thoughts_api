@@ -266,8 +266,8 @@ By default the Swagger UI is located at http://localhost:3000/api-docs/
 ## Specifications
 ### Versions
 
-* Rails: 7.0.4
-* Ruby: 3.2.0
+* Rails: 7.0.4.2
+* Ruby: 3.2.1
 
 ### Support
 
