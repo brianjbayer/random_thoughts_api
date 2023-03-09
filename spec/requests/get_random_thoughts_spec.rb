@@ -2,20 +2,21 @@
 
 require 'rails_helper'
 
-RSpec.describe 'get /random_thoughts/' do
-  shared_context 'when there are at least three pages' do
-    let(:pages) { 3 }
-    let(:per_page) { RandomThought.page.limit_value }
-    let(:num_random_thoughts) { (per_page * (pages - 1)) + 1 }
+require_relative '../support/helpers/pagination_helper'
+require_relative '../support/shared_contexts/when_at_least_three_pages'
+require_relative '../support/shared_contexts/when_first_paginated_page'
+require_relative '../support/shared_contexts/when_last_paginated_page'
+require_relative '../support/shared_contexts/when_middle_paginated_page'
+require_relative '../support/shared_examples/empty_paginated_page'
+require_relative '../support/shared_examples/pagination_meta_data'
 
-    before do
-      create_list(:random_thought, num_random_thoughts)
-    end
-  end
+RSpec.describe 'get /random_thoughts/' do
+  include PaginationHelper
+
   context 'when there are random_thoughts' do
     let(:page) { rand(1..pages) }
 
-    include_context 'when there are at least three pages'
+    include_context 'when at least three pages', RandomThought, :random_thought
 
     before do
       get random_thoughts_path({ page: })
@@ -39,112 +40,34 @@ RSpec.describe 'get /random_thoughts/' do
       end
     end
 
-    describe 'returned "meta" body' do
-      it 'contains requested page in "current_page"' do
-        expect(metadata_body['current_page']).to eql(page)
-      end
-
-      it 'contains correct number in "total_pages"' do
-        expect(metadata_body['total_pages']).to be(pages)
-      end
-
-      it 'contains correct total in "total_count"' do
-        expect(metadata_body['total_count']).to be(num_random_thoughts)
-      end
-    end
+    it_behaves_like 'pagination_meta_data'
   end
 
-  context 'when first page requested' do
-    include_context 'when there are at least three pages'
+  describe 'first page' do
+    subject(:first_page_request) { get random_thoughts_path({ page: 1 }) }
 
-    before do
-      get random_thoughts_path({ page: 1 })
-    end
-
-    describe 'returned "meta" body' do
-      it 'contains "prev_page": nil' do
-        expect(metadata_body['prev_page']).to be_nil
-      end
-    end
+    include_context 'when first paginated page', RandomThought, :random_thought
   end
 
-  context 'when last page requested' do
-    include_context 'when there are at least three pages'
+  describe 'last page' do
+    subject(:last_page_request) { get random_thoughts_path({ page: pages }) }
 
-    before do
-      get random_thoughts_path({ page: pages })
-    end
-
-    describe 'returned "meta" body' do
-      it 'contains "next_page": nil' do
-        expect(metadata_body['next_page']).to be_nil
-      end
-    end
+    include_context 'when last paginated page', RandomThought, :random_thought
   end
 
-  context 'when page in middle requested' do
+  describe 'middle page' do
+    subject(:middle_page_request) { get random_thoughts_path({ page: middle_page }) }
+
     let(:middle_page) { 2 }
 
-    include_context 'when there are at least three pages'
-
-    before do
-      get random_thoughts_path({ page: middle_page })
-    end
-
-    describe 'returned "meta" body' do
-      it 'contains correct "next_page"' do
-        expect(metadata_body['next_page']).to be(middle_page + 1)
-      end
-
-      it 'contains correct "prev_page"' do
-        expect(metadata_body['prev_page']).to be(middle_page - 1)
-      end
-    end
+    include_context 'when middle paginated page', RandomThought, :random_thought
   end
 
   context 'when there are no random thoughts' do
-    let(:page) { 1 }
+    subject(:any_page_request) { get random_thoughts_path({ page: any_page }) }
 
-    before do
-      get random_thoughts_path({ page: })
-    end
+    let(:any_page) { 1 }
 
-    describe 'returned "data" body' do
-      it 'contains [] (empty array)' do
-        expect(data_body).to eql([])
-      end
-    end
-
-    describe 'returned "meta" body' do
-      it 'contains requested page in "current_page"' do
-        expect(metadata_body['current_page']).to eql(page)
-      end
-
-      it 'contains "next_page": nil' do
-        expect(metadata_body['next_page']).to be_nil
-      end
-
-      it 'contains "prev_page": nil' do
-        expect(metadata_body['prev_page']).to be_nil
-      end
-
-      it 'contains "total_pages": 0' do
-        expect(metadata_body['total_pages']).to be(0)
-      end
-
-      it 'contains "total_count": 0' do
-        expect(metadata_body['total_count']).to be(0)
-      end
-    end
-  end
-
-  private
-
-  def data_body
-    json_body['data']
-  end
-
-  def metadata_body
-    json_body['meta']
+    it_behaves_like 'empty_paginated page'
   end
 end
