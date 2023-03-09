@@ -18,5 +18,12 @@ module Authorization
         super('Unauthorized: User does not authorization for this action')
       end
     end
+
+    # Custom exception when user record has been deleted
+    class DeletedUserError < AuthorizationError
+      def initialize
+        super('Unauthorized: User has been deleted')
+      end
+    end
   end
 end

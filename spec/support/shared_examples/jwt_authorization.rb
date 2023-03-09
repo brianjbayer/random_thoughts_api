@@ -24,6 +24,19 @@ RSpec.shared_examples 'jwt_authorization' do
     it_behaves_like 'unauthorized response', 'Unauthorized: User logged out or access revoked'
   end
 
+  context 'when JWT user has been deleted' do
+    let(:jwt) { valid_jwt(user) }
+
+    before do
+      # Ensure jwt created before deleting user
+      jwt
+      user.destroy!
+      request_with_jwt
+    end
+
+    it_behaves_like 'unauthorized response', 'Unauthorized: User has been deleted'
+  end
+
   context 'when JWT has wrong encoding' do
     let(:jwt) { invalid_algorithm_jwt(user) }
 
