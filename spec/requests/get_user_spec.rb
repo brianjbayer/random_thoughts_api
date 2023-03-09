@@ -37,12 +37,8 @@ RSpec.describe 'get /user/{id}' do
         get_user(different_user, valid_auth_jwt)
       end
 
-      it 'only returns "display_name"' do
-        expect(json_body.keys).to eql(['display_name'])
-      end
-
-      it 'returns "display_name": display_name of requested user' do
-        expect(json_body['display_name']).to eql(different_user.display_name)
+      it 'returns different user JSON with correct values' do
+        expect(json_body).to be_different_user_json(different_user)
       end
     end
 
