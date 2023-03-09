@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'same user response' do
-  it 'returns "email": email' do
-    expect(json_body['email']).to eql(user.email)
-  end
-
-  it 'returns "display_name": display_name' do
-    expect(json_body['display_name']).to eql(user.display_name)
+  it 'returns same user JSON with correct values' do
+    expect(json_body).to be_same_user_json(user)
   end
 end

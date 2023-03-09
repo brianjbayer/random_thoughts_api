@@ -13,6 +13,7 @@ require_relative 'support/factory_bot'
 require_relative 'support/helpers/api_helper'
 require_relative 'support/matchers/be_error_json'
 require_relative 'support/matchers/be_random_thought_json'
+require_relative 'support/matchers/be_same_user_json'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -70,6 +71,11 @@ RSpec.configure do |config|
 end
 
 # --- CUSTOM ADDITIONAL CONFIGURATION ---
+RSpec.configure do |config|
+  # Faker values are only guaranteed unique for each top level
+  # example group
+  config.before(:all) { Faker::UniqueGenerator.clear }
+end
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

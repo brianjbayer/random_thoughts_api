@@ -2,11 +2,10 @@
 
 FactoryBot.define do
   factory :user do
-    email { Faker::Internet.email }
-    display_name { Faker::Name.name }
-    passwd = Faker::Internet.password
-    password { passwd }
-    password_confirmation { passwd }
+    email { Faker::Internet.unique.email }
+    display_name { Faker::Name.unique.name }
+    password { Faker::Internet.unique.password }
+    password_confirmation { password }
 
     trait :empty_email do
       email { '' }

@@ -127,6 +127,22 @@ RSpec.configure do |config|
             },
             required: %w[display_name]
           },
+          updated_user: {
+            type: 'object',
+            properties: {
+              email: { type: 'string', minLength: 1, maxLength: 254 },
+              display_name: { type: 'string', minLength: 1 },
+              password: { type: 'string', minLength: User::PASSWORD_MIN_LENGTH },
+              password_confirmation: { type: 'string', minLength: User::PASSWORD_MIN_LENGTH }
+            }
+          },
+          update_user: {
+            type: 'object',
+            properties: {
+              user: { '$ref' => '#/components/schemas/updated_user' }
+            },
+            required: %w[user]
+          },
           login_credentials: {
             type: 'object',
             properties: {
