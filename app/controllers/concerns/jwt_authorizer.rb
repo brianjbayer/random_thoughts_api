@@ -9,7 +9,11 @@ module JwtAuthorizer
   included do
     def authorize_request
       decoded_jwt = decode_authentication_jwt(request_authorization_token)
-      @current_user = User.find(decoded_jwt['user'])
+      begin
+        @current_user = User.find(decoded_jwt['user'])
+      rescue ActiveRecord::RecordNotFound
+        raise Authorization::Errors::DeletedUserError
+      end
       validate_token(@current_user, decoded_jwt)
     end
 
