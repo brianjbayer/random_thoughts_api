@@ -31,6 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_02_151754) do
     t.string "password_digest"
     t.bigint "authorization_min", default: -9223372036854775808
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.check_constraint "length(email::text) < 255", name: "email_length_check"
   end
 
 end
