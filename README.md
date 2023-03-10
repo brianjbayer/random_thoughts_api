@@ -37,6 +37,11 @@ This API contains the following endpoints...
     > in request header
 
 * User endpoints...
+  * **Index** all users: `get /users?page={num}`
+    (e.g. http://localhost:3000/users?page=2)
+    > **Requires** Authorization JWT from login
+    > in request header
+
   * **Show** user {id}: `get /users/{id}`
     (e.g. http://localhost:3000/users/1)
     > **Requires** Authorization JWT from login

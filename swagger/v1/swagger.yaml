@@ -235,6 +235,36 @@ paths:
               schema:
                 "$ref": "#/components/schemas/error"
   "/users":
+    get:
+      summary: list users
+      security:
+      - bearer: []
+      parameters:
+      - name: page
+        in: query
+        description: page number
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/paginated_users"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    status: 401
+                    error: unauthorized
+                    message: Signature verification failed
+              schema:
+                "$ref": "#/components/schemas/error"
     post:
       summary: create user
       parameters: []
@@ -539,6 +569,20 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/new_user"
+    user_response:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          minLength: 1
+          maxLength: 254
+        display_name:
+          type: string
+          minLength: 1
+      required:
+      - display_name
     same_user_response:
       type: object
       properties:
@@ -586,6 +630,18 @@ components:
           "$ref": "#/components/schemas/updated_user"
       required:
       - user
+    paginated_users:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            "$ref": "#/components/schemas/user_response"
+        meta:
+          "$ref": "#/components/schemas/pagination"
+      required:
+      - data
+      - meta
     login_credentials:
       type: object
       properties:

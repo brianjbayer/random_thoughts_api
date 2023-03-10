@@ -11,6 +11,7 @@ require 'rspec/rails'
 require_relative 'support/factory_bot'
 
 require_relative 'support/helpers/api_helper'
+require_relative 'support/matchers/be_different_user_json'
 require_relative 'support/matchers/be_error_json'
 require_relative 'support/matchers/be_random_thought_json'
 require_relative 'support/matchers/be_same_user_json'
