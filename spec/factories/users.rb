@@ -7,6 +7,11 @@ FactoryBot.define do
     password { Faker::Internet.unique.password }
     password_confirmation { password }
 
+    trait :email_255_chars do
+      domain = '@test.com'
+      email { "#{Faker::Lorem.characters(number: (255 - domain.length))}#{domain}" }
+    end
+
     trait :empty_email do
       email { '' }
     end

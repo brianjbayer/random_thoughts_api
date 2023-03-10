@@ -3,6 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe User do
+  describe 'database constraints' do
+    describe 'email' do
+      it 'raises db error when email length greater than 254 characters' do
+        user = build(:user, :email_255_chars)
+        expect { user.save!(validate: false) }.to raise_error(ActiveRecord::StatementInvalid, /PG::CheckViolation/)
+      end
+    end
+  end
+
   describe 'validations' do
     describe 'email' do
       let(:valid_but_rejected_email) { '"Some spaces! And @ sign too!" @some.server.com' }
