@@ -2,9 +2,13 @@
 
 # Implements CRUD operations for User
 class UsersController < ApplicationController
-  before_action :authorize_request, only: %i[show update destroy]
+  before_action :authorize_request, only: %i[index show update destroy]
   before_action :find_user, only: %i[show update destroy]
   before_action :authorize_current_user, only: %i[update destroy]
+
+  def index
+    @users = User.page(params[:page])
+  end
 
   def show
     # before_actions and show view

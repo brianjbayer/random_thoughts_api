@@ -30,6 +30,31 @@ RSpec.describe 'users' do
   # rubocop:enable RSpec/VariableName
 
   path '/users' do
+    get('list users') do
+      consumes 'application/json'
+      produces 'application/json'
+      security [bearer: []]
+      parameter name: 'page',
+                in: :query,
+                type: :integer,
+                description: 'page number',
+                required: false
+
+      let(:user) { create(:user) }
+
+      response(200, 'successful') do
+        let(:jwt) { valid_jwt(user) }
+        schema '$ref' => '#/components/schemas/paginated_users'
+        run_test!
+      end
+
+      response(401, 'unauthorized') do
+        let(:jwt) { invalid_signature_jwt(user) }
+        it_behaves_like 'unauthorized schema', 'Signature verification failed'
+        run_test!
+      end
+    end
+
     post('create user') do
       consumes 'application/json'
       produces 'application/json'

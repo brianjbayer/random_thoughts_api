@@ -111,6 +111,17 @@ RSpec.configure do |config|
               user: { '$ref' => '#/components/schemas/new_user' }
             }
           },
+          # Handles same and different user responses
+          # Same user has all properties, different only has display_name
+          user_response: {
+            type: 'object',
+            properties: {
+              id: { type: 'integer' },
+              email: { type: 'string', minLength: 1, maxLength: 254 },
+              display_name: { type: 'string', minLength: 1 }
+            },
+            required: %w[display_name]
+          },
           same_user_response: {
             type: 'object',
             properties: {
@@ -142,6 +153,19 @@ RSpec.configure do |config|
               user: { '$ref' => '#/components/schemas/updated_user' }
             },
             required: %w[user]
+          },
+          paginated_users: {
+            type: 'object',
+            properties: {
+              data: {
+                type: :array,
+                items: { '$ref' => '#/components/schemas/user_response' }
+              },
+              meta: {
+                '$ref' => '#/components/schemas/pagination'
+              }
+            },
+            required: %w[data meta]
           },
           login_credentials: {
             type: 'object',
