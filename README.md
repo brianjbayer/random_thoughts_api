@@ -109,6 +109,8 @@ This API contains the following endpoints...
       }
     }
     ```
+    > **Requires** Authorization JWT from login
+    > in request header
 
   * **Delete** random thought {id}: `delete /random_thoughts/{id}`
     > **Requires** Authorization JWT from login

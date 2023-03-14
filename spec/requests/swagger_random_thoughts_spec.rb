@@ -105,12 +105,14 @@ RSpec.describe 'random_thoughts' do
     patch('update random_thought') do
       consumes 'application/json'
       produces 'application/json'
+      security [bearer: []]
       parameter name: :update,
                 in: :body,
                 schema: { '$ref' => '#/components/schemas/update_random_thought' }
 
+      let(:update) { build_random_thought_body(build(:random_thought)) }
+
       response(200, 'successful') do
-        let(:update) { build_random_thought_body(build(:random_thought)) }
         schema '$ref' => '#/components/schemas/random_thought_response'
         run_test!
       end
@@ -121,8 +123,13 @@ RSpec.describe 'random_thoughts' do
         run_test!
       end
 
+      response(401, 'unauthorized') do
+        let(:jwt) { invalid_signature_jwt(user) }
+        it_behaves_like 'unauthorized schema', 'Signature verification failed'
+        run_test!
+      end
+
       response(404, 'not found') do
-        let(:update) { build_random_thought_body(build(:random_thought)) }
         let(:id) { 0 }
         it_behaves_like 'not found schema', RandomThoughtMessage.not_found
         run_test!

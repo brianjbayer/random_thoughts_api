@@ -2,47 +2,60 @@
 
 require 'rails_helper'
 
+require_relative '../support/helpers/jwt_helper'
 require_relative '../support/helpers/random_thought_helper'
 require_relative '../support/shared_examples/bad_request_response'
 require_relative '../support/shared_examples/is_not_updated_from_request'
+require_relative '../support/shared_examples/jwt_authorization'
 require_relative '../support/shared_examples/not_found_response'
 require_relative '../support/shared_examples/unprocessable_entity_response'
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe 'patch /random_thoughts/{id}' do
+  include JwtHelper
   include RandomThoughtHelper
 
+  let!(:user) { create(:user) }
+  let(:valid_auth_jwt) { valid_jwt(user) }
   # Ensure the random_thought is created before updating it
   let!(:random_thought) { create(:random_thought) }
   let(:random_thought_update) { build(:random_thought) }
   let(:update) { build_random_thought_body(random_thought_update) }
 
+  describe 'authorization' do
+    let(:request_without_jwt) { patch random_thought_path(random_thought), params: update, as: :json }
+    let(:request_with_jwt) { patch_random_thought(random_thought, jwt, update) }
+
+    it_behaves_like 'jwt_authorization'
+  end
+
   context 'when {id} exists' do
     context 'when valid update request' do
       it 'does not change the number of RandomThoughts' do
         expect do
-          patch_random_thought(random_thought, update)
+          patch_random_thought(random_thought, valid_auth_jwt, update)
         end.not_to change(RandomThought, :count)
       end
 
       it 'updates thought when supplied' do
         just_thought = random_thought_update_just_keys(update, 'thought')
-        patch_random_thought(random_thought, just_thought)
+        patch_random_thought(random_thought, valid_auth_jwt, just_thought)
         expect(random_thought.reload.thought).to eql(random_thought_update.thought)
       end
 
       it 'updates name when supplied' do
         just_name = random_thought_update_just_keys(update, 'name')
-        patch_random_thought(random_thought, just_name)
+        patch_random_thought(random_thought, valid_auth_jwt, just_name)
         expect(random_thought.reload.name).to eql(random_thought_update.name)
       end
 
       it 'returns "id": id' do
-        patch_random_thought(random_thought, update)
+        patch_random_thought(random_thought, valid_auth_jwt, update)
         expect(json_body['id']).to eql(random_thought.id)
       end
 
       it 'returns updated random_thought JSON' do
-        patch_random_thought(random_thought, update)
+        patch_random_thought(random_thought, valid_auth_jwt, update)
         expect(json_body).to be_random_thought_json(random_thought_update)
       end
     end
@@ -51,7 +64,7 @@ RSpec.describe 'patch /random_thoughts/{id}' do
       let(:requesting) { random_thought }
 
       before do
-        patch random_thought_path(requesting), params: empty_json_body
+        patch random_thought_path(requesting), params: empty_json_body, headers: authorization_header(valid_auth_jwt)
       end
 
       it_behaves_like 'is not updated from request', RandomThought
@@ -63,7 +76,7 @@ RSpec.describe 'patch /random_thoughts/{id}' do
 
       before do
         empty_random_thought = build_random_thought_body(build(:random_thought, :empty))
-        patch_random_thought(requesting, empty_random_thought)
+        patch_random_thought(requesting, valid_auth_jwt, empty_random_thought)
       end
 
       it_behaves_like 'is not updated from request', RandomThought
@@ -75,7 +88,7 @@ RSpec.describe 'patch /random_thoughts/{id}' do
     let(:does_not_exist) { build(:random_thought).id = 0 }
 
     before do
-      patch_random_thought(does_not_exist, update)
+      patch_random_thought(does_not_exist, valid_auth_jwt, update)
     end
 
     it_behaves_like 'not_found response'
@@ -83,11 +96,12 @@ RSpec.describe 'patch /random_thoughts/{id}' do
 
   private
 
-  def patch_random_thought(random_thought, update)
-    patch random_thought_path(random_thought), params: update
+  def patch_random_thought(random_thought, jwt, update)
+    patch random_thought_path(random_thought), params: update, headers: authorization_header(jwt)
   end
 
   def random_thought_update_just_keys(update, *keys)
     json_body_just_keys(:random_thought, update, *keys)
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers
