@@ -84,6 +84,8 @@ paths:
                 "$ref": "#/components/schemas/paginated_random_thoughts"
     post:
       summary: create random_thought
+      security:
+      - bearer: []
       parameters: []
       responses:
         '201':
@@ -107,6 +109,18 @@ paths:
                     status: 400
                     error: bad_request
                     message: Error occurred while parsing request parameters
+              schema:
+                "$ref": "#/components/schemas/error"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    status: 401
+                    error: unauthorized
+                    message: Signature verification failed
               schema:
                 "$ref": "#/components/schemas/error"
         '422':

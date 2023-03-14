@@ -2,6 +2,7 @@
 
 # Implements CRUD operations for RandomThought
 class RandomThoughtsController < ApplicationController
+  before_action :authorize_request, only: %i[create]
   before_action :find_random_thought, only: %i[show update destroy]
 
   def index

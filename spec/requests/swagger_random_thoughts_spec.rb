@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 require 'swagger_helper'
+
+require_relative '../support/helpers/jwt_helper'
 require_relative '../support/helpers/random_thought_helper'
 require_relative '../support/shared_examples/bad_request_schema'
 require_relative '../support/shared_examples/not_found_schema'
+require_relative '../support/shared_examples/unauthorized_schema'
 require_relative '../support/shared_examples/unprocessable_entity_schema'
 
 class RandomThoughtMessage
@@ -12,8 +15,14 @@ class RandomThoughtMessage
   end
 end
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe 'random_thoughts' do
+  include JwtHelper
   include RandomThoughtHelper
+
+  # rubocop:disable RSpec/VariableName
+  let(:Authorization) { "Bearer #{jwt}" }
+  # rubocop:enable RSpec/VariableName
 
   path '/random_thoughts' do
     get('list random_thoughts') do
@@ -37,12 +46,16 @@ RSpec.describe 'random_thoughts' do
     post('create random_thought') do
       consumes 'application/json'
       produces 'application/json'
+      security [bearer: []]
       parameter name: :random_thought,
                 in: :body,
                 schema: { '$ref' => '#/components/schemas/create_random_thought' }
 
+      let(:user) { create(:user) }
+      let(:jwt) { valid_jwt(user) }
+      let(:random_thought) { build_random_thought_body(build(:random_thought)) }
+
       response(201, 'created') do
-        let(:random_thought) { build_random_thought_body(build(:random_thought)) }
         schema '$ref' => '#/components/schemas/random_thought_response'
         run_test!
       end
@@ -53,11 +66,16 @@ RSpec.describe 'random_thoughts' do
         run_test!
       end
 
+      response(401, 'unauthorized') do
+        let(:jwt) { invalid_signature_jwt(user) }
+        it_behaves_like 'unauthorized schema', 'Signature verification failed'
+        run_test!
+      end
+
       response(422, 'unprocessable entity') do
+        let(:random_thought) { build_random_thought_body(build(:random_thought, :empty)) }
         msg = "Validation failed: Thought can't be blank, Name can't be blank"
         it_behaves_like 'unprocessable entity schema', msg
-        let(:empty_values) { build_random_thought_body(build(:random_thought, :empty)) }
-        let(:random_thought) { empty_values }
         run_test!
       end
     end
@@ -139,3 +157,4 @@ RSpec.describe 'random_thoughts' do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

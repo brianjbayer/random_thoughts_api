@@ -96,6 +96,8 @@ This API contains the following endpoints...
       }
     }
     ```
+    > **Requires** Authorization JWT from login
+    > in request header
 
   * **Update** random thought {id}: `patch /random_thoughts/{id}`
     with Request Body...
