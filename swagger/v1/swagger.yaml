@@ -229,6 +229,8 @@ paths:
               "$ref": "#/components/schemas/update_random_thought"
     delete:
       summary: delete random_thought
+      security:
+      - bearer: []
       responses:
         '200':
           description: successful
@@ -236,6 +238,18 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/random_thought_response"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    status: 401
+                    error: unauthorized
+                    message: Signature verification failed
+              schema:
+                "$ref": "#/components/schemas/error"
         '404':
           description: not found
           content:
