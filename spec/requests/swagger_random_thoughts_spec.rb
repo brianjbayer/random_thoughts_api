@@ -23,6 +23,8 @@ RSpec.describe 'random_thoughts' do
   # rubocop:disable RSpec/VariableName
   let(:Authorization) { "Bearer #{jwt}" }
   # rubocop:enable RSpec/VariableName
+  let(:user) { create(:user) }
+  let(:jwt) { valid_jwt(user) }
 
   path '/random_thoughts' do
     get('list random_thoughts') do
@@ -51,8 +53,6 @@ RSpec.describe 'random_thoughts' do
                 in: :body,
                 schema: { '$ref' => '#/components/schemas/create_random_thought' }
 
-      let(:user) { create(:user) }
-      let(:jwt) { valid_jwt(user) }
       let(:random_thought) { build_random_thought_body(build(:random_thought)) }
 
       response(201, 'created') do
@@ -84,12 +84,13 @@ RSpec.describe 'random_thoughts' do
   path '/random_thoughts/{id}' do
     parameter name: 'id', in: :path, type: :string, description: 'id'
 
+    let(:id) { create(:random_thought).id }
+
     get('show random_thought') do
       consumes 'application/json'
       produces 'application/json'
 
       response(200, 'successful') do
-        let(:id) { create(:random_thought).id }
         schema '$ref' => '#/components/schemas/random_thought_response'
         run_test!
       end
@@ -109,14 +110,12 @@ RSpec.describe 'random_thoughts' do
                 schema: { '$ref' => '#/components/schemas/update_random_thought' }
 
       response(200, 'successful') do
-        let(:id) { create(:random_thought).id }
         let(:update) { build_random_thought_body(build(:random_thought)) }
         schema '$ref' => '#/components/schemas/random_thought_response'
         run_test!
       end
 
       response(400, 'bad request') do
-        let(:id) { create(:random_thought).id }
         let(:update) { empty_json_body }
         it_behaves_like 'bad request schema'
         run_test!
@@ -132,7 +131,6 @@ RSpec.describe 'random_thoughts' do
       response(422, 'unprocessable entity') do
         msg = "Validation failed: Thought can't be blank, Name can't be blank"
         it_behaves_like 'unprocessable entity schema', msg
-        let(:id) { create(:random_thought).id }
         let(:empty_values) { build_random_thought_body(build(:random_thought, :empty)) }
         let(:update) { empty_values }
         run_test!
@@ -142,10 +140,16 @@ RSpec.describe 'random_thoughts' do
     delete('delete random_thought') do
       consumes 'application/json'
       produces 'application/json'
+      security [bearer: []]
 
       response(200, 'successful') do
-        let(:id) { create(:random_thought).id }
         schema '$ref' => '#/components/schemas/random_thought_response'
+        run_test!
+      end
+
+      response(401, 'unauthorized') do
+        let(:jwt) { invalid_signature_jwt(user) }
+        it_behaves_like 'unauthorized schema', 'Signature verification failed'
         run_test!
       end
 

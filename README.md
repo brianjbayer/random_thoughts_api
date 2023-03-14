@@ -111,6 +111,8 @@ This API contains the following endpoints...
     ```
 
   * **Delete** random thought {id}: `delete /random_thoughts/{id}`
+    > **Requires** Authorization JWT from login
+    > in request header
 
 ## Development
 This project can be developed using the supplied basic,
