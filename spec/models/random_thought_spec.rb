@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe RandomThought do
+  describe 'relationships' do
+    it { is_expected.to belong_to(:user) }
+  end
+
   describe 'default scope' do
     it 'returns most recent first' do
       create_list(:random_thought, 20)

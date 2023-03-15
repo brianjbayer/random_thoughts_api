@@ -12,6 +12,10 @@ RSpec.describe User do
     end
   end
 
+  describe 'relationships' do
+    it { is_expected.to have_many(:random_thoughts).dependent(:destroy) }
+  end
+
   describe 'validations' do
     describe 'email' do
       let(:valid_but_rejected_email) { '"Some spaces! And @ sign too!" @some.server.com' }

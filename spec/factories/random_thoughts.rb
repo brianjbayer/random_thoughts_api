@@ -2,6 +2,8 @@
 
 FactoryBot.define do
   factory :random_thought do
+    association :user
+
     thought { Faker::Lorem.sentence }
     name { Faker::Name.name }
 

@@ -4,6 +4,8 @@
 class User < ApplicationRecord
   PASSWORD_MIN_LENGTH = 8
 
+  has_many :random_thoughts, dependent: :destroy
+
   validates :email, presence: true, uniqueness: true,
                     # NOTE: citext (db) does not support max length constraint
                     length: {
