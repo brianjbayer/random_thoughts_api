@@ -8,7 +8,7 @@
 # --- Base Image ---
 # Base Image from...
 # https://github.com/brianjbayer/machine-images/tree/main/rails/debian/debian-11-ruby-3.2-rails-7.0.4/dev
-ARG BASE_TAG=59fa86a4010b78715afccbe51c28e402d8fd8d1c
+ARG BASE_TAG=19464c3ac3cda7b9426a6614375909accc4f24ae
 ARG BASE_IMAGE_NAME=brianjbayer/debian-11-ruby-3.2-rails-7.0.4-dev
 ARG BASE_IMAGE=${BASE_IMAGE_NAME}:${BASE_TAG}
 FROM ${BASE_IMAGE}
