@@ -14,7 +14,7 @@ class RandomThoughtsController < ApplicationController
   end
 
   def create
-    @random_thought = RandomThought.new(random_thought_params)
+    @random_thought = @current_user.random_thoughts.build(random_thought_params)
     if @random_thought.save
       render_show_response(:created)
     else
