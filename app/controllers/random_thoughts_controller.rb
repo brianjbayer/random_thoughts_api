@@ -4,6 +4,8 @@
 class RandomThoughtsController < ApplicationController
   before_action :authorize_request, only: %i[create update destroy]
   before_action :find_random_thought, only: %i[show update destroy]
+  before_action :find_random_thought_user, only: %i[destroy]
+  before_action :authorize_current_user, only: %i[destroy]
 
   def index
     @random_thoughts = RandomThought.page(params[:page])
@@ -45,5 +47,9 @@ class RandomThoughtsController < ApplicationController
 
   def find_random_thought
     @random_thought = RandomThought.find(params[:id])
+  end
+
+  def find_random_thought_user
+    @user = @random_thought.user
   end
 end

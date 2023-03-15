@@ -84,7 +84,7 @@ RSpec.describe 'random_thoughts' do
   path '/random_thoughts/{id}' do
     parameter name: 'id', in: :path, type: :string, description: 'id'
 
-    let(:id) { create(:random_thought).id }
+    let(:id) { create(:random_thought, user:).id }
 
     get('show random_thought') do
       consumes 'application/json'
