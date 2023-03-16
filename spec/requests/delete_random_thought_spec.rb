@@ -17,6 +17,7 @@ RSpec.describe 'delete /random_thoughts/{id}' do
   let!(:user) { create(:user) }
   let(:valid_auth_jwt) { valid_jwt(user) }
   # RandomThought is created before authorization
+  # and associate it with the user
   let!(:random_thought) { create(:random_thought, user:) }
 
   describe 'authorization' do
