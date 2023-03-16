@@ -223,9 +223,15 @@ without a persistent volume (data) for the `development`
 and `test` environments.
 
 #### Seed Data
-There is one sample record which can be added repeatedly.
+There is some sample seed data that creates two users and one
+random thought that belongs to the first user.
 
-Run the following command to add a seed record...
+* First user email: `qhound@thisisfine.com`
+* Second user email: `user@example.com`
+
+The password for both users is `password`.
+
+Run the following command to add the seed data...
 ```
 bundle exec bin/rails db:seed
 ```
