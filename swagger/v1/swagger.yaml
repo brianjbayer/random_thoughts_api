@@ -132,7 +132,7 @@ paths:
                   value:
                     status: 422
                     error: unprocessable_entity
-                    message: 'Validation failed: Thought can''t be blank, Name can''t
+                    message: 'Validation failed: Thought can''t be blank, Mood can''t
                       be blank'
               schema:
                 "$ref": "#/components/schemas/error"
@@ -232,7 +232,7 @@ paths:
                   value:
                     status: 422
                     error: unprocessable_entity
-                    message: 'Validation failed: Thought can''t be blank, Name can''t
+                    message: 'Validation failed: Thought can''t be blank, Mood can''t
                       be blank'
               schema:
                 "$ref": "#/components/schemas/error"
@@ -531,15 +531,11 @@ components:
         thought:
           type: string
           minLength: 1
-        name:
-          type: string
-          minLength: 1
         mood:
           type: string
           minLength: 1
       required:
       - thought
-      - name
       - mood
     create_random_thought:
       type: object
@@ -555,11 +551,11 @@ components:
           type: integer
         thought:
           type: string
-        name:
-          type: string
         mood:
           type: string
           minLength: 1
+        name:
+          type: string
       required:
       - id
       - thought
@@ -569,9 +565,6 @@ components:
       type: object
       properties:
         thought:
-          type: string
-          minLength: 1
-        name:
           type: string
           minLength: 1
         mood:

@@ -7,7 +7,6 @@ class RandomThought < ApplicationRecord
   default_scope -> { order(created_at: :desc) }
 
   validates :thought, presence: true
-  validates :name, presence: true
   validates :mood, presence: true
 
 end

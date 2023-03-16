@@ -74,7 +74,7 @@ RSpec.describe 'random_thoughts' do
 
       response(422, 'unprocessable entity') do
         let(:random_thought) { build_random_thought_body(build(:random_thought, :empty)) }
-        msg = "Validation failed: Thought can't be blank, Name can't be blank"
+        msg = "Validation failed: Thought can't be blank, Mood can't be blank"
         it_behaves_like 'unprocessable entity schema', msg
         run_test!
       end
@@ -137,7 +137,7 @@ RSpec.describe 'random_thoughts' do
       end
 
       response(422, 'unprocessable entity') do
-        msg = "Validation failed: Thought can't be blank, Name can't be blank"
+        msg = "Validation failed: Thought can't be blank, Mood can't be blank"
         it_behaves_like 'unprocessable entity schema', msg
         let(:empty_values) { build_random_thought_body(build(:random_thought, :empty)) }
         let(:update) { empty_values }
