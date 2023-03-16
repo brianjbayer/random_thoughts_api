@@ -5,15 +5,10 @@ FactoryBot.define do
     association :user
 
     thought { Faker::Lorem.sentence }
-    name { Faker::Name.name }
     mood { Faker::Lorem.sentence }
 
     trait :empty_thought do
       thought { '' }
-    end
-
-    trait :empty_name do
-      name { '' }
     end
 
     trait :empty_mood do
@@ -22,7 +17,6 @@ FactoryBot.define do
 
     trait :empty do
       empty_thought
-      empty_name
       empty_mood
     end
   end

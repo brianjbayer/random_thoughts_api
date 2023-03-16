@@ -42,7 +42,7 @@ class RandomThoughtsController < ApplicationController
   private
 
   def random_thought_params
-    params.required(:random_thought).permit(:thought, :name, :mood)
+    params.required(:random_thought).permit(:thought, :mood)
   end
 
   def find_random_thought
