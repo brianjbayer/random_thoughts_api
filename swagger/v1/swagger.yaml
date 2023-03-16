@@ -534,9 +534,13 @@ components:
         name:
           type: string
           minLength: 1
+        mood:
+          type: string
+          minLength: 1
       required:
       - thought
       - name
+      - mood
     create_random_thought:
       type: object
       properties:
@@ -553,10 +557,14 @@ components:
           type: string
         name:
           type: string
+        mood:
+          type: string
+          minLength: 1
       required:
       - id
       - thought
       - name
+      - mood
     updated_random_thought:
       type: object
       properties:
@@ -564,6 +572,9 @@ components:
           type: string
           minLength: 1
         name:
+          type: string
+          minLength: 1
+        mood:
           type: string
           minLength: 1
     update_random_thought:

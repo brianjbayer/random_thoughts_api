@@ -8,4 +8,6 @@ class RandomThought < ApplicationRecord
 
   validates :thought, presence: true
   validates :name, presence: true
+  validates :mood, presence: true
+
 end

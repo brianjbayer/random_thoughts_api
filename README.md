@@ -7,7 +7,8 @@ that implements a random thought in JSON format...
 ```json
 {
   "thought": "A random thought",
-  "name": "The Thinker's Name"
+  "name": "The thinker's name",
+  "mood": "The thinker's mood leading to the thought"
 }
 ```
 
@@ -92,7 +93,8 @@ This API contains the following endpoints...
     {
       "random_thought": {
         "thought": "string",
-        "name": "string"
+        "name": "string",
+        "mood": "string"
       }
     }
     ```
@@ -105,7 +107,8 @@ This API contains the following endpoints...
     {
       "random_thought": {
         "thought": "string",
-        "name": "string"
+        "name": "string",
+        "mood": "string"
       }
     }
     ```

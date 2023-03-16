@@ -7,4 +7,5 @@ first_user = User.create!(email: 'qhound@thisisfine.com', display_name: 'Questio
 User.create!(email: 'user@example.com', display_name: 'Ann User',
              password: 'password', password_confirmation: 'password')
 
-RandomThought.create!(thought: 'This is fine', name: 'Question Hound', user: first_user)
+RandomThought.create!(thought: 'This is fine', name: 'Question Hound',
+                      mood: 'Fiery', user: first_user)
