@@ -5,15 +5,16 @@
 # JSON response
 module BeRandomThoughtJson
   class BeRandomThoughtJson
-    def initialize(expected_thought)
+    def initialize(expected_thought, user)
       @expected_thought = expected_thought
+      @user = user
     end
 
     def matches?(actual)
       @actual = actual
 
       @actual['thought'] == @expected_thought.thought &&
-        @actual['name'] == @expected_thought.name &&
+        @actual['name'] == @user.display_name &&
         @actual['mood'] == @expected_thought.mood
     end
 
@@ -34,12 +35,14 @@ module BeRandomThoughtJson
     end
 
     def matched_expected
-      @expected_thought.attributes.slice('id', 'thought', 'name', 'mood')
+      expected = @expected_thought.attributes.slice('id', 'thought', 'mood')
+      expected['name'] = @user.display_name
+      expected
     end
   end
 
-  def be_random_thought_json(expected_thought)
-    BeRandomThoughtJson.new(expected_thought)
+  def be_random_thought_json(expected_thought, user)
+    BeRandomThoughtJson.new(expected_thought, user)
   end
 end
 

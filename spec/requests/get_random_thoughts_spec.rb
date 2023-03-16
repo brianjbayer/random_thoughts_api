@@ -35,7 +35,7 @@ RSpec.describe 'get /random_thoughts/' do
         all_returned = data_body
         RandomThought.page(page).each do |random_thought|
           returned = all_returned.shift
-          expect(returned).to be_random_thought_json(random_thought)
+          expect(returned).to be_random_thought_json(random_thought, random_thought.user)
         end
       end
     end
