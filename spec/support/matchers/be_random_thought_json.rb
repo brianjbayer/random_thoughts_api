@@ -13,7 +13,8 @@ module BeRandomThoughtJson
       @actual = actual
 
       @actual['thought'] == @expected_thought.thought &&
-        @actual['name'] == @expected_thought.name
+        @actual['name'] == @expected_thought.name &&
+        @actual['mood'] == @expected_thought.mood
     end
 
     def failure_message
@@ -33,7 +34,7 @@ module BeRandomThoughtJson
     end
 
     def matched_expected
-      @expected_thought.attributes.slice('id', 'thought', 'name')
+      @expected_thought.attributes.slice('id', 'thought', 'name', 'mood')
     end
   end
 

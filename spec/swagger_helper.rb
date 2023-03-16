@@ -48,9 +48,10 @@ RSpec.configure do |config|
             type: 'object',
             properties: {
               thought: { type: 'string', minLength: 1 },
-              name: { type: 'string', minLength: 1 }
+              name: { type: 'string', minLength: 1 },
+              mood: { type: 'string', minLength: 1 }
             },
-            required: %w[thought name]
+            required: %w[thought name mood]
           },
           create_random_thought: {
             type: 'object',
@@ -64,15 +65,17 @@ RSpec.configure do |config|
             properties: {
               id: { type: 'integer' },
               thought: { type: 'string' },
-              name: { type: 'string' }
+              name: { type: 'string' },
+              mood: { type: 'string', minLength: 1 }
             },
-            required: %w[id thought name]
+            required: %w[id thought name mood]
           },
           updated_random_thought: {
             type: 'object',
             properties: {
               thought: { type: 'string', minLength: 1 },
-              name: { type: 'string', minLength: 1 }
+              name: { type: 'string', minLength: 1 },
+              mood: { type: 'string', minLength: 1 }
             }
           },
           update_random_thought: {

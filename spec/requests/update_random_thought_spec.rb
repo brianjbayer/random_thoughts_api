@@ -50,6 +50,12 @@ RSpec.describe 'patch /random_thoughts/{id}' do
         expect(random_thought.reload.name).to eql(random_thought_update.name)
       end
 
+      it 'updates mood when supplied' do
+        just_mood = random_thought_update_just_keys(update, 'mood')
+        patch_random_thought(random_thought, valid_auth_jwt, just_mood)
+        expect(random_thought.reload.mood).to eql(random_thought_update.mood)
+      end
+
       it 'returns "id": id' do
         patch_random_thought(random_thought, valid_auth_jwt, update)
         expect(json_body['id']).to eql(random_thought.id)

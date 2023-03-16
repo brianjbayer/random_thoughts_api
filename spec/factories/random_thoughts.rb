@@ -6,6 +6,7 @@ FactoryBot.define do
 
     thought { Faker::Lorem.sentence }
     name { Faker::Name.name }
+    mood { Faker::Lorem.sentence }
 
     trait :empty_thought do
       thought { '' }
@@ -15,9 +16,14 @@ FactoryBot.define do
       name { '' }
     end
 
+    trait :empty_mood do
+      mood { '' }
+    end
+
     trait :empty do
       empty_thought
       empty_name
+      empty_mood
     end
   end
 end
