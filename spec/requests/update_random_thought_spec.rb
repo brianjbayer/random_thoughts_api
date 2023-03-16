@@ -18,7 +18,8 @@ RSpec.describe 'patch /random_thoughts/{id}' do
   let!(:user) { create(:user) }
   let(:valid_auth_jwt) { valid_jwt(user) }
   # Ensure the random_thought is created before updating it
-  let!(:random_thought) { create(:random_thought) }
+  # and associate it with the user
+  let!(:random_thought) { create(:random_thought, user:) }
   let(:random_thought_update) { build(:random_thought) }
   let(:update) { build_random_thought_body(random_thought_update) }
 
@@ -29,7 +30,7 @@ RSpec.describe 'patch /random_thoughts/{id}' do
     it_behaves_like 'jwt_authorization'
   end
 
-  context 'when {id} exists' do
+  context "when {id} is current user's id" do
     context 'when valid update request' do
       it 'does not change the number of RandomThoughts' do
         expect do
@@ -58,6 +59,19 @@ RSpec.describe 'patch /random_thoughts/{id}' do
         patch_random_thought(random_thought, valid_auth_jwt, update)
         expect(json_body).to be_random_thought_json(random_thought_update)
       end
+    end
+
+    context "when {id} is different user's id" do
+      let!(:requesting) { create(:random_thought, user: create(:user)) }
+      let(:update_request) { patch_random_thought(requesting, valid_auth_jwt, update) }
+
+      before do
+        update_request
+      end
+
+      it_behaves_like 'is not updated from request', RandomThought
+
+      it_behaves_like 'unauthorized response', 'Unauthorized: User does not authorization for this action'
     end
 
     context 'when update parameters are missing in update request' do
