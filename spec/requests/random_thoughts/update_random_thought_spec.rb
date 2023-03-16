@@ -2,13 +2,13 @@
 
 require 'rails_helper'
 
-require_relative '../support/helpers/jwt_helper'
-require_relative '../support/helpers/random_thought_helper'
-require_relative '../support/shared_examples/bad_request_response'
-require_relative '../support/shared_examples/is_not_updated_from_request'
-require_relative '../support/shared_examples/jwt_authorization'
-require_relative '../support/shared_examples/not_found_response'
-require_relative '../support/shared_examples/unprocessable_entity_response'
+require_relative '../../support/helpers/jwt_helper'
+require_relative '../../support/helpers/random_thought_helper'
+require_relative '../../support/shared_examples/is_not_updated_from_request'
+require_relative '../../support/shared_examples/jwt_authorization'
+require_relative '../../support/shared_examples/errors/bad_request_response'
+require_relative '../../support/shared_examples/errors/not_found_response'
+require_relative '../../support/shared_examples/errors/unprocessable_entity_response'
 
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe 'patch /random_thoughts/{id}' do
@@ -24,7 +24,7 @@ RSpec.describe 'patch /random_thoughts/{id}' do
   let(:update) { build_random_thought_body(random_thought_update) }
 
   describe 'authorization' do
-    let(:request_without_jwt) { patch random_thought_path(random_thought), params: update, as: :json }
+    let(:request_without_jwt) { patch random_thought_path(random_thought), params: update }
     let(:request_with_jwt) { patch_random_thought(random_thought, jwt, update) }
 
     it_behaves_like 'jwt_authorization'
@@ -71,7 +71,7 @@ RSpec.describe 'patch /random_thoughts/{id}' do
 
       it_behaves_like 'is not updated from request', RandomThought
 
-      it_behaves_like 'unauthorized response', 'Unauthorized: User does not authorization for this action'
+      it_behaves_like 'unauthorized response', 'Unauthorized: User does not have authorization for this action'
     end
 
     context 'when update parameters are missing in update request' do

@@ -2,14 +2,14 @@
 
 require 'rails_helper'
 
-require_relative '../support/helpers/jwt_helper'
-require_relative '../support/helpers/user_helper'
-require_relative '../support/shared_examples/bad_request_response'
-require_relative '../support/shared_examples/is_not_updated_from_request'
-require_relative '../support/shared_examples/jwt_authorization'
-require_relative '../support/shared_examples/not_found_response'
-require_relative '../support/shared_examples/same_user_response'
-require_relative '../support/shared_examples/unprocessable_entity_response'
+require_relative '../../support/helpers/jwt_helper'
+require_relative '../../support/helpers/user_helper'
+require_relative '../../support/shared_examples/is_not_updated_from_request'
+require_relative '../../support/shared_examples/jwt_authorization'
+require_relative '../../support/shared_examples/same_user_response'
+require_relative '../../support/shared_examples/errors/bad_request_response'
+require_relative '../../support/shared_examples/errors/not_found_response'
+require_relative '../../support/shared_examples/errors/unprocessable_entity_response'
 
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe 'update /users/{id}' do
@@ -23,7 +23,7 @@ RSpec.describe 'update /users/{id}' do
   let(:valid_auth_jwt) { valid_jwt(user) }
 
   describe 'authorization' do
-    let(:request_without_jwt) { patch user_path(user), params: update, as: :json }
+    let(:request_without_jwt) { patch user_path(user), params: update }
     let(:request_with_jwt) { patch_user(user, jwt, update) }
 
     it_behaves_like 'jwt_authorization'
@@ -75,7 +75,7 @@ RSpec.describe 'update /users/{id}' do
       end
 
       it_behaves_like 'is not updated from request', User
-      it_behaves_like 'unauthorized response', 'Unauthorized: User does not authorization for this action'
+      it_behaves_like 'unauthorized response', 'Unauthorized: User does not have authorization for this action'
     end
   end
 

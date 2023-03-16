@@ -234,7 +234,7 @@ The password for both users is `password`.
 
 Run the following command to add the seed data...
 ```
-bundle exec bin/rails db:seed
+./script/run rails db:seed
 ```
 
 ### Testing
@@ -242,7 +242,7 @@ If you are using the same database for `development` and `test`,
 run the following command first to set the database for the
 `test` environment...
 ```
-bundle exec bin/rails db:environment:set RAILS_ENV=test
+./script/run rails db:environment:set RAILS_ENV=test
 ```
 
 Run the following command to run the tests...
@@ -253,6 +253,13 @@ Run the following command to run the tests...
 > :warning: If you are using the same database for `development`
 > and `test`, these steps can destroy any data in your
 > `development` database.
+
+This project is configured so that you can re-run just the
+failing tests using the RSpec `--only-failures` (or
+`--next-failure`) option.
+```
+./script/run tests --only-failures
+```
 
 ### Dependency Static Security Scanning
 This project includes the

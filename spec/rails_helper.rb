@@ -76,6 +76,10 @@ RSpec.configure do |config|
   # Faker values are only guaranteed unique for each top level
   # example group
   config.before(:all) { Faker::UniqueGenerator.clear }
+
+  # Set a file to store the status of each example the last time it ran
+  # So that --only-failures and/or --next-failure options can be used
+  config.example_status_persistence_file_path = 'tmp/examples.txt'
 end
 
 Shoulda::Matchers.configure do |config|

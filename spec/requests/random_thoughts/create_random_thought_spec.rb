@@ -2,14 +2,14 @@
 
 require 'rails_helper'
 
-require_relative '../support/helpers/jwt_helper'
-require_relative '../support/helpers/random_thought_helper'
-require_relative '../support/shared_examples/bad_request_response'
-require_relative '../support/shared_examples/is_created_from_request'
-require_relative '../support/shared_examples/is_not_created_from_request'
-require_relative '../support/shared_examples/jwt_authorization'
-require_relative '../support/shared_examples/random_thought_response'
-require_relative '../support/shared_examples/unprocessable_entity_response'
+require_relative '../../support/helpers/jwt_helper'
+require_relative '../../support/helpers/random_thought_helper'
+require_relative '../../support/shared_examples/is_created_from_request'
+require_relative '../../support/shared_examples/is_not_created_from_request'
+require_relative '../../support/shared_examples/jwt_authorization'
+require_relative '../../support/shared_examples/random_thought_response'
+require_relative '../../support/shared_examples/errors/bad_request_response'
+require_relative '../../support/shared_examples/errors/unprocessable_entity_response'
 
 RSpec.describe 'post /random_thoughts/' do
   include JwtHelper

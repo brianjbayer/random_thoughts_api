@@ -2,13 +2,13 @@
 
 require 'rails_helper'
 
-require_relative '../support/helpers/pagination_helper'
-require_relative '../support/shared_contexts/when_at_least_three_pages'
-require_relative '../support/shared_contexts/when_first_paginated_page'
-require_relative '../support/shared_contexts/when_last_paginated_page'
-require_relative '../support/shared_contexts/when_middle_paginated_page'
-require_relative '../support/shared_examples/empty_paginated_page'
-require_relative '../support/shared_examples/pagination_meta_data'
+require_relative '../../support/helpers/pagination_helper'
+require_relative '../../support/shared_contexts/pagination/when_at_least_three_pages'
+require_relative '../../support/shared_contexts/pagination/when_first_paginated_page'
+require_relative '../../support/shared_contexts/pagination/when_last_paginated_page'
+require_relative '../../support/shared_contexts/pagination/when_middle_paginated_page'
+require_relative '../../support/shared_examples/pagination/empty_paginated_page'
+require_relative '../../support/shared_examples/pagination/pagination_meta_data'
 
 RSpec.describe 'get /random_thoughts/' do
   include PaginationHelper

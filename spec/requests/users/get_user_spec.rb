@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-require_relative '../support/helpers/jwt_helper'
-require_relative '../support/shared_examples/jwt_authorization'
-require_relative '../support/shared_examples/not_found_response'
-require_relative '../support/shared_examples/same_user_response'
+require_relative '../../support/helpers/jwt_helper'
+require_relative '../../support/shared_examples/jwt_authorization'
+require_relative '../../support/shared_examples/same_user_response'
+require_relative '../../support/shared_examples/errors/not_found_response'
 
 RSpec.describe 'get /user/{id}' do
   include JwtHelper

@@ -2,12 +2,12 @@
 
 require 'swagger_helper'
 
-require_relative '../support/helpers/jwt_helper'
-require_relative '../support/helpers/random_thought_helper'
-require_relative '../support/shared_examples/bad_request_schema'
-require_relative '../support/shared_examples/not_found_schema'
-require_relative '../support/shared_examples/unauthorized_schema'
-require_relative '../support/shared_examples/unprocessable_entity_schema'
+require_relative '../../support/helpers/jwt_helper'
+require_relative '../../support/helpers/random_thought_helper'
+require_relative '../../support/shared_examples/errors/bad_request_schema'
+require_relative '../../support/shared_examples/errors/not_found_schema'
+require_relative '../../support/shared_examples/errors/unauthorized_schema'
+require_relative '../../support/shared_examples/errors/unprocessable_entity_schema'
 
 class RandomThoughtMessage
   def self.not_found

@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative '../support/helpers/user_helper'
-require_relative '../support/shared_examples/bad_request_response'
-require_relative '../support/shared_examples/is_created_from_request'
-require_relative '../support/shared_examples/is_not_created_from_request'
-require_relative '../support/shared_examples/same_user_response'
-require_relative '../support/shared_examples/unprocessable_entity_response'
+
+require_relative '../../support/helpers/user_helper'
+require_relative '../../support/shared_examples/is_created_from_request'
+require_relative '../../support/shared_examples/is_not_created_from_request'
+require_relative '../../support/shared_examples/same_user_response'
+require_relative '../../support/shared_examples/errors/bad_request_response'
+require_relative '../../support/shared_examples/errors/unprocessable_entity_response'
 
 RSpec.describe 'post /users/' do
   include UserHelper

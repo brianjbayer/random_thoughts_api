@@ -2,12 +2,9 @@
 
 module LoginHelper
   def build_login_body(user)
-    # We build this explicitly (vs. as_json) to populate password* attributes
-    {
-      authentication: {
-        email: user.email,
-        password: user.password
-      }
-    }
+    body = user.attributes.slice('email')
+    # NOTE: password attributes must be handled explicitly
+    body['password'] = user.password
+    { authentication: body }
   end
 end
