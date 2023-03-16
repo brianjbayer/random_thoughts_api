@@ -7,6 +7,7 @@ require_relative '../support/shared_examples/random_thought_response'
 RSpec.describe 'get /random_thoughts/{id}' do
   context 'when {id} exists' do
     let(:random_thought) { create(:random_thought) }
+    let(:user) { random_thought.user }
 
     before do
       get random_thought_path(random_thought)

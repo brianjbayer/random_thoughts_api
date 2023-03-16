@@ -63,7 +63,7 @@ RSpec.describe 'patch /random_thoughts/{id}' do
 
       it 'returns updated random_thought JSON' do
         patch_random_thought(random_thought, valid_auth_jwt, update)
-        expect(json_body).to be_random_thought_json(random_thought_update)
+        expect(json_body).to be_random_thought_json(random_thought_update, random_thought.user)
       end
     end
 
