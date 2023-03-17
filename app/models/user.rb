@@ -6,6 +6,8 @@ class User < ApplicationRecord
 
   has_many :random_thoughts, dependent: :destroy
 
+  default_scope -> { order(display_name: :asc) }, all_queries: true
+
   validates :email, presence: true, uniqueness: true,
                     # NOTE: citext (db) does not support max length constraint
                     length: {
