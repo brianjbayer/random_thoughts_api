@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-require_relative '../support/helpers/login_helper'
-require_relative '../support/shared_examples/unauthorized_response'
+require_relative '../../support/helpers/login_helper'
+require_relative '../../support/shared_examples/errors/unauthorized_response'
 
 class LoginMessage
   def self.invalid_login

@@ -15,7 +15,7 @@ module Authorization
     # (i.e. id is not current user's id)
     class UnauthorizedUserError < AuthorizationError
       def initialize
-        super('Unauthorized: User does not authorization for this action')
+        super('Unauthorized: User does not have authorization for this action')
       end
     end
 

@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-require_relative '../support/helpers/jwt_helper'
-require_relative '../support/shared_examples/jwt_authorization'
+require_relative '../../support/helpers/jwt_helper'
+require_relative '../../support/shared_examples/jwt_authorization'
 
 RSpec.describe 'get /logout' do
   include JwtHelper

@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require_relative '../support/shared_examples/not_found_response'
-require_relative '../support/shared_examples/random_thought_response'
+
+require_relative '../../support/shared_examples/random_thought_response'
+require_relative '../../support/shared_examples/errors/not_found_response'
 
 RSpec.describe 'get /random_thoughts/{id}' do
   context 'when {id} exists' do

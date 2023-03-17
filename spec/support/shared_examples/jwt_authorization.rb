@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './unauthorized_response'
+require_relative './errors/unauthorized_response'
 
 RSpec.shared_examples 'jwt_authorization' do
   context 'when no authorization' do

@@ -2,10 +2,10 @@
 
 require 'swagger_helper'
 
-require_relative '../support/helpers/jwt_helper'
-require_relative '../support/helpers/login_helper'
-require_relative '../support/shared_examples/bad_request_schema'
-require_relative '../support/shared_examples/unauthorized_schema'
+require_relative '../../support/helpers/jwt_helper'
+require_relative '../../support/helpers/login_helper'
+require_relative '../../support/shared_examples/errors/bad_request_schema'
+require_relative '../../support/shared_examples/errors/unauthorized_schema'
 
 RSpec.describe 'authentications' do
   include JwtHelper

@@ -2,12 +2,12 @@
 
 require 'rails_helper'
 
-require_relative '../support/helpers/jwt_helper'
-require_relative '../support/shared_examples/is_deleted_from_request'
-require_relative '../support/shared_examples/is_not_deleted_from_request'
-require_relative '../support/shared_examples/jwt_authorization'
-require_relative '../support/shared_examples/not_found_response'
-require_relative '../support/shared_examples/same_user_response'
+require_relative '../../support/helpers/jwt_helper'
+require_relative '../../support/shared_examples/is_deleted_from_request'
+require_relative '../../support/shared_examples/is_not_deleted_from_request'
+require_relative '../../support/shared_examples/jwt_authorization'
+require_relative '../../support/shared_examples/same_user_response'
+require_relative '../../support/shared_examples/errors/not_found_response'
 
 RSpec.describe 'delete /users/{id}' do
   include JwtHelper
@@ -58,7 +58,7 @@ RSpec.describe 'delete /users/{id}' do
 
       it_behaves_like 'is not deleted from request', User
 
-      it_behaves_like 'unauthorized response', 'Unauthorized: User does not authorization for this action'
+      it_behaves_like 'unauthorized response', 'Unauthorized: User does not have authorization for this action'
     end
 
     context 'when {id} does not exist' do
