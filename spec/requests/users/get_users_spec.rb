@@ -6,10 +6,10 @@ require_relative '../../support/helpers/jwt_helper'
 require_relative '../../support/helpers/pagination_helper'
 require_relative '../../support/shared_examples/jwt_authorization'
 require_relative '../../support/shared_contexts/pagination/when_at_least_three_pages'
-require_relative '../../support/shared_contexts/pagination/when_first_paginated_page'
-require_relative '../../support/shared_contexts/pagination/when_last_paginated_page'
-require_relative '../../support/shared_contexts/pagination/when_middle_paginated_page'
 require_relative '../../support/shared_examples/pagination/empty_paginated_page'
+require_relative '../../support/shared_examples/pagination/first_paginated_page'
+require_relative '../../support/shared_examples/pagination/last_paginated_page'
+require_relative '../../support/shared_examples/pagination/middle_paginated_page'
 require_relative '../../support/shared_examples/pagination/pagination_meta_data'
 
 RSpec.describe 'get /users/' do
@@ -58,7 +58,9 @@ RSpec.describe 'get /users/' do
     let(:first_page) { 1 }
     let(:user) { User.page(first_page).first }
 
-    include_context 'when first paginated page', User, :user
+    include_context 'when at least three pages', User, :user
+
+    it_behaves_like 'first paginated page'
   end
 
   describe 'last page' do
@@ -66,7 +68,9 @@ RSpec.describe 'get /users/' do
 
     let(:user) { User.page(pages).first }
 
-    include_context 'when last paginated page', User, :user
+    include_context 'when at least three pages', User, :user
+
+    it_behaves_like 'last paginated page'
   end
 
   describe 'middle page' do
@@ -75,7 +79,9 @@ RSpec.describe 'get /users/' do
     let(:middle_page) { 2 }
     let(:user) { User.page(middle_page).first }
 
-    include_context 'when middle paginated page', User, :user
+    include_context 'when at least three pages', User, :user
+
+    it_behaves_like 'middle paginated page'
   end
 
   private

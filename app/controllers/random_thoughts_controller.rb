@@ -7,7 +7,10 @@ class RandomThoughtsController < ApplicationController
   before_action :find_random_thought_user, :authorize_current_user, only: %i[update destroy]
 
   def index
-    @random_thoughts = RandomThought.page(params[:page])
+    return if random_thoughts_for_name
+
+    @random_thoughts = RandomThought.page(page)
+    @random_thoughts_total = RandomThought.count
   end
 
   def show
@@ -50,5 +53,23 @@ class RandomThoughtsController < ApplicationController
 
   def find_random_thought_user
     @user = @random_thought.user
+  end
+
+  def display_name
+    return false if params[:name].blank?
+
+    params[:name]
+  end
+
+  def random_thoughts_for_name
+    return false unless display_name
+
+    random_thoughts_for_name = RandomThought.joins(:user).where(user: { display_name: })
+    @random_thoughts = random_thoughts_for_name.page(page)
+    @random_thoughts_total = random_thoughts_for_name.count
+  end
+
+  def page
+    params[:page]
   end
 end

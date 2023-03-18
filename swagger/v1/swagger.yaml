@@ -75,6 +75,12 @@ paths:
         required: false
         schema:
           type: integer
+      - name: name
+        in: query
+        description: user name
+        required: false
+        schema:
+          type: string
       responses:
         '200':
           description: successful
