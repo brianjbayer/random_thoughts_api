@@ -43,6 +43,8 @@ This API contains the following endpoints...
     > **Requires** Authorization JWT from login
     > in request header
 
+    > The `page={num}` query parameter is optional
+
   * **Show** user {id}: `get /users/{id}`
     (e.g. http://localhost:3000/users/1)
     > **Requires** Authorization JWT from login
@@ -81,8 +83,12 @@ This API contains the following endpoints...
     > in request header
 
 * Random Thoughts endpoints...
-  * **Index** all random thoughts: `get /random_thoughts?page={num}`
-    (e.g. http://localhost:3000/random_thoughts?page=2)
+  * **Index** all random thoughts or all random thoughts
+    for a user (display_name):
+    `get /random_thoughts?page={num}&name={display_name}`
+    (e.g. http://localhost:3000/random_thoughts?name='Question%20Hound')
+    > The `page={num}` and `name={display_name}` query
+    > parameters are optional
 
   * **Show** random thought {id}: `get /random_thoughts/{id}`
     (e.g. http://localhost:3000/random_thoughts/1)

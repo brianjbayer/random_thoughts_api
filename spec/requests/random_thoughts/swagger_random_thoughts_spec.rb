@@ -35,6 +35,11 @@ RSpec.describe 'random_thoughts' do
                 type: :integer,
                 description: 'page number',
                 required: false
+      parameter name: 'name',
+                in: :query,
+                type: :string,
+                description: 'user name',
+                required: false
 
       response(200, 'successful') do
         # rubocop:disable RSpec/LetSetup
