@@ -10,17 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_17_163241) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_18_175441) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "plpgsql"
 
   create_table "random_thoughts", force: :cascade do |t|
     t.string "thought", null: false
+    t.string "mood", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.string "mood", null: false
     t.index ["created_at"], name: "index_random_thoughts_on_created_at"
     t.index ["user_id"], name: "index_random_thoughts_on_user_id"
   end
@@ -28,10 +28,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_17_163241) do
   create_table "users", force: :cascade do |t|
     t.citext "email", null: false
     t.string "display_name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "password_digest"
     t.bigint "authorization_min", default: -9223372036854775808
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["display_name"], name: "index_users_on_display_name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.check_constraint "length(email::text) < 255", name: "email_length_check"
