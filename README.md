@@ -267,6 +267,18 @@ failing tests using the RSpec `--only-failures` (or
 ./script/run tests --only-failures
 ```
 
+### Code Style/Linting
+This project includes the Rubocop gems
+[`rubocop`](https://github.com/rubocop/rubocop),
+[`rubocop-rails`](https://github.com/rubocop/rubocop-rails),
+[`rubocop-rspec`](https://github.com/rubocop/rubocop-rspec)
+for linting and ensuring a consistent code style.
+
+Run the following command to run code style/linting...
+```
+./script/run lint
+```
+
 ### Dependency Static Security Scanning
 This project includes the
 [`bundler-audit`](https://github.com/rubysec/bundler-audit)
@@ -325,3 +337,7 @@ By default the Swagger UI is located at http://localhost:3000/api-docs/
   Tooling
 * [bundler-audit](https://github.com/rubysec/bundler-audit) - Dependency
   Static Security
+* [rubocop](https://github.com/rubocop/rubocop),
+  [rubocop-rails](https://github.com/rubocop/rubocop-rails),
+  [rubocop-rspec](https://github.com/rubocop/rubocop-rspec) - Code Style
+  and Linting

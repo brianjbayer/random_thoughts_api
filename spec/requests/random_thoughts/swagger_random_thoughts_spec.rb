@@ -15,7 +15,6 @@ class RandomThoughtMessage
   end
 end
 
-# rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe 'random_thoughts' do
   include JwtHelper
   include RandomThoughtHelper
@@ -174,4 +173,3 @@ RSpec.describe 'random_thoughts' do
     end
   end
 end
-# rubocop:enable RSpec/MultipleMemoizedHelpers

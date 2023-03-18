@@ -10,7 +10,6 @@ require_relative '../../support/shared_examples/errors/bad_request_response'
 require_relative '../../support/shared_examples/errors/not_found_response'
 require_relative '../../support/shared_examples/errors/unprocessable_entity_response'
 
-# rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe 'patch /random_thoughts/{id}' do
   include JwtHelper
   include RandomThoughtHelper
@@ -118,4 +117,3 @@ RSpec.describe 'patch /random_thoughts/{id}' do
     json_body_just_keys(:random_thought, update, *keys)
   end
 end
-# rubocop:enable RSpec/MultipleMemoizedHelpers
