@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_16_185257) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_17_163241) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_16_185257) do
     t.datetime "updated_at", null: false
     t.string "password_digest"
     t.bigint "authorization_min", default: -9223372036854775808
+    t.index ["display_name"], name: "index_users_on_display_name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.check_constraint "length(email::text) < 255", name: "email_length_check"
   end

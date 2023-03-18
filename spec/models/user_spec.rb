@@ -16,6 +16,14 @@ RSpec.describe User do
     it { is_expected.to have_many(:random_thoughts).dependent(:destroy) }
   end
 
+  describe 'default scope' do
+    it 'orders by ascending display name' do
+      first_user = create(:user, display_name: 'aa')
+      second_user = create(:user, display_name: 'a')
+      expect(described_class.all).to eq([second_user, first_user])
+    end
+  end
+
   describe 'validations' do
     describe 'email' do
       let(:valid_but_rejected_email) { '"Some spaces! And @ sign too!" @some.server.com' }
