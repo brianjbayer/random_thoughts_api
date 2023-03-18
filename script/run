@@ -2,8 +2,10 @@
 # -----------------------------------------------
 # Project run script to run
 #   - server
-#   - tests
 #   - rails
+#   - tests
+#   - lint
+#   - depecscan
 #   - swaggerize
 #   - or it runs all arguments
 # -----------------------------------------------
@@ -43,7 +45,7 @@ set -e
 
 # set run command if recognized action
 action="${1}"
-case "$action" in 
+case "$action" in
   "server")
     shift
     run_command="bundle exec bin/rails server -p ${PORT:-3000} -b ${HOST:-0.0.0.0} $@"
@@ -57,6 +59,11 @@ case "$action" in
   "tests")
     shift
     run_command="bundle exec rspec $@"
+  ;;
+
+  "lint")
+    shift
+    run_command="bundle exec rubocop $@"
   ;;
 
   "depsecscan")

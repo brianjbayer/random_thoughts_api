@@ -33,6 +33,16 @@ jobs:
       registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
   # Vetting
+  vet-code-standards:
+    needs: [pr-norm-branch, build-and-push-branch-devenv]
+    runs-on: ubuntu-latest
+    env:
+      DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: dockercomposerun linting on development environment
+        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun ./script/run lint"
+
   vet-dependency-security:
     needs: [pr-norm-branch, build-and-push-branch-devenv]
     runs-on: ubuntu-latest
@@ -40,7 +50,7 @@ jobs:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
     steps:
       - uses: actions/checkout@v1
-      - name: dockercomposerun bundle-audit on development environment
+      - name: dockercomposerun dependency scanning on development environment
         run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun ./script/run depsecscan"
 
   vet-unit-tests:

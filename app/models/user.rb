@@ -17,7 +17,10 @@ class User < ApplicationRecord
                     },
                     format: {
                       with: URI::MailTo::EMAIL_REGEXP,
+                      # rubocop:disable Rails/I18nLocaleTexts
+                      # Currently assuming English language
                       message: 'must match URI::MailTo::EMAIL_REGEXP'
+                      # rubocop:enable Rails/I18nLocaleTexts
                     }
 
   validates :display_name, presence: true

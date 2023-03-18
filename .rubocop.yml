@@ -8,3 +8,10 @@ require:
 # Enable any new cops
 AllCops:
   NewCops: enable
+
+# --- CUSTOM CONFIGURATION ---
+
+# Especially with JWTs need more MemoizedHelpers
+# than the default 5
+RSpec/MultipleMemoizedHelpers:
+  Max: 7

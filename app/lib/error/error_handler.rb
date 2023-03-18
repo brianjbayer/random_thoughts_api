@@ -6,6 +6,8 @@ module Error
   module ErrorHandler
     include Authorization::Errors
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    # Disabling these cops to have global error handling in one place
     def self.included(including_class)
       # Handlers must be ordered in lowest to highest priority
       # (i.e. default must be first)
@@ -42,6 +44,7 @@ module Error
         end
       end
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def render_error_status_and_json(error, message)
       status = Rack::Utils.status_code(error)

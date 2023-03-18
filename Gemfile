@@ -64,6 +64,9 @@ group :development, :test do
   gem 'rspec-rails'
   # Swagger specs
   gem 'rswag-specs'
+  gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group :test do

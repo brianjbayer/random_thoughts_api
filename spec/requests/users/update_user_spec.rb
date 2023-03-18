@@ -11,7 +11,6 @@ require_relative '../../support/shared_examples/errors/bad_request_response'
 require_relative '../../support/shared_examples/errors/not_found_response'
 require_relative '../../support/shared_examples/errors/unprocessable_entity_response'
 
-# rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe 'update /users/{id}' do
   include JwtHelper
   include UserHelper
@@ -121,4 +120,3 @@ RSpec.describe 'update /users/{id}' do
     json_body_just_keys(:user, update, *keys)
   end
 end
-# rubocop:enable RSpec/MultipleMemoizedHelpers

@@ -9,7 +9,6 @@ require_relative '../../support/shared_examples/jwt_authorization'
 require_relative '../../support/shared_examples/random_thought_response'
 require_relative '../../support/shared_examples/errors/not_found_response'
 
-# rubocop:disable RSpec/MultipleMemoizedHelpers
 RSpec.describe 'delete /random_thoughts/{id}' do
   include JwtHelper
 
@@ -81,4 +80,3 @@ RSpec.describe 'delete /random_thoughts/{id}' do
     delete random_thought_path(random_thought), headers: authorization_header(jwt)
   end
 end
-# rubocop:enable RSpec/MultipleMemoizedHelpers
