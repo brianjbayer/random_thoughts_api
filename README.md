@@ -123,6 +123,18 @@ This API contains the following endpoints...
     > **Requires** Authorization JWT from login
     > in request header
 
+## Health Checks
+There are two health-check endpoints for determining the current
+health status of the application:
+
+* `/livez` - a *Liveness* endpoint that indicates that the
+  application is running but not necessarily healthy
+  (e.g. http://localhost:3000/livez)
+
+* `/readyz` - a *Readiness* endpoint that indicates that the
+  application is healthy and ready for requests
+  (e.g. http://localhost:3000/readyz)
+
 ## Development
 This project can be developed using the supplied basic,
 container-based development environment which includes
