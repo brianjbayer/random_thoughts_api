@@ -56,10 +56,10 @@ echo ''
 echo "DOCKER-COMPOSE RUNNING [$@]..."
 # Allow to fail but catch return code
 set +e
-# Specify the --service-ports option to expose app's PORTS 
+# Specify the --service-ports option to expose app's PORTS
 # on host machine (by default docker-compose run does not
 # expose host ports)
-$docker_compose_command run --service-ports app "$@"
+$docker_compose_command run --rm --service-ports app "$@"
 run_return_code=$?
 # NOTE return code must be caught before any other command
 set -e
