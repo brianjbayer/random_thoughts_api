@@ -6,7 +6,7 @@ info:
 paths:
   "/login":
     post:
-      summary: login
+      summary: login user
       parameters: []
       responses:
         '200':
@@ -37,9 +37,8 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/login"
-  "/logout":
-    get:
-      summary: logout
+    delete:
+      summary: logout user
       security:
       - bearer: []
       responses:

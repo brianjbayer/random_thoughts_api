@@ -7,12 +7,12 @@ require_relative '../../support/helpers/login_helper'
 require_relative '../../support/shared_examples/errors/bad_request_schema'
 require_relative '../../support/shared_examples/errors/unauthorized_schema'
 
-RSpec.describe 'authentications' do
+RSpec.describe 'authentication' do
   include JwtHelper
   include LoginHelper
 
   path '/login' do
-    post('login') do
+    post('login user') do
       consumes 'application/json'
       produces 'application/json'
       parameter name: :login,
@@ -36,10 +36,8 @@ RSpec.describe 'authentications' do
         run_test!
       end
     end
-  end
 
-  path '/logout' do
-    get('logout') do
+    delete('logout user') do
       consumes 'application/json'
       produces 'application/json'
       security [bearer: []]
