@@ -24,11 +24,11 @@ RSpec.describe 'delete /login' do
       logout(valid_auth_jwt) unless example.metadata[:skip_before]
     end
 
-    # TODO: Should this be user.id instead of email?
     it 'logs that the user has been logged out', :skip_before do
       allow(Rails.logger).to receive(:info)
       logout(valid_auth_jwt)
-      expect(Rails.logger).to have_received(:info).with("Logout: Logged out user [#{user.email}]")
+      log_user_id_and_email = "Logout: Logged out user [#{user.id} (#{user.email})]"
+      expect(Rails.logger).to have_received(:info).with(log_user_id_and_email)
     end
 
     it 'revokes users authorization' do
