@@ -5,14 +5,14 @@ require 'rails_helper'
 require_relative '../../support/helpers/jwt_helper'
 require_relative '../../support/shared_examples/jwt_authorization'
 
-RSpec.describe 'get /logout' do
+RSpec.describe 'delete /login' do
   include JwtHelper
 
   let(:user) { create(:user) }
 
   describe 'authorization' do
-    let(:request_without_jwt) { get logout_path }
-    let(:request_with_jwt) { get_logout(jwt) }
+    let(:request_without_jwt) { delete logout_path }
+    let(:request_with_jwt) { logout(jwt) }
 
     it_behaves_like 'jwt_authorization'
   end
@@ -21,13 +21,13 @@ RSpec.describe 'get /logout' do
     let(:valid_auth_jwt) { valid_jwt(user) }
 
     before do |example|
-      get_logout(valid_auth_jwt) unless example.metadata[:skip_before]
+      logout(valid_auth_jwt) unless example.metadata[:skip_before]
     end
 
     # TODO: Should this be user.id instead of email?
     it 'logs that the user has been logged out', :skip_before do
       allow(Rails.logger).to receive(:info)
-      get_logout(valid_auth_jwt)
+      logout(valid_auth_jwt)
       expect(Rails.logger).to have_received(:info).with("Logout: Logged out user [#{user.email}]")
     end
 
@@ -42,7 +42,7 @@ RSpec.describe 'get /logout' do
 
   private
 
-  def get_logout(jwt)
-    get logout_path, headers: authorization_header(jwt)
+  def logout(jwt)
+    delete logout_path, headers: authorization_header(jwt)
   end
 end

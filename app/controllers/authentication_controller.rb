@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 # Implements application authentication actions
+# NOTE: the restful actions of create (POST) login
+# and DELETE login are mapped to the more intuitive
+# actions of login and logout
 class AuthenticationController < ApplicationController
   include Authorization::JsonWebToken
 
   before_action :authorize_request, only: %i[logout]
 
-  # Post /authentication/login
+  # POST /authentication/login
   def login
     @user = User.find_by(email: params[:authentication][:email])
     if @user&.authenticate(params[:authentication][:password])
@@ -18,6 +21,7 @@ class AuthenticationController < ApplicationController
     end
   end
 
+  # DELETE /authentication/login
   def logout
     @current_user.revoke_auth
     logger.info "Logout: Logged out user [#{@current_user.email}]"

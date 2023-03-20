@@ -32,8 +32,7 @@ This API contains the following endpoints...
     }
     ```
 
-  * **Logout** user: `get /logout`
-    (e.g. http://localhost:3000/logout)
+  * **Logout** user: `delete /login`
     > **Requires** Authorization JWT from login
     > in request header
 
