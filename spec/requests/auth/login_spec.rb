@@ -28,7 +28,8 @@ RSpec.describe 'post /login' do
     it 'logs that the user has been authenticated', :skip_before do
       allow(Rails.logger).to receive(:info)
       post_login(valid_user)
-      expect(Rails.logger).to have_received(:info).with("Login: Authenticated user [#{valid_user.email}]")
+      log_user_id_and_email = "Login: Authenticated user [#{valid_user.id} (#{valid_user.email})]"
+      expect(Rails.logger).to have_received(:info).with(log_user_id_and_email)
     end
 
     it 'returns HS256-encoded JWT in "token"' do
