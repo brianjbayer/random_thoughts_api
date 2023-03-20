@@ -122,6 +122,11 @@ This API contains the following endpoints...
     > **Requires** Authorization JWT from login
     > in request header
 
+## Self-Documenting Root Endpoint
+The root endpoint (i.e. `get /`) returns the application's
+Swagger File (i.e. OpenAPI specification) in JSON, thus making
+this application self-documenting.
+
 ## Health Checks
 There are two health-check endpoints for determining the current
 health status of the application:
