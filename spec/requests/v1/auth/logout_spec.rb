@@ -2,16 +2,16 @@
 
 require 'rails_helper'
 
-require_relative '../../support/helpers/jwt_helper'
-require_relative '../../support/shared_examples/jwt_authorization'
+require_relative '../../../support/helpers/jwt_helper'
+require_relative '../../../support/shared_examples/jwt_authorization'
 
-RSpec.describe 'delete /login' do
+RSpec.describe 'delete /v1/login' do
   include JwtHelper
 
   let(:user) { create(:user) }
 
   describe 'authorization' do
-    let(:request_without_jwt) { delete logout_path }
+    let(:request_without_jwt) { delete v1_logout_path }
     let(:request_with_jwt) { logout(jwt) }
 
     it_behaves_like 'jwt_authorization'
@@ -43,6 +43,6 @@ RSpec.describe 'delete /login' do
   private
 
   def logout(jwt)
-    delete logout_path, headers: authorization_header(jwt)
+    delete v1_logout_path, headers: authorization_header(jwt)
   end
 end

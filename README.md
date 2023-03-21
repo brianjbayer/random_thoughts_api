@@ -18,10 +18,13 @@ mounted into the container.
 
 ---
 
+## API Versions
+The current and latest version of this API is version `v1`.
+
 ## API Endpoints
-This API contains the following endpoints...
+The latest version of this API contains the following endpoints...
 * Authentication endpoints...
-  * **Login** user: `post /login`
+  * **Login** user: `post /v1/login`
     with Request Body...
     ```json
     {
@@ -32,24 +35,24 @@ This API contains the following endpoints...
     }
     ```
 
-  * **Logout** user: `delete /login`
+  * **Logout** user: `delete /v1/login`
     > **Requires** Authorization JWT from login
     > in request header
 
 * User endpoints...
-  * **Index** all users: `get /users?page={num}`
-    (e.g. http://localhost:3000/users?page=2)
+  * **Index** all users: `get /v1/users?page={num}`
+    (e.g. http://localhost:3000/v1/users?page=2)
     > **Requires** Authorization JWT from login
     > in request header
 
     > The `page={num}` query parameter is optional
 
-  * **Show** user {id}: `get /users/{id}`
-    (e.g. http://localhost:3000/users/1)
+  * **Show** user {id}: `get /v1/users/{id}`
+    (e.g. http://localhost:3000/v1/users/1)
     > **Requires** Authorization JWT from login
     > in request header
 
-  * **Create** user: `post /users`
+  * **Create** user: `post /v1/users`
     with Request Body...
     ```json
     {
@@ -62,7 +65,7 @@ This API contains the following endpoints...
     }
     ```
 
-  * **Update** user {id}: `patch /users/{id}`
+  * **Update** user {id}: `patch /v1/users/{id}`
     with Request Body...
     ```json
     {
@@ -77,22 +80,22 @@ This API contains the following endpoints...
     > **Requires** Authorization JWT from login
     > in request header
 
-  * **Delete** user {id}: `delete /users/{id}`
+  * **Delete** user {id}: `delete /v1/users/{id}`
     > **Requires** Authorization JWT from login
     > in request header
 
 * Random Thoughts endpoints...
   * **Index** all random thoughts or all random thoughts
     for a user (display_name):
-    `get /random_thoughts?page={num}&name={display_name}`
-    (e.g. http://localhost:3000/random_thoughts?name='Question%20Hound')
+    `get /v1/random_thoughts?page={num}&name={display_name}`
+    (e.g. http://localhost:3000/v1/random_thoughts?name=Question%20Hound)
     > The `page={num}` and `name={display_name}` query
     > parameters are optional
 
-  * **Show** random thought {id}: `get /random_thoughts/{id}`
-    (e.g. http://localhost:3000/random_thoughts/1)
+  * **Show** random thought {id}: `get /v1/random_thoughts/{id}`
+    (e.g. http://localhost:3000/v1/random_thoughts/1)
 
-  * **Create** random thought: `post /random_thoughts`
+  * **Create** random thought: `post /v1/random_thoughts`
     with Request Body...
     ```json
     {
@@ -105,7 +108,7 @@ This API contains the following endpoints...
     > **Requires** Authorization JWT from login
     > in request header
 
-  * **Update** random thought {id}: `patch /random_thoughts/{id}`
+  * **Update** random thought {id}: `patch /v1/random_thoughts/{id}`
     with Request Body...
     ```json
     {
@@ -118,14 +121,14 @@ This API contains the following endpoints...
     > **Requires** Authorization JWT from login
     > in request header
 
-  * **Delete** random thought {id}: `delete /random_thoughts/{id}`
+  * **Delete** random thought {id}: `delete /v1/random_thoughts/{id}`
     > **Requires** Authorization JWT from login
     > in request header
 
 ## Self-Documenting Root Endpoint
-The root endpoint (i.e. `get /`) returns the application's
-Swagger File (i.e. OpenAPI specification) in JSON, thus making
-this application self-documenting.
+The root endpoint (i.e. `get /`) returns the latest version of
+the application's Swagger File (i.e. OpenAPI specification) in
+JSON, thus making this application self-documenting.
 
 ## Health Checks
 There are two health-check endpoints for determining the current

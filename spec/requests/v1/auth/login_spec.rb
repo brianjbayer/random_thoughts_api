@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-require_relative '../../support/helpers/login_helper'
-require_relative '../../support/shared_examples/errors/unauthorized_response'
+require_relative '../../../support/helpers/login_helper'
+require_relative '../../../support/shared_examples/errors/unauthorized_response'
 
 class LoginMessage
   def self.invalid_login
@@ -11,7 +11,7 @@ class LoginMessage
   end
 end
 
-RSpec.describe 'post /login' do
+RSpec.describe 'post /v1/login' do
   include LoginHelper
 
   let(:valid_user) { create(:user) }
@@ -66,6 +66,6 @@ RSpec.describe 'post /login' do
   private
 
   def post_login(user)
-    post login_path, params: build_login_body(user)
+    post v1_login_path, params: build_login_body(user)
   end
 end

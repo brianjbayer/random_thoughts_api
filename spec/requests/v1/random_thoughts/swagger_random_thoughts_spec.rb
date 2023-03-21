@@ -2,12 +2,12 @@
 
 require 'swagger_helper'
 
-require_relative '../../support/helpers/jwt_helper'
-require_relative '../../support/helpers/random_thought_helper'
-require_relative '../../support/shared_examples/errors/bad_request_schema'
-require_relative '../../support/shared_examples/errors/not_found_schema'
-require_relative '../../support/shared_examples/errors/unauthorized_schema'
-require_relative '../../support/shared_examples/errors/unprocessable_entity_schema'
+require_relative '../../../support/helpers/jwt_helper'
+require_relative '../../../support/helpers/random_thought_helper'
+require_relative '../../../support/shared_examples/errors/bad_request_schema'
+require_relative '../../../support/shared_examples/errors/not_found_schema'
+require_relative '../../../support/shared_examples/errors/unauthorized_schema'
+require_relative '../../../support/shared_examples/errors/unprocessable_entity_schema'
 
 class RandomThoughtMessage
   def self.not_found
@@ -15,7 +15,7 @@ class RandomThoughtMessage
   end
 end
 
-RSpec.describe 'random_thoughts' do
+RSpec.describe 'v1/random_thoughts', swagger_doc: 'v1/swagger.yaml' do
   include JwtHelper
   include RandomThoughtHelper
 
@@ -25,7 +25,7 @@ RSpec.describe 'random_thoughts' do
   let(:user) { create(:user) }
   let(:jwt) { valid_jwt(user) }
 
-  path '/random_thoughts' do
+  path '/v1/random_thoughts' do
     get('list random_thoughts') do
       consumes 'application/json'
       produces 'application/json'
@@ -85,7 +85,7 @@ RSpec.describe 'random_thoughts' do
     end
   end
 
-  path '/random_thoughts/{id}' do
+  path '/v1/random_thoughts/{id}' do
     parameter name: 'id', in: :path, type: :string, description: 'id'
 
     # Create RandomThought associated with User

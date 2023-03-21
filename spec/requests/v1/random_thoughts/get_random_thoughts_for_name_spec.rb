@@ -2,14 +2,14 @@
 
 require 'rails_helper'
 
-require_relative '../../support/helpers/pagination_helper'
-require_relative '../../support/shared_examples/pagination/empty_paginated_page'
-require_relative '../../support/shared_examples/pagination/first_paginated_page'
-require_relative '../../support/shared_examples/pagination/last_paginated_page'
-require_relative '../../support/shared_examples/pagination/middle_paginated_page'
-require_relative '../../support/shared_examples/pagination/pagination_meta_data'
+require_relative '../../../support/helpers/pagination_helper'
+require_relative '../../../support/shared_examples/pagination/empty_paginated_page'
+require_relative '../../../support/shared_examples/pagination/first_paginated_page'
+require_relative '../../../support/shared_examples/pagination/last_paginated_page'
+require_relative '../../../support/shared_examples/pagination/middle_paginated_page'
+require_relative '../../../support/shared_examples/pagination/pagination_meta_data'
 
-RSpec.describe 'get /random_thoughts/?name={display_name}' do
+RSpec.describe 'get /v1/random_thoughts/?name={display_name}' do
   include PaginationHelper
 
   shared_context 'when at least three pages for name' do
@@ -82,9 +82,10 @@ RSpec.describe 'get /random_thoughts/?name={display_name}' do
   end
 
   context 'when there are no random thoughts for name' do
-    subject(:any_page_request) { get random_thoughts_path({ page: any_page }) }
+    subject(:any_page_request) { get_random_thoughts_for_name(any_page, user.display_name) }
 
     let(:any_page) { 1 }
+    let(:user) { create(:user) }
 
     it_behaves_like 'empty_paginated page'
   end
@@ -92,7 +93,7 @@ RSpec.describe 'get /random_thoughts/?name={display_name}' do
   private
 
   def get_random_thoughts_for_name(page, name)
-    get random_thoughts_path({ page:, name: })
+    get v1_random_thoughts_path({ page:, name: })
   end
 
   def paginated_random_thoughts_for_name(user)

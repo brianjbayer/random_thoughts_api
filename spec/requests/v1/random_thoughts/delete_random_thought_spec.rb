@@ -2,14 +2,14 @@
 
 require 'rails_helper'
 
-require_relative '../../support/helpers/jwt_helper'
-require_relative '../../support/shared_examples/is_deleted_from_request'
-require_relative '../../support/shared_examples/is_not_deleted_from_request'
-require_relative '../../support/shared_examples/jwt_authorization'
-require_relative '../../support/shared_examples/random_thought_response'
-require_relative '../../support/shared_examples/errors/not_found_response'
+require_relative '../../../support/helpers/jwt_helper'
+require_relative '../../../support/shared_examples/is_deleted_from_request'
+require_relative '../../../support/shared_examples/is_not_deleted_from_request'
+require_relative '../../../support/shared_examples/jwt_authorization'
+require_relative '../../../support/shared_examples/random_thought_response'
+require_relative '../../../support/shared_examples/errors/not_found_response'
 
-RSpec.describe 'delete /random_thoughts/{id}' do
+RSpec.describe 'delete /v1/random_thoughts/{id}' do
   include JwtHelper
 
   # Ensure user is created before authorization
@@ -20,7 +20,7 @@ RSpec.describe 'delete /random_thoughts/{id}' do
   let!(:random_thought) { create(:random_thought, user:) }
 
   describe 'authorization' do
-    let(:request_without_jwt) { delete random_thought_path(random_thought) }
+    let(:request_without_jwt) { raw_delete_random_thought(random_thought) }
     let(:request_with_jwt) { delete_random_thought(random_thought, jwt) }
 
     it_behaves_like 'jwt_authorization'
@@ -77,6 +77,14 @@ RSpec.describe 'delete /random_thoughts/{id}' do
   private
 
   def delete_random_thought(random_thought, jwt)
-    delete random_thought_path(random_thought), headers: authorization_header(jwt)
+    raw_delete_random_thought(random_thought, headers: authorization_header(jwt))
+  end
+
+  def raw_delete_random_thought(random_thought, headers: false)
+    if headers
+      delete v1_random_thought_path(random_thought), headers:
+    else
+      delete v1_random_thought_path(random_thought)
+    end
   end
 end

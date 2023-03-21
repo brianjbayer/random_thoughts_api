@@ -2,18 +2,18 @@
 
 require 'rails_helper'
 
-require_relative '../../support/helpers/jwt_helper'
-require_relative '../../support/shared_examples/jwt_authorization'
-require_relative '../../support/shared_examples/same_user_response'
-require_relative '../../support/shared_examples/errors/not_found_response'
+require_relative '../../../support/helpers/jwt_helper'
+require_relative '../../../support/shared_examples/jwt_authorization'
+require_relative '../../../support/shared_examples/same_user_response'
+require_relative '../../../support/shared_examples/errors/not_found_response'
 
-RSpec.describe 'get /user/{id}' do
+RSpec.describe 'get /v1/user/{id}' do
   include JwtHelper
 
   let(:user) { create(:user) }
 
   describe 'authorization' do
-    let(:request_without_jwt) { get user_path(user), params: {} }
+    let(:request_without_jwt) { raw_get_user(user) }
     let(:request_with_jwt) { get_user(user, jwt) }
 
     it_behaves_like 'jwt_authorization'
@@ -56,6 +56,15 @@ RSpec.describe 'get /user/{id}' do
   private
 
   def get_user(user, jwt)
-    get user_path(user), headers: authorization_header(jwt)
+    # get user_path(user), headers: authorization_header(jwt)
+    raw_get_user(user, headers: authorization_header(jwt))
+  end
+
+  def raw_get_user(user, headers: false)
+    if headers
+      get v1_user_path(user), headers:
+    else
+      get v1_user_path(user)
+    end
   end
 end
