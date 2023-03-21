@@ -4,7 +4,7 @@ info:
   title: API V1
   version: v1
 paths:
-  "/login":
+  "/v1/login":
     post:
       summary: login user
       parameters: []
@@ -64,7 +64,7 @@ paths:
                     message: Nil JSON web token
               schema:
                 "$ref": "#/components/schemas/error"
-  "/random_thoughts":
+  "/v1/random_thoughts":
     get:
       summary: list random_thoughts
       parameters:
@@ -146,7 +146,7 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/create_random_thought"
-  "/random_thoughts/{id}":
+  "/v1/random_thoughts/{id}":
     parameters:
     - name: id
       in: path
@@ -281,7 +281,7 @@ paths:
                     message: Couldn't find RandomThought with 'id'=??
               schema:
                 "$ref": "#/components/schemas/error"
-  "/users":
+  "/v1/users":
     get:
       summary: list users
       security:
@@ -364,7 +364,7 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/create_user"
-  "/users/{id}":
+  "/v1/users/{id}":
     parameters:
     - name: id
       in: path

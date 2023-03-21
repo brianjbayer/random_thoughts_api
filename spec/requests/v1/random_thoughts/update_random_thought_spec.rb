@@ -2,15 +2,15 @@
 
 require 'rails_helper'
 
-require_relative '../../support/helpers/jwt_helper'
-require_relative '../../support/helpers/random_thought_helper'
-require_relative '../../support/shared_examples/is_not_updated_from_request'
-require_relative '../../support/shared_examples/jwt_authorization'
-require_relative '../../support/shared_examples/errors/bad_request_response'
-require_relative '../../support/shared_examples/errors/not_found_response'
-require_relative '../../support/shared_examples/errors/unprocessable_entity_response'
+require_relative '../../../support/helpers/jwt_helper'
+require_relative '../../../support/helpers/random_thought_helper'
+require_relative '../../../support/shared_examples/is_not_updated_from_request'
+require_relative '../../../support/shared_examples/jwt_authorization'
+require_relative '../../../support/shared_examples/errors/bad_request_response'
+require_relative '../../../support/shared_examples/errors/not_found_response'
+require_relative '../../../support/shared_examples/errors/unprocessable_entity_response'
 
-RSpec.describe 'patch /random_thoughts/{id}' do
+RSpec.describe 'patch /v1/random_thoughts/{id}' do
   include JwtHelper
   include RandomThoughtHelper
 
@@ -23,7 +23,7 @@ RSpec.describe 'patch /random_thoughts/{id}' do
   let(:update) { build_random_thought_body(random_thought_update) }
 
   describe 'authorization' do
-    let(:request_without_jwt) { patch random_thought_path(random_thought), params: update }
+    let(:request_without_jwt) { raw_patch_random_thought(random_thought, update) }
     let(:request_with_jwt) { patch_random_thought(random_thought, jwt, update) }
 
     it_behaves_like 'jwt_authorization'
@@ -77,7 +77,7 @@ RSpec.describe 'patch /random_thoughts/{id}' do
       let(:requesting) { random_thought }
 
       before do
-        patch random_thought_path(requesting), params: empty_json_body, headers: authorization_header(valid_auth_jwt)
+        raw_patch_random_thought(requesting, empty_json_body, headers: authorization_header(valid_auth_jwt))
       end
 
       it_behaves_like 'is not updated from request', RandomThought
@@ -110,7 +110,15 @@ RSpec.describe 'patch /random_thoughts/{id}' do
   private
 
   def patch_random_thought(random_thought, jwt, update)
-    patch random_thought_path(random_thought), params: update, headers: authorization_header(jwt)
+    raw_patch_random_thought(random_thought, update, headers: authorization_header(jwt))
+  end
+
+  def raw_patch_random_thought(random_thought, params, headers: false)
+    if headers
+      patch v1_random_thought_path(random_thought), params:, headers:
+    else
+      patch v1_random_thought_path(random_thought), params:
+    end
   end
 
   def random_thought_update_just_keys(update, *keys)

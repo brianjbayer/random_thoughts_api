@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ApplicationController do
+RSpec.describe V1::ApplicationController do
   controller do
     def index
       raise StandardError, 'ruh roh'

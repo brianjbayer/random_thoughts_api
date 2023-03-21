@@ -2,17 +2,17 @@
 
 require 'rails_helper'
 
-require_relative '../../support/helpers/jwt_helper'
-require_relative '../../support/helpers/pagination_helper'
-require_relative '../../support/shared_examples/jwt_authorization'
-require_relative '../../support/shared_contexts/pagination/when_at_least_three_pages'
-require_relative '../../support/shared_examples/pagination/empty_paginated_page'
-require_relative '../../support/shared_examples/pagination/first_paginated_page'
-require_relative '../../support/shared_examples/pagination/last_paginated_page'
-require_relative '../../support/shared_examples/pagination/middle_paginated_page'
-require_relative '../../support/shared_examples/pagination/pagination_meta_data'
+require_relative '../../../support/helpers/jwt_helper'
+require_relative '../../../support/helpers/pagination_helper'
+require_relative '../../../support/shared_examples/jwt_authorization'
+require_relative '../../../support/shared_contexts/pagination/when_at_least_three_pages'
+require_relative '../../../support/shared_examples/pagination/empty_paginated_page'
+require_relative '../../../support/shared_examples/pagination/first_paginated_page'
+require_relative '../../../support/shared_examples/pagination/last_paginated_page'
+require_relative '../../../support/shared_examples/pagination/middle_paginated_page'
+require_relative '../../../support/shared_examples/pagination/pagination_meta_data'
 
-RSpec.describe 'get /users/' do
+RSpec.describe 'get /v1/users/' do
   include JwtHelper
   include PaginationHelper
 
@@ -20,7 +20,7 @@ RSpec.describe 'get /users/' do
 
   describe 'authorization' do
     let(:user) { create(:user) }
-    let(:request_without_jwt) { get users_path, params: {} }
+    let(:request_without_jwt) { raw_get_users }
     let(:request_with_jwt) { get_users(jwt) }
 
     it_behaves_like 'jwt_authorization'
@@ -50,6 +50,16 @@ RSpec.describe 'get /users/' do
     end
 
     it_behaves_like 'pagination_meta_data'
+  end
+
+  context 'when there is not an optional page query parameter' do
+    subject(:first_page_request) { get_users(valid_auth_jwt) }
+
+    let(:user) { User.page(1).first }
+
+    include_context 'when at least three pages', RandomThought, :random_thought
+
+    it_behaves_like 'first paginated page'
   end
 
   describe 'first page' do
@@ -87,10 +97,15 @@ RSpec.describe 'get /users/' do
   private
 
   def get_users(jwt, page: false)
-    if page
-      get users_path({ page: }), headers: authorization_header(jwt)
+    raw_get_users(page:, headers: authorization_header(jwt))
+  end
+
+  def raw_get_users(page: false, headers: false)
+    path = path_with_optional_page(method(:v1_users_path), page:)
+    if headers
+      get path, headers:
     else
-      get users_path, headers: authorization_header(jwt)
+      get path
     end
   end
 

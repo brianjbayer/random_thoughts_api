@@ -2,15 +2,15 @@
 
 require 'rails_helper'
 
-require_relative '../../support/helpers/pagination_helper'
-require_relative '../../support/shared_contexts/pagination/when_at_least_three_pages'
-require_relative '../../support/shared_examples/pagination/empty_paginated_page'
-require_relative '../../support/shared_examples/pagination/first_paginated_page'
-require_relative '../../support/shared_examples/pagination/last_paginated_page'
-require_relative '../../support/shared_examples/pagination/middle_paginated_page'
-require_relative '../../support/shared_examples/pagination/pagination_meta_data'
+require_relative '../../../support/helpers/pagination_helper'
+require_relative '../../../support/shared_contexts/pagination/when_at_least_three_pages'
+require_relative '../../../support/shared_examples/pagination/empty_paginated_page'
+require_relative '../../../support/shared_examples/pagination/first_paginated_page'
+require_relative '../../../support/shared_examples/pagination/last_paginated_page'
+require_relative '../../../support/shared_examples/pagination/middle_paginated_page'
+require_relative '../../../support/shared_examples/pagination/pagination_meta_data'
 
-RSpec.describe 'get /random_thoughts/' do
+RSpec.describe 'get /v1/random_thoughts/' do
   include PaginationHelper
 
   context 'when there are random_thoughts' do
@@ -19,7 +19,7 @@ RSpec.describe 'get /random_thoughts/' do
     include_context 'when at least three pages', RandomThought, :random_thought
 
     before do
-      get random_thoughts_path({ page: })
+      get_random_thoughts(page:)
     end
 
     describe 'returned "data" body' do
@@ -43,8 +43,16 @@ RSpec.describe 'get /random_thoughts/' do
     it_behaves_like 'pagination_meta_data'
   end
 
+  context 'when there is not an optional page query parameter' do
+    subject(:first_page_request) { get_random_thoughts }
+
+    include_context 'when at least three pages', RandomThought, :random_thought
+
+    it_behaves_like 'first paginated page'
+  end
+
   describe 'first page' do
-    subject(:first_page_request) { get random_thoughts_path({ page: 1 }) }
+    subject(:first_page_request) { get_random_thoughts(page: 1) }
 
     include_context 'when at least three pages', RandomThought, :random_thought
 
@@ -52,7 +60,7 @@ RSpec.describe 'get /random_thoughts/' do
   end
 
   describe 'last page' do
-    subject(:last_page_request) { get random_thoughts_path({ page: pages }) }
+    subject(:last_page_request) { get_random_thoughts(page: pages) }
 
     include_context 'when at least three pages', RandomThought, :random_thought
 
@@ -60,7 +68,7 @@ RSpec.describe 'get /random_thoughts/' do
   end
 
   describe 'middle page' do
-    subject(:middle_page_request) { get random_thoughts_path({ page: middle_page }) }
+    subject(:middle_page_request) { get_random_thoughts(page: middle_page) }
 
     let(:middle_page) { 2 }
 
@@ -70,10 +78,16 @@ RSpec.describe 'get /random_thoughts/' do
   end
 
   context 'when there are no random thoughts' do
-    subject(:any_page_request) { get random_thoughts_path({ page: any_page }) }
+    subject(:any_page_request) { get_random_thoughts(page: any_page) }
 
     let(:any_page) { 1 }
 
     it_behaves_like 'empty_paginated page'
+  end
+
+  private
+
+  def get_random_thoughts(page: false)
+    get path_with_optional_page(method(:v1_random_thoughts_path), page:)
   end
 end

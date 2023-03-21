@@ -2,16 +2,16 @@
 
 require 'rails_helper'
 
-require_relative '../../support/helpers/jwt_helper'
-require_relative '../../support/helpers/random_thought_helper'
-require_relative '../../support/shared_examples/is_created_from_request'
-require_relative '../../support/shared_examples/is_not_created_from_request'
-require_relative '../../support/shared_examples/jwt_authorization'
-require_relative '../../support/shared_examples/random_thought_response'
-require_relative '../../support/shared_examples/errors/bad_request_response'
-require_relative '../../support/shared_examples/errors/unprocessable_entity_response'
+require_relative '../../../support/helpers/jwt_helper'
+require_relative '../../../support/helpers/random_thought_helper'
+require_relative '../../../support/shared_examples/is_created_from_request'
+require_relative '../../../support/shared_examples/is_not_created_from_request'
+require_relative '../../../support/shared_examples/jwt_authorization'
+require_relative '../../../support/shared_examples/random_thought_response'
+require_relative '../../../support/shared_examples/errors/bad_request_response'
+require_relative '../../../support/shared_examples/errors/unprocessable_entity_response'
 
-RSpec.describe 'post /random_thoughts/' do
+RSpec.describe 'post /v1/random_thoughts/' do
   include JwtHelper
   include RandomThoughtHelper
 
@@ -74,9 +74,9 @@ RSpec.describe 'post /random_thoughts/' do
 
   def raw_post_random_thought(params, headers: false)
     if headers
-      post random_thoughts_path, params:, headers:
+      post v1_random_thoughts_path, params:, headers:
     else
-      post random_thoughts_path, params:
+      post v1_random_thoughts_path, params:
     end
   end
 end

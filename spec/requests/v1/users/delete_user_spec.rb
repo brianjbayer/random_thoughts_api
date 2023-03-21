@@ -2,12 +2,12 @@
 
 require 'rails_helper'
 
-require_relative '../../support/helpers/jwt_helper'
-require_relative '../../support/shared_examples/is_deleted_from_request'
-require_relative '../../support/shared_examples/is_not_deleted_from_request'
-require_relative '../../support/shared_examples/jwt_authorization'
-require_relative '../../support/shared_examples/same_user_response'
-require_relative '../../support/shared_examples/errors/not_found_response'
+require_relative '../../../support/helpers/jwt_helper'
+require_relative '../../../support/shared_examples/is_deleted_from_request'
+require_relative '../../../support/shared_examples/is_not_deleted_from_request'
+require_relative '../../../support/shared_examples/jwt_authorization'
+require_relative '../../../support/shared_examples/same_user_response'
+require_relative '../../../support/shared_examples/errors/not_found_response'
 
 RSpec.describe 'delete /users/{id}' do
   include JwtHelper
@@ -15,7 +15,7 @@ RSpec.describe 'delete /users/{id}' do
   let(:user) { create(:user) }
 
   describe 'authorization' do
-    let(:request_without_jwt) { delete user_path(user) }
+    let(:request_without_jwt) { raw_delete_user(user) }
     let(:request_with_jwt) { delete_user(user, jwt) }
 
     it_behaves_like 'jwt_authorization'
@@ -75,6 +75,14 @@ RSpec.describe 'delete /users/{id}' do
   private
 
   def delete_user(user, jwt)
-    delete user_path(user), headers: authorization_header(jwt)
+    raw_delete_user(user, headers: authorization_header(jwt))
+  end
+
+  def raw_delete_user(user, headers: false)
+    if headers
+      delete v1_user_path(user), headers:
+    else
+      delete v1_user_path(user)
+    end
   end
 end

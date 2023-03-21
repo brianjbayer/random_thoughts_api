@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Root' do
-  describe 'GET /' do
+RSpec.describe 'root' do
+  describe 'get /' do
     before do
       get root_path
     end

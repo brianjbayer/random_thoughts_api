@@ -2,16 +2,16 @@
 
 require 'rails_helper'
 
-require_relative '../../support/helpers/jwt_helper'
-require_relative '../../support/helpers/user_helper'
-require_relative '../../support/shared_examples/is_not_updated_from_request'
-require_relative '../../support/shared_examples/jwt_authorization'
-require_relative '../../support/shared_examples/same_user_response'
-require_relative '../../support/shared_examples/errors/bad_request_response'
-require_relative '../../support/shared_examples/errors/not_found_response'
-require_relative '../../support/shared_examples/errors/unprocessable_entity_response'
+require_relative '../../../support/helpers/jwt_helper'
+require_relative '../../../support/helpers/user_helper'
+require_relative '../../../support/shared_examples/is_not_updated_from_request'
+require_relative '../../../support/shared_examples/jwt_authorization'
+require_relative '../../../support/shared_examples/same_user_response'
+require_relative '../../../support/shared_examples/errors/bad_request_response'
+require_relative '../../../support/shared_examples/errors/not_found_response'
+require_relative '../../../support/shared_examples/errors/unprocessable_entity_response'
 
-RSpec.describe 'update /users/{id}' do
+RSpec.describe 'patch /v1/users/{id}' do
   include JwtHelper
   include UserHelper
 
@@ -22,7 +22,7 @@ RSpec.describe 'update /users/{id}' do
   let(:valid_auth_jwt) { valid_jwt(user) }
 
   describe 'authorization' do
-    let(:request_without_jwt) { patch user_path(user), params: update }
+    let(:request_without_jwt) { raw_patch_user(user, update) }
     let(:request_with_jwt) { patch_user(user, jwt, update) }
 
     it_behaves_like 'jwt_authorization'
@@ -82,7 +82,7 @@ RSpec.describe 'update /users/{id}' do
     let(:requesting) { user }
 
     before do
-      patch user_path(requesting), params: empty_json_body, headers: authorization_header(valid_auth_jwt)
+      raw_patch_user(requesting, empty_json_body, headers: authorization_header(valid_auth_jwt))
     end
 
     it_behaves_like 'is not updated from request', User
@@ -113,7 +113,15 @@ RSpec.describe 'update /users/{id}' do
   private
 
   def patch_user(user, jwt, update)
-    patch user_path(user), params: update, headers: authorization_header(jwt)
+    raw_patch_user(user, update, headers: authorization_header(jwt))
+  end
+
+  def raw_patch_user(user, params, headers: false)
+    if headers
+      patch v1_user_path(user), params:, headers:
+    else
+      patch v1_user_path(user), params:
+    end
   end
 
   def user_update_just_keys(update, *keys)

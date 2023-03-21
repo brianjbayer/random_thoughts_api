@@ -2,16 +2,16 @@
 
 require 'swagger_helper'
 
-require_relative '../../support/helpers/jwt_helper'
-require_relative '../../support/helpers/login_helper'
-require_relative '../../support/shared_examples/errors/bad_request_schema'
-require_relative '../../support/shared_examples/errors/unauthorized_schema'
+require_relative '../../../support/helpers/jwt_helper'
+require_relative '../../../support/helpers/login_helper'
+require_relative '../../../support/shared_examples/errors/bad_request_schema'
+require_relative '../../../support/shared_examples/errors/unauthorized_schema'
 
-RSpec.describe 'authentication' do
+RSpec.describe 'v1/authentication', swagger_doc: 'v1/swagger.yaml' do
   include JwtHelper
   include LoginHelper
 
-  path '/login' do
+  path '/v1/login' do
     post('login user') do
       consumes 'application/json'
       produces 'application/json'

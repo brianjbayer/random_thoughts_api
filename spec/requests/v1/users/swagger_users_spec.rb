@@ -2,12 +2,12 @@
 
 require 'swagger_helper'
 
-require_relative '../../support/helpers/jwt_helper'
-require_relative '../../support/helpers/user_helper'
-require_relative '../../support/shared_examples/errors/bad_request_schema'
-require_relative '../../support/shared_examples/errors/not_found_schema'
-require_relative '../../support/shared_examples/errors/unauthorized_schema'
-require_relative '../../support/shared_examples/errors/unprocessable_entity_schema'
+require_relative '../../../support/helpers/jwt_helper'
+require_relative '../../../support/helpers/user_helper'
+require_relative '../../../support/shared_examples/errors/bad_request_schema'
+require_relative '../../../support/shared_examples/errors/not_found_schema'
+require_relative '../../../support/shared_examples/errors/unauthorized_schema'
+require_relative '../../../support/shared_examples/errors/unprocessable_entity_schema'
 
 class UserMessage
   def self.not_found
@@ -22,7 +22,7 @@ class UserMessage
   end
 end
 
-RSpec.describe 'users' do
+RSpec.describe 'v1/users', swagger_doc: 'v1/swagger.yaml' do
   include UserHelper
   include JwtHelper
 
@@ -30,7 +30,7 @@ RSpec.describe 'users' do
   let(:Authorization) { "Bearer #{jwt}" }
   # rubocop:enable RSpec/VariableName
 
-  path '/users' do
+  path '/v1/users' do
     get('list users') do
       consumes 'application/json'
       produces 'application/json'
@@ -88,7 +88,7 @@ RSpec.describe 'users' do
     end
   end
 
-  path '/users/{id}' do
+  path '/v1/users/{id}' do
     parameter name: 'id', in: :path, type: :string, description: 'id'
 
     let(:user) { create(:user) }

@@ -2,14 +2,14 @@
 
 require 'rails_helper'
 
-require_relative '../../support/helpers/user_helper'
-require_relative '../../support/shared_examples/is_created_from_request'
-require_relative '../../support/shared_examples/is_not_created_from_request'
-require_relative '../../support/shared_examples/same_user_response'
-require_relative '../../support/shared_examples/errors/bad_request_response'
-require_relative '../../support/shared_examples/errors/unprocessable_entity_response'
+require_relative '../../../support/helpers/user_helper'
+require_relative '../../../support/shared_examples/is_created_from_request'
+require_relative '../../../support/shared_examples/is_not_created_from_request'
+require_relative '../../../support/shared_examples/same_user_response'
+require_relative '../../../support/shared_examples/errors/bad_request_response'
+require_relative '../../../support/shared_examples/errors/unprocessable_entity_response'
 
-RSpec.describe 'post /users/' do
+RSpec.describe 'post /v1/users/' do
   include UserHelper
 
   context 'when valid create request for a new user' do
@@ -27,7 +27,7 @@ RSpec.describe 'post /users/' do
   end
 
   context 'when parameters are missing in create request' do
-    subject(:request) { post users_path, params: empty_json_body }
+    subject(:request) { raw_post_user(empty_json_body) }
 
     before do |example|
       request unless example.metadata[:skip_before]
@@ -74,6 +74,10 @@ RSpec.describe 'post /users/' do
   private
 
   def post_user(user)
-    post users_path, params: build_user_body(user)
+    raw_post_user(build_user_body(user))
+  end
+
+  def raw_post_user(params)
+    post v1_users_path, params:
   end
 end
