@@ -30,6 +30,28 @@ jobs:
       - name: Output normalized merged branch env var
         run: echo "NORM_BRANCH=[${NORM_BRANCH}]"
 
+  promote-branch-last-commit-to-prod:
+    needs: [branch-and-last-commit, push-norm-branch]
+    uses: brianjbayer/actions-image-cicd/.github/workflows/pull_push_image.yml@main
+    with:
+      # Pull last (vetted) branch image
+      pull_as: ${{ github.repository }}_${{ needs.push-norm-branch.outputs.name }}:${{ needs.branch-and-last-commit.outputs.commit }}
+      # Push prod Image
+      push_as: ${{ github.repository }}:${{ needs.branch-and-last-commit.outputs.commit }}
+    secrets:
+      registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
+      registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+  promote-branch-last-commit-to-prod-latest:
+    needs: [branch-and-last-commit, promote-branch-last-commit-to-prod]
+    uses: brianjbayer/actions-image-cicd/.github/workflows/pull_push_latest_image.yml@main
+    with:
+      image_name: ${{ github.repository }}
+      image_tag: ${{ needs.branch-and-last-commit.outputs.commit }}
+    secrets:
+      registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
+      registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
   promote-branch-last-commit-devenv:
     needs: [branch-and-last-commit, push-norm-branch]
     uses: brianjbayer/actions-image-cicd/.github/workflows/pull_push_image.yml@main

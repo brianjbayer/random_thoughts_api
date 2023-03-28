@@ -5,14 +5,14 @@ on:
     branches:
       - main
 
-# NOTE: Currently only supports Development Environment
-
 # FYI...
 #  Raw Branch Name: ${{ github.head_ref }}
 #  <commit-sha>: ${{ github.event.pull_request.head.sha }}
 
 # Produced images...
-#  1. (Always) Dev Environment Image: <owner/repository>_<normalized-branch>_dev:<commit-sha>
+#  1. (Always) Unvetted Image: <owner/repository>_<normalized-branch>_unvetted:<commit-sha>
+#  2. (Always) Dev Environment Image: <owner/repository>_<normalized-branch>_dev:<commit-sha>
+#  3. (If vetted) Vetted_image: <owner/repository>_<normalized-branch>:<commit-sha>
 
 jobs:
   # Normalize the branch for image name
@@ -27,7 +27,16 @@ jobs:
     uses: brianjbayer/actions-image-cicd/.github/workflows/build_push_image.yml@main
     with:
       image: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
-      # buildopts: --target devenv
+      buildopts: --target devenv
+    secrets:
+      registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
+      registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+  build-and-push-branch-unvetted:
+    needs: [pr-norm-branch]
+    uses: brianjbayer/actions-image-cicd/.github/workflows/build_push_image.yml@main
+    with:
+      image: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_unvetted:${{ github.event.pull_request.head.sha }}
     secrets:
       registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
       registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
@@ -41,7 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: dockercomposerun linting on development environment
-        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun ./script/run lint"
+        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -d ./script/run lint"
 
   vet-dependency-security:
     needs: [pr-norm-branch, build-and-push-branch-devenv]
@@ -51,7 +60,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: dockercomposerun dependency scanning on development environment
-        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun ./script/run depsecscan"
+        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -d ./script/run depsecscan"
 
   vet-unit-tests:
     needs: [pr-norm-branch, build-and-push-branch-devenv]
@@ -63,7 +72,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: dockercomposerun tests on development environment
-        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun ./script/run tests"
+        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -d ./script/run tests"
 
   vet-swagger-file-currency:
     needs: [pr-norm-branch, build-and-push-branch-devenv]
@@ -75,6 +84,52 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: dockercomposerun swaggerize on development environment
-        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun ./script/run swaggerize"
+        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -d ./script/run swaggerize"
       - name: git diff Swagger File(s) to ensure no changes
         run: git diff --exit-code swagger
+
+  vet-deploy-as-e2e-tests-target:
+    needs: [pr-norm-branch, build-and-push-branch-unvetted]
+    runs-on: ubuntu-latest
+    env:
+      UNVETTED_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_unvetted:${{ github.event.pull_request.head.sha }}
+      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
+      APP_JWT_SECRET: ${{ secrets.APP_JWT_SECRET }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: dockercomposerun e2e tests against unvetted image
+        run: "APP_IMAGE=${UNVETTED_IMAGE} ./script/dockercomposerun -ct"
+
+  # Push (IF) Vetted Deploy Image
+  push-branch-vetted-deploy-image:
+    needs:
+      - vet-deploy-as-e2e-tests-target
+      - vet-unit-tests
+      - vet-swagger-file-currency
+      - vet-dependency-security
+      - vet-code-standards
+      - build-and-push-branch-unvetted
+      - pr-norm-branch
+    uses: brianjbayer/actions-image-cicd/.github/workflows/pull_push_image.yml@main
+    with:
+      # Pull unvetted branch image
+      pull_as: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_unvetted:${{ github.event.pull_request.head.sha }}
+      # Push Vetted Image
+      push_as: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}:${{ github.event.pull_request.head.sha }}
+    secrets:
+      registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
+      registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+# Vet Dev Environment Image
+  vet-devenv-as-e2e-tests-target:
+    needs: [pr-norm-branch, build-and-push-branch-devenv]
+    runs-on: ubuntu-latest
+    env:
+      DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
+      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
+      APP_JWT_SECRET: ${{ secrets.APP_JWT_SECRET }}
+      RAILS_ENV: development
+    steps:
+      - uses: actions/checkout@v1
+      - name: dockercomposerun e2e tests against devenv image
+        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -dt"

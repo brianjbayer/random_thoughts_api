@@ -12,10 +12,6 @@ that implements a random thought in JSON format...
 }
 ```
 
-The `Dockerfile` for this project only supports the
-Development Environment where the source code is volume
-mounted into the container.
-
 ---
 
 ## API Versions
@@ -158,46 +154,40 @@ executes the `bash` shell providing a command line interface
 into the application container.
 
 ### To Develop Using the Container-Based Development Environment
-The easiest way to run the containerized development environment
-is with the docker-compose framework using the `dockercomposerun`
-script.
 
-#### PREREQUISITES
-In order to run the containerized development environment...
+> **Prerequisites**: You must have Docker installed and
+> running on your local machine
 
-1. Docker must be installed and running
+The easiest way to run the containerized development environment is with
+the docker compose framework using the `dockercomposerun` script with the
+`-d` (development environment) option...
+```
+./script/dockercomposerun -d
+```
 
-#### Running the Containerized Development Environment
-1. Run the following command to run the containerized development
-   environment...
-   ```
-   ./script/dockercomposerun
-   ```
+This will pull and run the latest development environment image
+of this project along with the latest `postgres` image.
 
-   > This will pull and run the latest development environment
-   > image of this project along with the latest `postgres`
-   > image.
+To exit the containerized development environment, run the
+following command ...
+```
+exit
+```
 
-2. To exit the containerized development environment, run the
-   following command ...
-   ```
-   exit
-   ```
-
-#### Building And Running Your Own Development Environment Image
+### Building And Running Your Own Development Environment Image
 You can also build and run your own development environment
 image.  This is helpful when you are updating gems or
 changing the `Dockerfile`.
 
 1. Run the following command to build your image...
    ```
-   docker build --no-cache -t local-random_thoughts_api-dev .
+   docker build --no-cache --target devenv -t rta-dev .
    ```
 
 2. Run the following command to run the containerized development
    environment using your image...
    ```
-   APP_IMAGE=local-random_thoughts_api-dev ./script/dockercomposerun
+   APP_IMAGE=rta-dev ./script/dockercomposerun -d
    ```
 
 ### Mappings to Host Machine
@@ -206,14 +196,12 @@ their ports mapped to the host machine (i.e. `localhost`) for
 visibility and access.
 
 * A running Rails server in the application container is mapped to
-  http://localhost:3000.
+  http://localhost:3000 by default
 
 * The PostgreSQL container is mapped to `localhost:5432` and can
   be accessed on the host machine with the database connection string
   `postgresql://random_thoughts_api:banana@localhost:5432/random_thoughts_api`
   (e.g. `psql postgresql://random_thoughts_api:banana@localhost:5432/random_thoughts_api`)
-
----
 
 ## Operating
 
@@ -325,8 +313,6 @@ or to run the server in detached mode...
 ```
 ./script/run server -d
 ```
-
----
 
 ## Swagger
 
