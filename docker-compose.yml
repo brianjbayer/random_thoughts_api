@@ -5,4 +5,5 @@ services:
     container_name: ${APP_HOSTNAME:-app}
     environment:
       - RAILS_LOG_TO_STDOUT
+      - SECRET_KEY_BASE
       - APP_JWT_SECRET

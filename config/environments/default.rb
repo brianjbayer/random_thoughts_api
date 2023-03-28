@@ -21,6 +21,11 @@ Rails.application.configure do
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
+  # --- SECRET KEY BASE ---
+  # NOTE: This application does not use the secret key base
+  #       But rails needs it
+  config.secret_key_base = ENV.fetch('SECRET_KEY_BASE')
+
   #--- APPLICATION-SPECIFIC CONFIGURATION ---
   config.jwt_secret = ENV.fetch('APP_JWT_SECRET')
 end

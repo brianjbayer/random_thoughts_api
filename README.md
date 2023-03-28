@@ -219,21 +219,27 @@ visibility and access.
 
 ### PREREQUISITES
 In order to run the rails commands for this application...
+1. You must set the required Rails environment variable
+   `SECRET_KEY_BASE`
 
-1. You must set the required environment variable `APP_JWT_SECRET`
-   > Note that to even generate a secret for setting `APP_JWT_SECRET`
-   > using the `rails secret` command, you must have already set
-   > `APP_JWT_SECRET` with an initial value.  You can use this
-   > hack...
-   > ```
-   > export APP_JWT_SECRET=chicken-to-lay-first-egg
-   > ```
+2. You must set the required environment variable `APP_JWT_SECRET`
 
-Provided that you have already set `APP_JWT_SECRET` to some initial
-value, to generate a suitable secret for setting `APP_JWT_SECRET`,
-you can use the `rails secret` command, for example...
+> Note that to even generate a secret for setting
+> `SECRET_KEY_BASE` or `APP_JWT_SECRET` using the
+> `rails secret` command, you must have already set
+> `SECRET_KEY_BASE` and `APP_JWT_SECRET` with an initial
+> value.  You can use this hack...
+> ```
+> export SECRET_KEY_BASE=chicken-to-lay-first-egg
+> export APP_JWT_SECRET=chicken-to-lay-first-egg
+> ```
+
+Provided that you have already set `SECRET_KEY_BASE`
+and `APP_JWT_SECRET` to some initial values, to generate
+a suitable secret, you can use the `rails secret` command,
+for example...
 ```
-APP_JWT_SECRET=$(bundle exec bin/rails secret)
+SECRET_KEY_BASE=$(bundle exec bin/rails secret) APP_JWT_SECRET=$(bundle exec bin/rails secret)
 ```
 
 ### Database
