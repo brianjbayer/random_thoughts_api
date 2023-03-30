@@ -28,4 +28,8 @@ Rails.application.configure do
 
   #--- APPLICATION-SPECIFIC CONFIGURATION ---
   config.jwt_secret = ENV.fetch('APP_JWT_SECRET')
+
+  # Make all (i.e. development) environments the same
+  # which is allow all hosts
+  config.hosts.clear
 end

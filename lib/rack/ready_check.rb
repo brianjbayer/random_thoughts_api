@@ -14,6 +14,7 @@ module Rack
 
     def ready?
       database_connected?
+      database_migrations?
     end
 
     def database_connected?
@@ -21,6 +22,14 @@ module Rack
       @body_details[:database_connection] = 'ok'
     rescue StandardError
       @body_details[:database_connection] = 'error'
+      false
+    end
+
+    def database_migrations?
+      ActiveRecord::Migration.check_pending!
+      @body_details[:database_migrations] = 'ok'
+    rescue StandardError
+      @body_details[:database_migrations] = 'pending'
       false
     end
 
