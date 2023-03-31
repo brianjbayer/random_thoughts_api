@@ -382,9 +382,7 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                - "$ref": "#/components/schemas/same_user_response"
-                - "$ref": "#/components/schemas/different_user_response"
+                "$ref": "#/components/schemas/user_response"
         '401':
           description: unauthorized
           content:
@@ -649,14 +647,6 @@ components:
       required:
       - id
       - email
-      - display_name
-    different_user_response:
-      type: object
-      properties:
-        display_name:
-          type: string
-          minLength: 1
-      required:
       - display_name
     updated_user:
       type: object
