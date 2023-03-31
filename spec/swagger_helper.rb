@@ -132,13 +132,6 @@ RSpec.configure do |config|
             },
             required: %w[id email display_name]
           },
-          different_user_response: {
-            type: 'object',
-            properties: {
-              display_name: { type: 'string', minLength: 1 }
-            },
-            required: %w[display_name]
-          },
           updated_user: {
             type: 'object',
             properties: {

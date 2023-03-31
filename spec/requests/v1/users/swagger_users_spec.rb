@@ -104,8 +104,7 @@ RSpec.describe 'v1/users', swagger_doc: 'v1/swagger.yaml' do
         # NOTE: This is intended to test different users
         let(:id) { create(:user).id }
 
-        schema oneOf: [{ '$ref' => '#/components/schemas/same_user_response' },
-                       { '$ref' => '#/components/schemas/different_user_response' }]
+        schema '$ref' => '#/components/schemas/user_response'
         run_test!
       end
 
