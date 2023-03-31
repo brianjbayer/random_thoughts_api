@@ -5,12 +5,35 @@
 
 # Read more: https://github.com/cyu/rack-cors
 
-# Rails.application.config.middleware.insert_before 0, Rack::Cors do
-#   allow do
-#     origins "example.com"
-#
-#     resource "*",
-#       headers: :any,
-#       methods: [:get, :post, :put, :patch, :delete, :options, :head]
-#   end
-# end
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  open_public_access = '*'
+
+  # FOR NOW allow open public access to healthchecks but these
+  # should probably be restricted to localhost, same network zone.
+  # and our health monitoring services
+  allow do
+    origins open_public_access
+
+    resource '/livez, /readyz',
+             headers: :any,
+             methods: [:get]
+  end
+
+  # For the API-documenting root route, allow open public access
+  allow do
+    origins open_public_access
+
+    resource '/',
+             headers: :any,
+             methods: [:get]
+  end
+
+  # For the API endpoints themselves (including root), allow open public access
+  allow do
+    origins open_public_access
+
+    resource '/v1/*',
+             headers: :any,
+             methods: %i[get post patch delete]
+  end
+end
