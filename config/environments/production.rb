@@ -1,7 +1,7 @@
 # Based on defaults
 require Rails.root.join('config/environments/default')
 
-# TODO: Remove during default configuration refactor
+# RAILS ORIGINAL: Moved to default.rb
 # require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
@@ -42,15 +42,18 @@ Rails.application.configure do
   # config.action_cable.url = "wss://example.com/cable"
   # config.action_cable.allowed_request_origins = [ "http://example.com", /http:\/\/example.*/ ]
 
+  # RAILS ORIGINAL: Moved to default.rb
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 
   # Include generic and useful information about system operation, but avoid logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII).
-  config.log_level = :info
+  # RAILS ORIGINAL: Moved to default.rb
+  # config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  # RAILS ORIGINAL: Moved to default.rb
+  # config.log_tags = [ :request_id ]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -73,13 +76,14 @@ Rails.application.configure do
   config.active_support.report_deprecations = false
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  # RAILS ORIGINAL: Moved to default.rb
+  # config.log_formatter = ::Logger::Formatter.new
 
   # Use a different logger for distributed setups.
   # require "syslog/logger"
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new "app-name")
 
-  # TODO: Remove during default configuration refactor
+  # # RAILS ORIGINAL: Moved to default.rb
   # if ENV["RAILS_LOG_TO_STDOUT"].present?
   #   logger           = ActiveSupport::Logger.new(STDOUT)
   #   logger.formatter = config.log_formatter

@@ -67,6 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
       APP_JWT_SECRET: ${{ secrets.APP_JWT_SECRET }}
     steps:
@@ -79,6 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
       APP_JWT_SECRET: not-used-but-needed
     steps:
@@ -93,6 +95,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       UNVETTED_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_unvetted:${{ github.event.pull_request.head.sha }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
       APP_JWT_SECRET: ${{ secrets.APP_JWT_SECRET }}
     steps:
@@ -126,6 +129,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
       APP_JWT_SECRET: ${{ secrets.APP_JWT_SECRET }}
       RAILS_ENV: development

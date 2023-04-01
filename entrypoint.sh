@@ -17,8 +17,14 @@ echo "...RAILS_ENV [${RAILS_ENV}]"
 echo 'Setting and Exporting RAILS_LOG_TO_STDOUT...'
 export RAILS_LOG_TO_STDOUT=
 
-echo 'Remove any leftover server.pid...'
-rm -f tmp/pids/server.pid
+echo 'Removing any leftover pid files...'
+if [ -z ${PIDFILE} ]; then
+  echo '...Removing any (default) tmp/pids/server.pid file'
+  rm -f tmp/pids/server.pid
+else
+  echo "...Removing any specified PIDFILE [${PIDFILE}]"
+  rm -f ${PIDFILE}
+fi
 
 # NOTE: Remove this if database is managed outside of the application
 echo 'Run database migrations...'

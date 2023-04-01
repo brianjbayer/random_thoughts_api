@@ -1,7 +1,7 @@
 # Based on defaults
 require Rails.root.join('config/environments/default')
 
-# TODO: Remove during default configuration refactor
+# RAILS ORIGINAL: Moved to default.rb
 # require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
