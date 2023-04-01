@@ -2,7 +2,7 @@ version: '3.8'
 services:
   app:
     environment:
-      DATABASE_URL: postgresql://random_thoughts_api:banana@db:5432/random_thoughts_api
+      DATABASE_URL: postgresql://random_thoughts_api:${POSTGRES_PASSWORD:-banana}@db:5432/random_thoughts_api
     depends_on:
       db:
         condition: service_healthy
@@ -13,7 +13,7 @@ services:
       POSTGRES_HOST_AUTH_METHOD: md5
       POSTGRES_DB: random_thoughts_api
       POSTGRES_USER: random_thoughts_api
-      POSTGRES_PASSWORD: banana
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-banana}
     # By default Postgres runs on port 5432,
     # map this to localhost port 5432 for access
     ports:

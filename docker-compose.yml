@@ -4,10 +4,19 @@ services:
     image: brianjbayer/random_thoughts_api:${APP_TAG:-latest}
     container_name: ${APP_HOSTNAME:-app}
     environment:
-      - RAILS_ENV
-      - RAILS_LOG_TO_STDOUT
-      - SECRET_KEY_BASE
+      # App-specific configuration
       - APP_JWT_SECRET
+      # Rails (Puma) configuration
+      - PIDFILE
       - PORT
+      - RACK_ENV
+      - RAILS_ENV
+      - RAILS_FORCE_SSL
+      - RAILS_LOG_LEVEL
+      - RAILS_LOG_TO_STDOUT
+      - RAILS_MAX_THREADS
+      - RAILS_MIN_THREADS
+      - SECRET_KEY_BASE
+      - WEB_CONCURRENCY
     ports:
       - ${PORT:-3000}:${PORT:-3000}
