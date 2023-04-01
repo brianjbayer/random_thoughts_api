@@ -1,132 +1,81 @@
-# WIP: random_thoughts_api
+# random_thoughts_api
 
-> **This is a Work In Progress**
+## What It Is
+This is an example of a public
+[Ruby on Rails](https://rubyonrails.org/)
+[Web API](https://wikipedia.org/wiki/Web_API)
+that contains and demonstrates...
+* API versioning
+* Self documentation of the API
+* JWT-based authorization (JSON Web Token) with instant
+  revocation without allow or deny lists
+* OpenAPI ([Swagger](https://swagger.io/)) specification and
+  tooling
+* [Rack](https://wikipedia.org/wiki/Rack_(web_server_interface))-based
+  health checks
+* Container-based deployment artifacts (versus source code)
+* Docker compose framework for operating, developing, and
+  testing the application
+* Continuous Integration (CI) using
+  [GitHub Actions](https://github.com/features/actions)
+* Secrets management
+* Environment variable based configuration
+* Code Style enforcement, linting, and static dependency
+  security scanning
 
-A simple demonstration-only Rails API with OpenAPI (Swagger)
-that implements a random thought in JSON format...
+## What It Does
+This API represents *Users* and their *RandomThoughts* which
+are represented in JSON format...
 ```json
 {
   "thought": "A random thought",
-  "mood": "The thinker's mood leading to the thought",
-  "name": "The creating user's display name"
+  "mood": "The mood of the thought and/or user",
+  "name": "The user's display name"
 }
 ```
+
+> :eyes: For more information, see the
+> [APPLICATION_DATA_MODEL.md](docs/APPLICATION_DATA_MODEL.md)
 
 ---
 
 ## API Versions
 The current and latest version of this API is version `v1`.
 
-## API Endpoints
-The latest version of this API contains the following endpoints...
-* Authentication endpoints...
-  * **Login** user: `post /v1/login`
-    with Request Body...
-    ```json
-    {
-      "authentication": {
-        "email": "string",
-        "password": "string"
-      }
-    }
-    ```
+## Endpoints
+### API Endpoints
+The latest version of this API contains...
 
-  * **Logout** user: `delete /v1/login`
-    > **Requires** Authorization JWT from login
-    > in request header
+* **Authentication** endpoints...
+  * Login
+  * Logout
 
-* User endpoints...
-  * **Index** all users: `get /v1/users?page={num}`
-    (e.g. http://localhost:3000/v1/users?page=2)
-    > **Requires** Authorization JWT from login
-    > in request header
+* **User** endpoints...
+  * Index
+  * Show
+  * Create
+  * Update
+  * Delete
 
-    > The `page={num}` query parameter is optional
+* **RandomThoughts** endpoints...
+  * Index
+  * Show
+  * Create
+  * Update
+  * Delete
 
-  * **Show** user {id}: `get /v1/users/{id}`
-    (e.g. http://localhost:3000/v1/users/1)
-    > **Requires** Authorization JWT from login
-    > in request header
+> :eyes: For a summary of these endpoints, see
+> [V1_API_ENDPOINTS.md](docs/V1_API_ENDPOINTS.md) or
+> for a complete specification of the API, see the
+> [Swagger File](https://github.com/brianjbayer/random_thoughts_api/blob/main/swagger/v1/swagger.yaml)
+> for the latest version
 
-  * **Create** user: `post /v1/users`
-    with Request Body...
-    ```json
-    {
-      "user": {
-        "email": "string",
-        "display_name": "string",
-        "password": "stringst",
-        "password_confirmation": "stringst"
-      }
-    }
-    ```
-
-  * **Update** user {id}: `patch /v1/users/{id}`
-    with Request Body...
-    ```json
-    {
-      "user": {
-        "email": "string",
-        "display_name": "string",
-        "password": "stringst",
-        "password_confirmation": "stringst"
-      }
-    }
-    ```
-    > **Requires** Authorization JWT from login
-    > in request header
-
-  * **Delete** user {id}: `delete /v1/users/{id}`
-    > **Requires** Authorization JWT from login
-    > in request header
-
-* Random Thoughts endpoints...
-  * **Index** all random thoughts or all random thoughts
-    for a user (display_name):
-    `get /v1/random_thoughts?page={num}&name={display_name}`
-    (e.g. http://localhost:3000/v1/random_thoughts?name=Question%20Hound)
-    > The `page={num}` and `name={display_name}` query
-    > parameters are optional
-
-  * **Show** random thought {id}: `get /v1/random_thoughts/{id}`
-    (e.g. http://localhost:3000/v1/random_thoughts/1)
-
-  * **Create** random thought: `post /v1/random_thoughts`
-    with Request Body...
-    ```json
-    {
-      "random_thought": {
-        "thought": "string",
-        "mood": "string"
-      }
-    }
-    ```
-    > **Requires** Authorization JWT from login
-    > in request header
-
-  * **Update** random thought {id}: `patch /v1/random_thoughts/{id}`
-    with Request Body...
-    ```json
-    {
-      "random_thought": {
-        "thought": "string",
-        "mood": "string"
-      }
-    }
-    ```
-    > **Requires** Authorization JWT from login
-    > in request header
-
-  * **Delete** random thought {id}: `delete /v1/random_thoughts/{id}`
-    > **Requires** Authorization JWT from login
-    > in request header
-
-## Self-Documenting Root Endpoint
+### Self-Documenting Root Endpoint
 The root endpoint (i.e. `get /`) returns the latest version of
 the application's Swagger File (i.e. OpenAPI specification) in
 JSON, thus making this application self-documenting.
 
-## Health Checks
+### Health Check Endpoints
 There are two health-check endpoints for determining the current
 health status of the application:
 
@@ -138,196 +87,56 @@ health status of the application:
   application is healthy and ready for requests
   (e.g. http://localhost:3000/readyz)
 
-## Development
-This project can be developed using the supplied basic,
-container-based development environment which includes
-`vim`, `git`, `curl`, and `psql`.
+## Running the Application
+The easiest way to run the application is with the docker compose
+framework using the `dockercomposerun` script.
 
-The containerized development environment contains this
-application along with an orchestrated PostgreSQL container.
+This will pull the latest docker image of this project and run
+the server along with an orchestrated PostgreSQL container.
 
-The development environment application container volume mounts
-your local source code to recognize and persist any changes.
+### Prerequisites
+In order to run this application...
+1. You must have Docker installed and running on your host
+   machine
 
-By default the development environment application container
-executes the `bash` shell providing a command line interface
-into the application container.
+2. You must set the required Rails environment variable
+   `SECRET_KEY_BASE`
 
-### To Develop Using the Container-Based Development Environment
+3. You must set the required environment variable `APP_JWT_SECRET`
 
-> **Prerequisites**: You must have Docker installed and
-> running on your local machine
+> :eyes: For more information, see
+> [PREREQUISITES.md](docs/PREREQUISITES.md)
 
-The easiest way to run the containerized development environment is with
-the docker compose framework using the `dockercomposerun` script with the
-`-d` (development environment) option...
+### Running the Application Server
+To run the server using the docker compose framework, run
+the following command
 ```
-./script/dockercomposerun -d
+./script/dockercomposerun
 ```
-
-This will pull and run the latest development environment image
-of this project along with the latest `postgres` image.
-
-To exit the containerized development environment, run the
-following command ...
-```
-exit
-```
-
-### Building And Running Your Own Development Environment Image
-You can also build and run your own development environment
-image.  This is helpful when you are updating gems or
-changing the `Dockerfile`.
-
-1. Run the following command to build your image...
-   ```
-   docker build --no-cache --target devenv -t rta-dev .
-   ```
-
-2. Run the following command to run the containerized development
-   environment using your image...
-   ```
-   APP_IMAGE=rta-dev ./script/dockercomposerun -d
-   ```
 
 ### Mappings to Host Machine
-The containers in the containerized development environment have
-their ports mapped to the host machine (i.e. `localhost`) for
+The containers in the docker compose framework have their
+ports mapped to the host machine (i.e. `localhost`) for
 visibility and access.
 
-* A running Rails server in the application container is mapped to
+* The running Rails server in the application container is mapped to
   http://localhost:3000 by default
 
 * The PostgreSQL container is mapped to `localhost:5432` and can
   be accessed on the host machine with the database connection string
-  `postgresql://random_thoughts_api:banana@localhost:5432/random_thoughts_api`
+  `postgresql://random_thoughts_api:${POSTGRES_PASSWORD:-banana}@db:5432/random_thoughts_api`
   (e.g. `psql postgresql://random_thoughts_api:banana@localhost:5432/random_thoughts_api`)
 
-## Operating
-
-### PREREQUISITES
-In order to run the rails commands for this application...
-1. You must set the required Rails environment variable
-   `SECRET_KEY_BASE`
-
-2. You must set the required environment variable `APP_JWT_SECRET`
-
-> Note that to even generate a secret for setting
-> `SECRET_KEY_BASE` or `APP_JWT_SECRET` using the
-> `rails secret` command, you must have already set
-> `SECRET_KEY_BASE` and `APP_JWT_SECRET` with an initial
-> value.  You can use this hack...
-> ```
-> export SECRET_KEY_BASE=chicken-to-lay-first-egg
-> export APP_JWT_SECRET=chicken-to-lay-first-egg
-> ```
-
-Provided that you have already set `SECRET_KEY_BASE`
-and `APP_JWT_SECRET` to some initial values, to generate
-a suitable secret, you can use the `rails secret` command,
-for example...
-```
-SECRET_KEY_BASE=$(bundle exec bin/rails secret) APP_JWT_SECRET=$(bundle exec bin/rails secret)
-```
-
-### Database
-This project uses a Rails-supported PostgreSQL database with
-the same configuration in all environments.
-
-Use the `DATABASE_URL`environment variable set to a standard
-database connection string to specify the database.
-
-It is recommended to use the official
-[PostgreSQL Docker image](https://hub.docker.com/_/postgres)
-without a persistent volume (data) for the `development`
-and `test` environments.
-
-#### Seed Data
-There is some sample seed data that creates two users and one
-random thought that belongs to the first user.
-
-* First user email: `qhound@thisisfine.com`
-* Second user email: `user@example.com`
-
-The password for both users is `password`.
-
-Run the following command to add the seed data...
-```
-./script/run rails db:seed
-```
-
-### Testing
-If you are using the same database for `development` and `test`,
-run the following command first to set the database for the
-`test` environment...
-```
-./script/run rails db:environment:set RAILS_ENV=test
-```
-
-Run the following command to run the tests...
-```
-./script/run tests
-```
-
-> :warning: If you are using the same database for `development`
-> and `test`, these steps can destroy any data in your
-> `development` database.
-
-This project is configured so that you can re-run just the
-failing tests using the RSpec `--only-failures` (or
-`--next-failure`) option.
-```
-./script/run tests --only-failures
-```
-
-### Code Style/Linting
-This project includes the Rubocop gems
-[`rubocop`](https://github.com/rubocop/rubocop),
-[`rubocop-rails`](https://github.com/rubocop/rubocop-rails),
-[`rubocop-rspec`](https://github.com/rubocop/rubocop-rspec)
-for linting and ensuring a consistent code style.
-
-Run the following command to run code style/linting...
-```
-./script/run lint
-```
-
-### Dependency Static Security Scanning
-This project includes the
-[`bundler-audit`](https://github.com/rubysec/bundler-audit)
-gem for statically scanning the gems for any known security
-vulnerabilities.
-
-Run the following command to run the dependency security scan...
-```
-./script/run depsecscan
-```
-
-### Running the Application
-Run the following command to run the Rails server...
-```
-./script/run server
-```
-
-or to run the server in detached mode...
-```
-./script/run server -d
-```
-
-## Swagger
-
-### To Generate the Swagger File
-
-Run the following command to generate the Swagger file for the
-application...
-```
-./script/run swaggerize
-```
-
 ### Swagger UI
+Once the application is running, the Swagger UI is located at
+http://localhost:3000/api-docs/
 
-By default the Swagger UI is located at http://localhost:3000/api-docs/
+## Development
+This project can be developed using the supplied
+container-based development environment which includes
+`vim`, `git`, `curl`, and `psql`.
 
+> :eyes: For more information, see [DEVELOPMENT.md](docs/DEVELOPMENT.md)
 
 ---
 
@@ -340,15 +149,21 @@ By default the Swagger UI is located at http://localhost:3000/api-docs/
 ### Support
 
 * [PostgreSQL](https://www.postgresql.org/) - Database
+* [rswag](https://github.com/rswag/rswag) - Swagger/OpenAPI
+  Tooling
 * [JWT](https://github.com/jwt/ruby-jwt) - Authorization
+* [Kaminari](https://github.com/kaminari/kaminari) - Pagination
 * [RSpec](http://rspec.info/) - Test Framework
 * [Factory Bot](https://github.com/thoughtbot/factory_bot) - Test
   Data Factory Framework
-* [rswag](https://github.com/rswag/rswag) - Swagger/OpenAPI
-  Tooling
+* [Faker](https://github.com/faker-ruby/faker) - Fuzzing Test Data
+* [Shoulda Matchers](https://matchers.shoulda.io/) - Test Expectation
+  Matchers
 * [bundler-audit](https://github.com/rubysec/bundler-audit) - Dependency
   Static Security
 * [rubocop](https://github.com/rubocop/rubocop),
   [rubocop-rails](https://github.com/rubocop/rubocop-rails),
   [rubocop-rspec](https://github.com/rubocop/rubocop-rspec) - Code Style
   and Linting
+* [actions-image-cicd](https://github.com/brianjbayer/actions-image-cicd) - Continuous
+  Integration
