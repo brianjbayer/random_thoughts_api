@@ -70,8 +70,7 @@ echo 'DOCKER (COMPOSE) VERSION...'
 docker --version
 echo ''
 
-# Override docker compose environments
-echo 'DOCKER-COMPOSE COMMAND...'
+# Initial docker compose command before environments
 docker_compose_command='docker compose -f docker-compose.yml '
 
 # Unless the no database option is set, add the database service
@@ -89,13 +88,15 @@ if [ ! -z ${devenv} ]; then
   echo "...Using Development Environment with Image [${APP_IMAGE}]"
   docker_compose_command="${docker_compose_command} -f docker-compose.dev.yml "
 fi
-echo "...COMMAND: [${docker_compose_command}]"
-echo ''
 
 if [ ! -z ${run_e2etests} ]; then
   echo "...Running E2E Tests Image [${E2ETESTS_IMAGE}] against Image [${APP_IMAGE}]"
   docker_compose_command="${docker_compose_command} -f docker-compose.e2e.yml "
 fi
+echo ''
+
+echo "DOCKER-COMPOSE COMMAND: [${docker_compose_command}]"
+echo ''
 
 echo 'DOCKER-COMPOSE CONFIGURATION...'
 $docker_compose_command config

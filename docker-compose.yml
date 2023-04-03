@@ -20,3 +20,5 @@ services:
       - WEB_CONCURRENCY
     ports:
       - ${PORT:-3000}:${PORT:-3000}
+    expose:
+      - ${PORT:-3000}
