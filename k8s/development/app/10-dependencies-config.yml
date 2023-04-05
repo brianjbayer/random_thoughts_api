@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: random-thoughts-api
+data:
+  PGPORT: "5432"
+  POSTGRES_DB: random_thoughts_api
+  # These should be secrets
+  POSTGRES_USER: random_thoughts_api
+  POSTGRES_PASSWORD: banana
