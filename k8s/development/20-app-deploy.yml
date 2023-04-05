@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: random-thoughts-api
+  namespace: random-thoughts-api
+spec:
+  type: NodePort
+  selector:
+    app: random-thoughts-api
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: random-thoughts-api
+  namespace: random-thoughts-api
+spec:
+  selector:
+    matchLabels:
+      app: random-thoughts-api
+  template:
+    metadata:
+      labels:
+        app: random-thoughts-api
+    spec:
+      containers:
+        - name: random-thoughts-api
+          image: brianjbayer/random_thoughts_api
+          imagePullPolicy: Always
+          env:
+            - name: APP_JWT_SECRET
+              value: 69237b2ca6f9e38b1bf7a56e2e68e311f356d413f52f9ec1d0a6be1d72dcb036e3b7c97f275318be65022bbf20e97c8c6c9d71d3d6f9a49488296e5f919c2f98
+            - name: SECRET_KEY_BASE
+              value: dc18e6b39871748ffc19280814f8df7b7b212d9dbc403c6eb7dfab4802bca1cd50c2f65e1bbcedcfdfe3072ab54f593b2a178b2bea689dc8b75a20fef1220951
+            - name: RAILS_ENV
+              value: production
+            - name: RAILS_LOG_TO_STDOUT
+              value: enabled
+            - name: DATABASE_URL
+              value: postgresql://random_thoughts_api:banana@postgres.random-thoughts-api.svc.cluster.local:5432/random_thoughts_api
