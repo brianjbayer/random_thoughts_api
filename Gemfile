@@ -58,6 +58,7 @@ gem 'rswag-api'
 gem 'rswag-ui'
 
 group :development, :test do
+  gem 'brakeman'
   gem 'bundler-audit'
   gem 'factory_bot_rails'
   gem 'faker'

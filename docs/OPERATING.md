@@ -77,6 +77,17 @@ Run the following command to run the dependency security scan...
 ./script/run depsecscan
 ```
 
+### Static Security Analysis
+This project includes the
+[`brakeman`](https://brakemanscanner.org/)
+gem for statically analyzing the project for any security
+vulnerabilities.
+
+Run the following command to run the static security analysis...
+```
+./script/run statsecscan
+```
+
 ### Running the Server
 Run the following command to run the Rails server...
 ```
