@@ -159,6 +159,8 @@ container-based development environment which includes
 * [Faker](https://github.com/faker-ruby/faker) - Fuzzing Test Data
 * [Shoulda Matchers](https://matchers.shoulda.io/) - Test Expectation
   Matchers
+* [SimpleCov](https://github.com/simplecov-ruby/simplecov) - Test Coverage
+  Reporting
 * [bundler-audit](https://github.com/rubysec/bundler-audit) - Dependency
   Static Security
 * [rubocop](https://github.com/rubocop/rubocop),
