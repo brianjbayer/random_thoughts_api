@@ -1,0 +1,48 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Missing Encryption",
+      "warning_code": 109,
+      "fingerprint": "6a26086cd2400fbbfb831b2f8d7291e320bcc2b36984d2abc359e41b3b63212b",
+      "check_name": "ForceSSL",
+      "message": "The application does not force use of HTTPS: `config.force_ssl` is not enabled",
+      "file": "config/environments/production.rb",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/missing_encryption/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        311
+      ],
+      "note": "Currently HTTPS not required"
+    },
+    {
+      "warning_type": "Unscoped Find",
+      "warning_code": 82,
+      "fingerprint": "bdbc61c0ca28dc7d8f85d53cb804fb823e3a1032283c4c2ccab0447994c97645",
+      "check_name": "UnscopedFind",
+      "message": "Unscoped call to `RandomThought#find`",
+      "file": "app/controllers/v1/random_thoughts_controller.rb",
+      "line": 52,
+      "link": "https://brakemanscanner.org/docs/warning_types/unscoped_find/",
+      "code": "RandomThought.find(params[:id])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "V1::RandomThoughtsController",
+        "method": "find_random_thought"
+      },
+      "user_input": "params[:id]",
+      "confidence": "Weak",
+      "cwe_id": [
+        285
+      ],
+      "note": "Authorization not required to view Random Thoughts"
+    }
+  ],
+  "updated": "2023-04-20 19:29:35 +0000",
+  "brakeman_version": "5.4.1"
+}

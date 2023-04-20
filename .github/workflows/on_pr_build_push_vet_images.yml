@@ -62,6 +62,16 @@ jobs:
       - name: dockercomposerun dependency scanning on development environment
         run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -d ./script/run depsecscan"
 
+  vet-static-security:
+    needs: [pr-norm-branch, build-and-push-branch-devenv]
+    runs-on: ubuntu-latest
+    env:
+      DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: dockercomposerun static security analysis on development environment
+        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -d ./script/run statsecscan"
+
   vet-unit-tests:
     needs: [pr-norm-branch, build-and-push-branch-devenv]
     runs-on: ubuntu-latest
@@ -109,6 +119,7 @@ jobs:
       - vet-deploy-as-e2e-tests-target
       - vet-unit-tests
       - vet-swagger-file-currency
+      - vet-static-security
       - vet-dependency-security
       - vet-code-standards
       - build-and-push-branch-unvetted

@@ -5,7 +5,8 @@
 #   - rails
 #   - tests
 #   - lint
-#   - depecscan
+#   - depsecscan
+#   - statsecscan
 #   - swaggerize
 #   - or it runs all arguments
 # -----------------------------------------------
@@ -69,6 +70,11 @@ case "$action" in
   "depsecscan")
     shift
     run_command="bundle exec bundle-audit check --update $@"
+  ;;
+
+    "statsecscan")
+    shift
+    run_command="bundle exec brakeman --run-all-checks --color -o /dev/stdout $@"
   ;;
 
   "swaggerize")

@@ -20,8 +20,8 @@ that contains and demonstrates...
   [GitHub Actions](https://github.com/features/actions)
 * Secrets management
 * Environment variable based configuration
-* Code Style enforcement, linting, and static dependency
-  security scanning
+* Code Style enforcement, linting, and static security
+  analysis and dependency scanning
 
 ## What It Does
 This API represents *Users* and their *RandomThoughts* which
@@ -161,6 +161,7 @@ container-based development environment which includes
   Matchers
 * [SimpleCov](https://github.com/simplecov-ruby/simplecov) - Test Coverage
   Reporting
+* [brakeman](https://brakemanscanner.org/) - Static Security Analysis
 * [bundler-audit](https://github.com/rubysec/bundler-audit) - Dependency
   Static Security
 * [rubocop](https://github.com/rubocop/rubocop),
