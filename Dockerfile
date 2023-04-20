@@ -11,14 +11,14 @@
 # docker run -it --rm -v $(pwd):/app -p 3000:3000 rta-dev
 
 # --- Base Image ---
-ARG BASE_IMAGE=ruby:3.2.1-slim-bullseye
+ARG BASE_IMAGE=ruby:3.2.2-slim-bullseye
 FROM ${BASE_IMAGE} AS ruby-base
 
 #--- Base Builder Stage ---
 FROM ruby-base AS base-builder
 
 # TODO: Update bundler version
-ARG BUNDLER_VER=2.4.8
+ARG BUNDLER_VER=2.4.12
 
 # Install base build packages needed for both devenv and deploy builders
 ARG BASE_BUILD_PACKAGES='build-essential libpq-dev'
