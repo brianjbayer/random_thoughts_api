@@ -30,3 +30,6 @@
 
 # DO NOT COMMIT .env FILES
 .env
+
+# Ignore coverage reports
+coverage
