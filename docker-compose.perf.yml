@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  app:
+    command: ./entrypoint.sh
+
+  perftests:
+    image: "${PERFTESTS_IMAGE:-grafana/k6:latest}"
+    container_name: ${PERFTESTS_HOSTNAME:-perftests}
+    environment:
+      - PERF_BASE_URL=http://${APP_HOSTNAME:-app}:${PORT:-3000}
+    volumes:
+      # Mount the k6 script to run
+      - ${PERFTESTS_SCRIPT:-./k6/script.js}:/script.js
+    command: run /script.js
+    depends_on:
+      app:
+        condition: service_healthy

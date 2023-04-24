@@ -109,6 +109,20 @@ following command...
 APP_IMAGE=rta ./script/dockercomposerun -ct
 ```
 
+### Running the Perf Tests
+You can also run the Perf(ormance) tests using the `dockercomposerun`
+script with the `-p` (Perf tests) option.  This will pull the
+[grafana/k6](https://k6.io/) load test tool image and run the
+specified test script against the running application container.
+
+To specify the tests script, use the `PERFTESTS_SCRIPT` environment
+variable (e.g. `PERFTESTS_SCRIPT=./k6/user_create_stress_test.js`)
+
+To run the load test for creating a user, run the following command...
+```
+PERFTESTS_SCRIPT=./k6/user_create_stress_test.js ./script/dockercomposerun -p
+```
+
 ### Operating
 :eyes: For information on operating the application including
 running the unit tests, static dependency security scanning,
