@@ -13,11 +13,12 @@
 # -c: Use the docker-compose CI environment with APP_IMAGE
 # -d: Use the docker-compose Dev environment with APP_IMAGE
 # -n: No application database in the docker-compose environment
+# -p: Run the performance tests (and not the app service)
 # -t: Run the e2e tests (and not the app service)
 # ----------------------------------------------------------------------
 
 usage() {
-  echo "Usage: $0 [-cdnt] [CMD]"
+  echo "Usage: $0 [-cdnpt] [CMD]"
 }
 
 err_exit() {
@@ -32,7 +33,7 @@ err_exit() {
 set -e
 
 # Handle options
-while getopts ":cdnt" options; do
+while getopts ":cdnpt" options; do
   case "${options}" in
     c)
       echo "CI Environment"
@@ -49,6 +50,11 @@ while getopts ":cdnt" options; do
       no_database=true
       ;;
 
+    p)
+      echo "Running Perf Tests"
+      run_perftests=true
+      ;;
+
     t)
       echo "Running End-To-End (E2E) Tests"
       run_e2etests=true
@@ -60,6 +66,12 @@ while getopts ":cdnt" options; do
   esac
 done
 shift $((OPTIND-1))
+
+if [ ! -z ${run_perftests} ] && [ ! -z ${run_e2etests} ]; then
+echo ''
+echo "ERROR: you can not select both the '-p' (Perf Tests) and '-t' (End-To-End Tests) options!!!"
+exit 86
+fi
 
 echo ''
 echo "ENVIRONMENT VARIABLES..."
@@ -89,6 +101,11 @@ if [ ! -z ${devenv} ]; then
   docker_compose_command="${docker_compose_command} -f docker-compose.dev.yml "
 fi
 
+if [ ! -z ${run_perftests} ]; then
+  echo "...Running Perf Tests Image [${PERFTESTS_IMAGE}] against Image [${APP_IMAGE}]"
+  docker_compose_command="${docker_compose_command} -f docker-compose.perf.yml "
+fi
+
 if [ ! -z ${run_e2etests} ]; then
   echo "...Running E2E Tests Image [${E2ETESTS_IMAGE}] against Image [${APP_IMAGE}]"
   docker_compose_command="${docker_compose_command} -f docker-compose.e2e.yml "
@@ -116,16 +133,21 @@ echo ''
 echo "DOCKER-COMPOSE RUNNING [$@]..."
 # Allow to fail but catch return code
 set +e
-if [ -z ${run_e2etests} ]; then
+if [ ! -z ${run_perftests} ]; then
+  echo "RUNNING THE PERF TESTS (perftests SERVICE) (NOT app SERVICE)..."
+  $docker_compose_command run --rm perftests "$@"
+  # NOTE return code must be caught before any other command
+  run_return_code=$?
+elif [ ! -z ${run_e2etests} ]; then
+  echo "RUNNING THE E2E TESTS (e2etests SERVICE) (NOT app SERVICE)..."
+  $docker_compose_command run --rm e2etests "$@"
+  # NOTE return code must be caught before any other command
+  run_return_code=$?
+else
   # Specify the --service-ports option to expose app's PORTS
   # on host machine (by default docker-compose run does not
   # expose host ports)
   $docker_compose_command run --rm --service-ports app "$@"
-  # NOTE return code must be caught before any other command
-  run_return_code=$?
-else
-  echo "RUNNING THE E2E TESTS (e2etests SERVICE) (NOT app SERVICE)..."
-  $docker_compose_command run --rm e2etests "$@"
   # NOTE return code must be caught before any other command
   run_return_code=$?
 fi

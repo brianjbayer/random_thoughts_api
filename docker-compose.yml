@@ -22,3 +22,9 @@ services:
       - ${PORT:-3000}:${PORT:-3000}
     expose:
       - ${PORT:-3000}
+    healthcheck:
+      test: ["CMD", "bash", "-c", "ruby", "app_isready.rb"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 10

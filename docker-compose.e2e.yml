@@ -1,12 +1,6 @@
 version: '3.8'
 services:
   app:
-    healthcheck:
-      test: ["CMD", "bash", "-c", "ruby", "app_isready.rb"]
-      start_period: 10s
-      interval: 10s
-      timeout: 5s
-      retries: 10
     command: ./entrypoint.sh
 
   e2etests:
