@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :random_thought do
-    association :user
+    user
 
     thought { Faker::Lorem.sentence }
     mood { Faker::Lorem.sentence }
