@@ -24,7 +24,7 @@ for it...
 
 3. You must set the required environment variable `APP_JWT_SECRET`
 
-:eyes: For more information, see [PREREQUISITES.md](docs/PREREQUISITES.md)
+:eyes: For more information, see [PREREQUISITES.md](PREREQUISITES.md)
 
 ### To Develop Using the Container-Based Development Environment
 The easiest way to run the containerized development environment is with
