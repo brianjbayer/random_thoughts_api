@@ -1,7 +1,6 @@
 #---------------------------
 #--- random_thoughts_api ---
 #---------------------------
-# TODO: Convert this back to using pre-built machine images
 # Build and Run deployment image
 # docker build --no-cache -t rta .
 # docker run -it --rm -p 3000:3000 rta
@@ -17,8 +16,9 @@ FROM ${BASE_IMAGE} AS ruby-base
 #--- Base Builder Stage ---
 FROM ruby-base AS base-builder
 
-# TODO: Update bundler version
-ARG BUNDLER_VER=2.4.12
+# Use the same version of Bundler in the Gemfile.lock
+ARG BUNDLER_VERSION=2.4.15
+ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 # Install base build packages needed for both devenv and deploy builders
 ARG BASE_BUILD_PACKAGES='build-essential libpq-dev'
@@ -30,9 +30,7 @@ RUN apt-get update \
   # Update gem command to latest
   && gem update --system \
   # install bundler and rails versions
-  && gem install bundler:$BUNDLER_VER
-
-# NOTE: End of machine-specific
+  && gem install bundler:${BUNDLER_VERSION}
 
 # Copy Gemfiles
 WORKDIR /app
@@ -52,7 +50,6 @@ RUN apt-get update \
   && apt-get -y dist-upgrade \
   && apt-get -y install ${DEVENV_PACKAGES} \
   && rm -rf /var/lib/apt/lists/* \
-  # NOTE: End of machine-specific
   # Install app dependencies
   && bundle install \
     # Remove unneeded files (cached *.gem, *.o, *.c)
@@ -71,10 +68,8 @@ CMD bash
 #--- Deploy Builder Stage ---
 FROM base-builder AS deploy-builder
 
-# NOTE: App specific
 ARG BUNDLER_PATH=/usr/local/bundle
 
-# NOTE: App specific
 RUN bundle config set --local without 'development:test' \
     && bundle install \
     # Remove unneeded files (cached *.gem, *.o, *.c)
@@ -86,6 +81,10 @@ RUN bundle config set --local without 'development:test' \
 
 #--- Deploy Image ---
 FROM ruby-base AS deploy
+
+# Use the same version of Bundler in the Gemfile.lock
+ARG BUNDLER_VERSION=2.4.15
+ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 # Install runtime packages
 ARG RUNTIME_PACKAGES='postgresql-client'
@@ -107,5 +106,5 @@ COPY --from=deploy-builder --chown=deployer /usr/local/bundle/ /usr/local/bundle
 # Copy the app source
 COPY --chown=deployer . /app/
 
-# Run the server
+# Run the server with any required setup
 CMD ./entrypoint.sh
