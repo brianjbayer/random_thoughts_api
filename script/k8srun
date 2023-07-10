@@ -1,0 +1,120 @@
+#!/bin/sh
+# ----------------------------------------------------------------------
+# This script runs the project Kubernetes development environment
+#
+# TODO
+# Inspired by https://blog.8bitbuddhism.com/2022/11/12/how-to-use-environment-variables-in-a-kubernetes-manifest/
+#
+# ----------------------------------------------------------------------
+# Exit script on any errors
+set -e
+
+INGRESS_NGINX_VERSION="${INGRESS_NGINX_VERSION:=v1.8.1}"
+INGRESS_NGINX="https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-${INGRESS_NGINX_VERSION}/deploy/static/provider/cloud/deploy.yaml"
+
+INGRESS_SLEEP=${INGRESS_SLEEP:=15}
+WAIT_READY=${WAIT_READY:=120}
+kubectl_cmd='kubectl'
+
+required() {
+  local command_name="$1"
+  local verify_argument="$2"
+
+  echo "COMMAND [${command_name}] IS REQUIRED..."
+  ${command_name} "${verify_argument}" || (echo "ERROR[86]: ${command_name} must be installed" ; exit 86)
+  echo ''
+}
+
+wait_until_ready() {
+  local what="$1"
+  local ready_command="$2"
+
+  local counter=0
+  echo "WAITING FOR [${what}] WITH COMMAND [${ready_command}]..."
+  until ${ready_command} &>/dev/null ; do
+    printf "."
+    sleep 1
+    counter=$((counter + 1))
+    if [ $counter -eq ${WAIT_READY} ] ; then
+      echo "✘"
+      echo "ERROR[99]: Timed out waiting for [${what}]"
+      exit 99
+    fi
+  done
+  echo "✔ [${what}]"
+}
+
+ingress_up() {
+  echo "INGRESS: Ingress-Nginx Controller ${INGRESS_NGINX}..."
+  echo "APPLYING (BRINGING UP) INGRESS-NGINX CONTROLLER..."
+  ${kubectl_cmd} apply -f "${INGRESS_NGINX}"
+  echo ''
+
+  echo "WAITING FOR INGRESS-NGINX CONTROLLER POD TO BE READY..."
+  # FROM https://kubernetes.github.io/ingress-nginx/deploy/#pre-flight-check
+  ${kubectl_cmd} wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=120s
+  echo ''
+
+    # Still give it a few
+    echo "SLEEPING ${INGRESS_SLEEP:=15} SECONDS TO ALLOW INGRESS TO BE FULLY AVAILABLE..."
+    sleep ${INGRESS_SLEEP}
+}
+
+envsubst_current_directory_manifests() {
+  local kubectl_action="$1"
+  echo "RUNNING [${kubectl_cmd} ${kubectl_action}] AGAINST ALL FILES IN DIRECTORY..."
+  for FILE in *; do
+    echo "ORIGINAL MANIFEST FILE [${FILE}]..."
+    cat ${FILE}
+    echo ''
+    echo "ENV VAR SUBSTITUTED MANIFEST FILE [${FILE}]..."
+    envsubst < ${FILE}
+    echo ''
+    echo "ENV VAR SUBSTITUTED [${kubectl_cmd} ${kubectl_action}] on FILE [${FILE}]..."
+    envsubst < ${FILE} | ${kubectl_cmd} ${kubectl_action} -f -
+  done
+}
+
+# ------------
+# --- MAIN ---
+# ------------
+echo "CHECKING REQUIREMENTS..."
+required ${kubectl_cmd} 'version'
+required 'envsubst' '--version'
+
+echo 'CURRENT ENVIRONMENT VARIABLES...'
+env
+echo ''
+
+# Command parsing
+action="${1}"
+case "$action" in
+  "up")
+    shift
+    echo 'ENSURING STACK IS UP...'
+    ingress_up
+    envsubst_current_directory_manifests 'apply'
+    wait_until_ready "app alive" "curl -fs http://localhost/livez"
+    wait_until_ready "app ready" "curl -fs http://localhost/readyz"
+    echo 'STACK IS UP'
+  ;;
+
+  "down")
+    shift
+    echo 'ENSURING STACK IS DOWN...'
+    echo "DELETING (BRINGING DOWN) INGRESS-NGINX CONTROLLER ${INGRESS_NGINX}..."
+    ${kubectl_cmd} delete -f "${INGRESS_NGINX}"
+    echo ''
+    envsubst_current_directory_manifests 'delete'
+  ;;
+esac
+
+# if [ -z "$run_command" ]; then
+#   # No recognized actions so run all the arguments as the command"
+#   run_command="$@"
+# else
+#   echo "RUNNING Action [${action}]"
+# fi
