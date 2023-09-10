@@ -17,7 +17,7 @@ FROM ${BASE_IMAGE} AS ruby-base
 FROM ruby-base AS base-builder
 
 # Use the same version of Bundler in the Gemfile.lock
-ARG BUNDLER_VERSION=2.4.15
+ARG BUNDLER_VERSION=2.4.19
 ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 # Install base build packages needed for both devenv and deploy builders

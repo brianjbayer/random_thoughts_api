@@ -124,7 +124,7 @@ RSpec.describe 'patch /v1/users/{id}' do
     end
   end
 
-  def user_update_just_keys(update, *keys)
-    json_body_just_keys(:user, update, *keys)
+  def user_update_just_keys(update, *)
+    json_body_just_keys(:user, update, *)
   end
 end

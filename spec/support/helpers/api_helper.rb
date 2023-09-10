@@ -9,9 +9,9 @@ module ApiHelper
     {}
   end
 
-  def json_body_just_keys(top_key, update, *keys)
+  def json_body_just_keys(top_key, update, *)
     update_just_key = {}
-    update_just_key[top_key] = update[top_key].slice(*keys)
+    update_just_key[top_key] = update[top_key].slice(*)
     update_just_key
   end
 end

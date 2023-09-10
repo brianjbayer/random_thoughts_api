@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.2.2"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.0.4"
+gem "rails", "~> 7.0.8"
 
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
@@ -39,6 +39,20 @@ gem "rack-cors"
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
+
+  # - CUSTOM -
+  gem 'brakeman'
+  gem 'bundler-audit'
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'rspec-rails'
+  # Swagger specs
+  gem 'rswag-specs'
+  gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
+  gem 'simplecov', require: false
+  gem 'simplecov-console', require: false
 end
 
 group :development do
@@ -56,21 +70,6 @@ gem 'kaminari'
 # Add Swagger/OpenAPI endpoints to all environments
 gem 'rswag-api'
 gem 'rswag-ui'
-
-group :development, :test do
-  gem 'brakeman'
-  gem 'bundler-audit'
-  gem 'factory_bot_rails'
-  gem 'faker'
-  gem 'rspec-rails'
-  # Swagger specs
-  gem 'rswag-specs'
-  gem 'rubocop', require: false
-  gem 'rubocop-rails', require: false
-  gem 'rubocop-rspec', require: false
-  gem 'simplecov', require: false
-  gem 'simplecov-console', require: false
-end
 
 group :test do
   gem 'shoulda-matchers'

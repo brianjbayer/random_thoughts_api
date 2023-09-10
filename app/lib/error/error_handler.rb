@@ -27,12 +27,12 @@ module Error
           render_error_response(:bad_request, e.to_s)
         end
 
-        #- Authorization Exceptions -
+        # - Authorization Exceptions -
         rescue_from AuthorizationError do |e|
           render_error_response(:unauthorized, e.to_s)
         end
 
-        #- JWT Exceptions -
+        # - JWT Exceptions -
         # JWT::DecodeError is the base decoding error
         rescue_from JWT::DecodeError do |e|
           render_error_response(:unauthorized, e.to_s)

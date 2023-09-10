@@ -121,7 +121,7 @@ RSpec.describe 'patch /v1/random_thoughts/{id}' do
     end
   end
 
-  def random_thought_update_just_keys(update, *keys)
-    json_body_just_keys(:random_thought, update, *keys)
+  def random_thought_update_just_keys(update, *)
+    json_body_just_keys(:random_thought, update, *)
   end
 end
