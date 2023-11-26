@@ -9,7 +9,7 @@ on:
 #  Raw Branch Name: ${{ github.head_ref }}
 #  <commit-sha>: ${{ github.event.pull_request.head.sha }}
 
-# Produced images...
+# Produced multi-architecture (linux/amd64,linux/arm64) images...
 #  1. (Always) Unvetted Image: <owner/repository>_<normalized-branch>_unvetted:<commit-sha>
 #  2. (Always) Dev Environment Image: <owner/repository>_<normalized-branch>_dev:<commit-sha>
 #  3. (If vetted) Vetted_image: <owner/repository>_<normalized-branch>:<commit-sha>
@@ -22,28 +22,30 @@ jobs:
       raw_name: ${{ github.head_ref }}
 
   # Build and Push Images
-  build-and-push-branch-devenv:
+  buildx-and-push-branch-devenv:
     needs: [pr-norm-branch]
-    uses: brianjbayer/actions-image-cicd/.github/workflows/build_push_image.yml@main
+    uses: brianjbayer/actions-image-cicd/.github/workflows/buildx_push_image.yml@main
     with:
       image: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
+      platforms: "linux/amd64,linux/arm64"
       buildopts: --target devenv
     secrets:
       registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
       registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-  build-and-push-branch-unvetted:
+  buildx-and-push-branch-unvetted:
     needs: [pr-norm-branch]
-    uses: brianjbayer/actions-image-cicd/.github/workflows/build_push_image.yml@main
+    uses: brianjbayer/actions-image-cicd/.github/workflows/buildx_push_image.yml@main
     with:
       image: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_unvetted:${{ github.event.pull_request.head.sha }}
+      platforms: "linux/amd64,linux/arm64"
     secrets:
       registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
       registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
   # Vetting
   vet-code-standards:
-    needs: [pr-norm-branch, build-and-push-branch-devenv]
+    needs: [pr-norm-branch, buildx-and-push-branch-devenv]
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
@@ -53,7 +55,7 @@ jobs:
         run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -d ./script/run lint"
 
   vet-dependency-security:
-    needs: [pr-norm-branch, build-and-push-branch-devenv]
+    needs: [pr-norm-branch, buildx-and-push-branch-devenv]
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
@@ -63,7 +65,7 @@ jobs:
         run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -d ./script/run depsecscan"
 
   vet-static-security:
-    needs: [pr-norm-branch, build-and-push-branch-devenv]
+    needs: [pr-norm-branch, buildx-and-push-branch-devenv]
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
@@ -73,7 +75,7 @@ jobs:
         run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -d ./script/run statsecscan"
 
   vet-unit-tests:
-    needs: [pr-norm-branch, build-and-push-branch-devenv]
+    needs: [pr-norm-branch, buildx-and-push-branch-devenv]
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
@@ -86,7 +88,7 @@ jobs:
         run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -d ./script/run tests"
 
   vet-swagger-file-currency:
-    needs: [pr-norm-branch, build-and-push-branch-devenv]
+    needs: [pr-norm-branch, buildx-and-push-branch-devenv]
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
@@ -101,7 +103,7 @@ jobs:
         run: git diff --exit-code swagger
 
   vet-deploy-as-e2e-tests-target:
-    needs: [pr-norm-branch, build-and-push-branch-unvetted]
+    needs: [pr-norm-branch, buildx-and-push-branch-unvetted]
     runs-on: ubuntu-latest
     env:
       UNVETTED_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_unvetted:${{ github.event.pull_request.head.sha }}
@@ -122,21 +124,19 @@ jobs:
       - vet-static-security
       - vet-dependency-security
       - vet-code-standards
-      - build-and-push-branch-unvetted
+      - buildx-and-push-branch-unvetted
       - pr-norm-branch
-    uses: brianjbayer/actions-image-cicd/.github/workflows/pull_push_image.yml@main
+    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image.yml@main
     with:
-      # Pull unvetted branch image
-      pull_as: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_unvetted:${{ github.event.pull_request.head.sha }}
-      # Push Vetted Image
-      push_as: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}:${{ github.event.pull_request.head.sha }}
+      source_image: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_unvetted:${{ github.event.pull_request.head.sha }}
+      target_image: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}:${{ github.event.pull_request.head.sha }}
     secrets:
       registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
       registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
 # Vet Dev Environment Image
   vet-devenv-as-e2e-tests-target:
-    needs: [pr-norm-branch, build-and-push-branch-devenv]
+    needs: [pr-norm-branch, buildx-and-push-branch-devenv]
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
