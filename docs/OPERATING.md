@@ -1,8 +1,7 @@
 ## Operating random_thoughts_api
 
-> :eyes: Please see the [PREREQUISITES.md](docs/PREREQUISITES.md)
+> :eyes: Please see the [PREREQUISITES.md](PREREQUISITES.md)
 > for running and operating this application
-
 
 ### Database
 This project uses a Rails-supported PostgreSQL database with

@@ -50,6 +50,10 @@ RUN apt-get update \
   && apt-get -y dist-upgrade \
   && apt-get -y install ${DEVENV_PACKAGES} \
   && rm -rf /var/lib/apt/lists/* \
+  # Add support for multiple platforms
+  && bundle lock --add-platform ruby \
+  && bundle lock --add-platform x86_64-linux \
+  && bundle lock --add-platform aarch64-linux \
   # Install app dependencies
   && bundle install \
     # Remove unneeded files (cached *.gem, *.o, *.c)
@@ -71,6 +75,10 @@ FROM base-builder AS deploy-builder
 ARG BUNDLER_PATH=/usr/local/bundle
 
 RUN bundle config set --local without 'development:test' \
+    # Add support for multiple platforms
+    && bundle lock --add-platform ruby \
+    && bundle lock --add-platform x86_64-linux \
+    && bundle lock --add-platform aarch64-linux \
     && bundle install \
     # Remove unneeded files (cached *.gem, *.o, *.c)
     && rm -rf ${BUNDLER_PATH}/cache/*.gem \

@@ -88,6 +88,10 @@ health status of the application:
   (e.g. http://localhost:3000/readyz)
 
 ## Running the Application
+> :apple: The images built for this project are multi-platform
+> images that support both `linux/amd64` (e.g. x86) and
+> `linux/arm64` (i.e. Apple Silicon)
+
 The easiest way to run the application is with the docker compose
 framework using the `dockercomposerun` script.
 
