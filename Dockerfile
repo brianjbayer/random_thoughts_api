@@ -91,7 +91,7 @@ RUN bundle config set --local without 'development:test' \
 FROM ruby-base AS deploy
 
 # Use the same version of Bundler in the Gemfile.lock
-ARG BUNDLER_VERSION=2.4.15
+ARG BUNDLER_VERSION=2.5.1
 ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 # Install runtime packages
