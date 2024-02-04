@@ -10,7 +10,7 @@
 # docker run -it --rm -v $(pwd):/app -p 3000:3000 rta-dev
 
 # --- Base Image ---
-ARG BASE_IMAGE=ruby:3.2.2-slim-bookworm
+ARG BASE_IMAGE=ruby:3.2-slim-bookworm
 FROM ${BASE_IMAGE} AS ruby-base
 
 #--- Base Builder Stage ---
