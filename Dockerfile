@@ -17,7 +17,7 @@ FROM ${BASE_IMAGE} AS ruby-base
 FROM ruby-base AS base-builder
 
 # Use the same version of Bundler in the Gemfile.lock
-ARG BUNDLER_VERSION=2.4.19
+ARG BUNDLER_VERSION=2.5.6
 ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 # Install base build packages needed for both devenv and deploy builders
@@ -56,10 +56,9 @@ RUN apt-get update \
   && bundle lock --add-platform aarch64-linux \
   # Install app dependencies
   && bundle install \
-    # Remove unneeded files (cached *.gem, *.o, *.c)
-    && rm -rf ${BUNDLER_PATH}/cache/*.gem \
-    && find ${BUNDLER_PATH}/gems/ -name "*.c" -delete \
-    && find ${BUNDLER_PATH}/gems/ -name "*.o" -delete
+  # Remove unneeded files (cached *.gem, *.o, *.c)
+  && rm -rf ${BUNDLER_PATH}/cache/*.gem \
+  && find ${BUNDLER_PATH}/gems/ -name '*.[co]' -delete
 
 # --- Dev Environment Image ---
 FROM devenv-builder AS devenv
@@ -82,8 +81,7 @@ RUN bundle config set --local without 'development:test' \
     && bundle install \
     # Remove unneeded files (cached *.gem, *.o, *.c)
     && rm -rf ${BUNDLER_PATH}/cache/*.gem \
-    && find ${BUNDLER_PATH}/gems/ -name "*.c" -delete \
-    && find ${BUNDLER_PATH}/gems/ -name "*.o" -delete \
+    && find ${BUNDLER_PATH}/gems/ -name '*.[co]' -delete \
     # Configure bundler to lock to Gemfile.lock
     && bundle config --global frozen 1
 
@@ -91,7 +89,7 @@ RUN bundle config set --local without 'development:test' \
 FROM ruby-base AS deploy
 
 # Use the same version of Bundler in the Gemfile.lock
-ARG BUNDLER_VERSION=2.5.1
+ARG BUNDLER_VERSION=2.5.6
 ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 # Install runtime packages

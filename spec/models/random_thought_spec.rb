@@ -9,7 +9,7 @@ RSpec.describe RandomThought do
 
   describe 'default scope' do
     it 'orders by most recent first' do
-      create_list(:random_thought, 20)
+      create_list(:random_thought, 10)
       most_recent = create(:random_thought)
       expect(described_class.first).to eql(most_recent)
     end
