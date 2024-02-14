@@ -94,19 +94,19 @@ framework, use the `dockercomposerun` script with the `-c`
 You can also run the
 [random_thoughts_api_e2e](https://github.com/brianjbayer/random_thoughts_api_e2e)
 End-to-End (E2E) tests using the `dockercomposerun` script with
-the `-t` (E2E tests) option.  This will pull the pinned E2E
+the `-e` (E2E tests) option.  This will pull the pinned E2E
 tests image and run them against the running application container.
 
 To run the E2E tests against the development environment, run the
 following command...
 ```
-RAILS_ENV=development ./script/dockercomposerun -dt
+RAILS_ENV=development ./script/dockercomposerun -de
 ```
 
 To run the E2E tests against your own deployment image, run the
 following command...
 ```
-APP_IMAGE=rta ./script/dockercomposerun -ct
+APP_IMAGE=rta ./script/dockercomposerun -ce
 ```
 
 ### Running the Perf Tests
@@ -115,12 +115,16 @@ script with the `-p` (Perf tests) option.  This will pull the
 [grafana/k6](https://k6.io/) load test tool image and run the
 specified test script against the running application container.
 
-To specify the tests script, use the `PERFTESTS_SCRIPT` environment
-variable (e.g. `PERFTESTS_SCRIPT=./k6/user_create_stress_test.js`)
+The grafana/k6 container runs the k6 application as its entrypoint,
+so it expects a k6 command e.g. `new`, `run user_create_stress_test.js`.
 
-To run the load test for creating a user, run the following command...
+To specify the tests script directory, use the `PERF_SRC` environment
+variable (e.g. `PERF_SRC=./k6`)
+
+For example, to run the load test script `user_create_stress_test.js`
+located in your `k6` subdirectory, run the following command...
 ```
-PERFTESTS_SCRIPT=./k6/user_create_stress_test.js ./script/dockercomposerun -p
+PERF_SRC=./k6 ./script/dockercomposerun -p "run" "user_create_stress_test.js"
 ```
 
 ### Operating
