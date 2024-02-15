@@ -13,7 +13,7 @@ export const options = {
 };
 
 export default function () {
-  const create_user_url = `${__ENV.PERF_BASE_URL}/v1/users/`;
+  const create_user_url = `${__ENV.APP_BASE_URL}/v1/users/`;
   const payload = JSON.stringify({
     user: {
       email: `${uuidv4()}@test.org`,

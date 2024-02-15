@@ -1,17 +1,20 @@
 version: '3.8'
 services:
   app:
+    # Ensure that the app server is running
     command: ./entrypoint.sh
 
   perftests:
-    image: "${PERFTESTS_IMAGE:-grafana/k6:latest}"
-    container_name: ${PERFTESTS_HOSTNAME:-perftests}
+    image: "${PERF_IMAGE:-grafana/k6:latest}"
+    container_name: ${PERF_HOSTNAME:-perftests}
     environment:
-      - PERF_BASE_URL=http://${APP_HOSTNAME:-app}:${PORT:-3000}
+      - APP_BASE_URL=http://${APP_HOSTNAME:-app}:${PORT:-3000}
     volumes:
-      # Mount the k6 script to run
-      - ${PERFTESTS_SCRIPT:-./k6/script.js}:/script.js
-    command: run /script.js
+      # Mount the k6 script source directory
+      - ${PERF_SRC:-./k6}:/k6
+    working_dir: /k6
+    # Default entrypoint is k6 Alpine base
+    # entrypoint: "/bin/ash"
     depends_on:
       app:
         condition: service_healthy

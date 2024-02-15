@@ -66,7 +66,7 @@ FROM devenv-builder AS devenv
 WORKDIR /app
 
 # Start devenv in (command line) shell
-CMD bash
+CMD ["bash"]
 
 #--- Deploy Builder Stage ---
 FROM base-builder AS deploy-builder
@@ -113,4 +113,4 @@ COPY --from=deploy-builder --chown=deployer /usr/local/bundle/ /usr/local/bundle
 COPY --chown=deployer . /app/
 
 # Run the server with any required setup
-CMD ./entrypoint.sh
+CMD ["./entrypoint.sh"]

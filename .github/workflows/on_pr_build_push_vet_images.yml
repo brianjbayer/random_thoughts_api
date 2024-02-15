@@ -113,7 +113,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: dockercomposerun e2e tests against unvetted image
-        run: "APP_IMAGE=${UNVETTED_IMAGE} ./script/dockercomposerun -ct"
+        run: "APP_IMAGE=${UNVETTED_IMAGE} ./script/dockercomposerun -ce"
 
   # Push (IF) Vetted Deploy Image
   push-branch-vetted-deploy-image:
@@ -147,4 +147,4 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: dockercomposerun e2e tests against devenv image
-        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -dt"
+        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -de"

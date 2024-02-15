@@ -17,7 +17,7 @@ export const options = {
 };
 
 export default function () {
-  const res = http.get(`${__ENV.PERF_BASE_URL}/v1/random_thoughts/`);
+  const res = http.get(`${__ENV.APP_BASE_URL}/v1/random_thoughts/`);
   check(res, {
     'is status 200': (r) => r.status === 200,
   });
