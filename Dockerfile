@@ -10,14 +10,15 @@
 # docker run -it --rm -v $(pwd):/app -p 3000:3000 rta-dev
 
 # --- Base Image ---
-ARG BASE_IMAGE=ruby:3.2-slim-bookworm
+# Ruby version must mttch that in Gemfile.lock
+ARG BASE_IMAGE=ruby:3.2.4-slim-bookworm
 FROM ${BASE_IMAGE} AS ruby-base
 
 #--- Base Builder Stage ---
 FROM ruby-base AS base-builder
 
 # Use the same version of Bundler in the Gemfile.lock
-ARG BUNDLER_VERSION=2.5.6
+ARG BUNDLER_VERSION=2.5.10
 ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 # Install base build packages needed for both devenv and deploy builders
