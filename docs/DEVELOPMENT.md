@@ -37,6 +37,9 @@ the docker compose framework using the `dockercomposerun` script with the
 This will pull and run the latest development environment image
 of this project along with the latest `postgres` image.
 
+> :fast_forward: The docker compose framework provides default
+> values for `SECRET_KEY_BASE` and `APP_JWT_SECRET` for you
+
 To exit the containerized development environment, run the
 following command ...
 ```

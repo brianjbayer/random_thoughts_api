@@ -79,9 +79,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
-      APP_JWT_SECRET: ${{ secrets.APP_JWT_SECRET }}
+      RAILS_ENV: test
     steps:
       - uses: actions/checkout@v1
       - name: dockercomposerun tests on development environment
@@ -92,9 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
-      APP_JWT_SECRET: not-used-but-needed
+      RAILS_ENV: test
     steps:
       - uses: actions/checkout@v1
       - name: dockercomposerun swaggerize on development environment
@@ -140,9 +136,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DEVENV_IMAGE: ${{ github.repository }}_${{ needs.pr-norm-branch.outputs.name }}_dev:${{ github.event.pull_request.head.sha }}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
-      APP_JWT_SECRET: ${{ secrets.APP_JWT_SECRET }}
       RAILS_ENV: development
     steps:
       - uses: actions/checkout@v1
