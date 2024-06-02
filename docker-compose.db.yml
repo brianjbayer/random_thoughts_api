@@ -1,7 +1,12 @@
 services:
   app:
     environment:
-      DATABASE_URL: postgresql://random_thoughts_api:${POSTGRES_PASSWORD:-banana}@db:5432/random_thoughts_api
+      PGPORT: ${PGPORT:-5432}
+      # Default host is the db service
+      POSTGRES_HOST: ${POSTGRES_HOST:-db}
+      POSTGRES_DB: ${POSTGRES_DB:-random_thoughts_api}
+      POSTGRES_USER: ${POSTGRES_USER:-random_thoughts_api}
+      POSTGRES_PASSWORD:
     depends_on:
       db:
         condition: service_healthy
@@ -9,17 +14,20 @@ services:
   db:
     image: postgres
     environment:
+      # PostgreSQL environment variables
+      # By default Postgres runs on port 5432
+      PGPORT: ${PGPORT:-5432}
+      # Postgres image environment variables
       POSTGRES_HOST_AUTH_METHOD: md5
-      POSTGRES_DB: random_thoughts_api
-      POSTGRES_USER: random_thoughts_api
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-banana}
-    # By default Postgres runs on port 5432,
-    # map this to localhost port 5432 for access
+      POSTGRES_DB: ${POSTGRES_DB:-random_thoughts_api}
+      POSTGRES_USER: ${POSTGRES_USER:-random_thoughts_api}
+      POSTGRES_PASSWORD:
     ports:
-    - "5432:5432"
-    # Expose 5432 to other containers in this network
+    # Maps to host localhost port 5432
+    - "${PGPORT:-5432}:5432"
+    # Expose Port to other containers in this network
     expose:
-    - "5432"
+    - ${PGPORT:-5432}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
