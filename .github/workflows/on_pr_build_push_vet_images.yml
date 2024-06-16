@@ -51,9 +51,9 @@ jobs:
       - buildx-and-push-dev-image
     uses: brianjbayer/actions-image-cicd/.github/workflows/vet_code_standards.yml@v0.2.1
     with:
-      lint_command: "APP_IMAGE=${{ needs.image-names.outputs.dev_image }} ./script/dockercomposerun -d ./script/run lint"
-      dependency_security_command: "APP_IMAGE=${{ needs.image-names.outputs.dev_image }} ./script/dockercomposerun -d ./script/run depsecscan"
-      static_security_command: "APP_IMAGE=${{ needs.image-names.outputs.dev_image }} ./script/dockercomposerun -d ./script/run statsecscan"
+      lint_command: "APP_IMAGE=${{ needs.image-names.outputs.dev_image }} ./script/dockercomposerun -do ./script/run lint"
+      dependency_security_command: "APP_IMAGE=${{ needs.image-names.outputs.dev_image }} ./script/dockercomposerun -do ./script/run depsecscan"
+      static_security_command: "APP_IMAGE=${{ needs.image-names.outputs.dev_image }} ./script/dockercomposerun -do ./script/run statsecscan"
       tests_command: "RAILS_ENV=test APP_IMAGE=${{ needs.image-names.outputs.dev_image }} ./script/dockercomposerun -d ./script/run tests"
 
   vet-swagger-file-currency:
