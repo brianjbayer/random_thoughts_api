@@ -40,10 +40,8 @@ COPY Gemfile Gemfile.lock ./
 #--- Dev Environment Builder Stage ---
 FROM base-builder AS devenv-builder
 
-# NOTE: Machine specific
 ARG DEVENV_PACKAGES='git vim curl postgresql-client'
 
-# NOTE: App specific
 ARG BUNDLER_PATH=/usr/local/bundle
 
 # Install dev environment specific build packages
