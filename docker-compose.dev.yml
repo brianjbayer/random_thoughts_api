@@ -5,14 +5,6 @@ services:
       - ${APP_SRC:-.}:/app
     environment:
       RAILS_ENV: ${RAILS_ENV:-development}
-      POSTGRES_DB: "${POSTGRES_DB:-random_thoughts_api}_${RAILS_ENV:-development}"
-      # For development environment use default secrets
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-banana}
       # To generate secret keys `openssl rand -hex 64`
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:-dev_b2b05a5b3793a9d416fecb7799b662826aadf190729987055bfb794ba474ba5582187d238f8b4d851e8af02885737a26d370243458dac53ce29fb6dbcfc140ac}
       APP_JWT_SECRET: ${APP_JWT_SECRET:-dev_2748a9c0fa8244a555620c075aa7902e1fae951fee1a5f30fa9f96a3d8a7e9d48594a83ec5af6af6b7aeef6da8e021fce44106206b3dce3c174beeaa5420ab33}
-
-  db:
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-random_thoughts_api}_${RAILS_ENV:-development}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-banana}
