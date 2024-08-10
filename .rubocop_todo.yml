@@ -140,6 +140,7 @@ Style/FrozenStringLiteralComment:
     # CUSTOM EXCLUDES
     # app_isready is a script so first line MUST be shbang
     - 'app_isready.rb'
+    - 'app_is'
 
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).

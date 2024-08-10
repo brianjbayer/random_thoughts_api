@@ -24,6 +24,6 @@ end
 
 # rubocop:disable Style/TernaryParentheses
 puts "Received response code [#{response.code}]"
-exit_code = (response.code == 200) ? 0 : 1
+exit_code = (response.code == '200') ? 0 : 1
 # rubocop:enable Style/TernaryParentheses
 exit(exit_code)
