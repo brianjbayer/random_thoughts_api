@@ -11,14 +11,14 @@
 
 # --- Base Image ---
 # Ruby version must mttch that in Gemfile.lock
-ARG BASE_IMAGE=ruby:3.3.4-slim-bookworm
+ARG BASE_IMAGE=ruby:3.3.5-slim-bookworm
 FROM ${BASE_IMAGE} AS ruby-base
 
 #--- Base Builder Stage ---
 FROM ruby-base AS base-builder
 
 # Use the same version of Bundler in the Gemfile.lock
-ARG BUNDLER_VERSION=2.5.17
+ARG BUNDLER_VERSION=2.5.19
 ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 # Install base build packages needed for both devenv and deploy builders
@@ -88,7 +88,7 @@ RUN bundle config set --local without 'development:test' \
 FROM ruby-base AS deploy
 
 # Use the same version of Bundler in the Gemfile.lock
-ARG BUNDLER_VERSION=2.5.14
+ARG BUNDLER_VERSION=2.5.19
 ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 # Install runtime packages
