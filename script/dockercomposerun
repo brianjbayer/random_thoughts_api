@@ -67,7 +67,7 @@ docker_compose_command='docker compose -f docker-compose.yml '
 
 # Default is to run the app, but must specify --service-ports
 # (by default docker compose run does not expose host ports)
-run_command='run --rm --service-ports app '
+run_command='run --rm --service-ports random_thoughts_api '
 
 if [ ! -z ${run_perftests} ]; then
   docker_compose_command="${docker_compose_command} -f docker-compose.perf.yml "

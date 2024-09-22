@@ -1,5 +1,5 @@
 services:
-  app:
+  random_thoughts_api:
     # Ensure that the app server is running
     command: ./entrypoint.sh
 

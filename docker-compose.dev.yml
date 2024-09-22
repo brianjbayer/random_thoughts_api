@@ -1,5 +1,5 @@
 services:
-  app:
+  random_thoughts_api:
     image: "${APP_IMAGE:-brianjbayer/random_thoughts_api-dev:latest}"
     volumes:
       - ${APP_SRC:-.}:/app

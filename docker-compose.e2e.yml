@@ -1,5 +1,5 @@
 services:
-  app:
+  random_thoughts_api:
     command: ./entrypoint.sh
 
   e2etests:

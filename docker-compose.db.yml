@@ -1,5 +1,5 @@
 services:
-  app:
+  random_thoughts_api:
     environment:
       PGPORT: ${PGPORT:-5432}
       # Default host is the db service
