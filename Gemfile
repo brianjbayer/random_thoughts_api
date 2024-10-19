@@ -6,11 +6,12 @@ ruby "3.3.5"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.8"
 
-# FROM activesupport-7.0.8.4
-# ...was loaded from the standard library, but will no longer be part of the default gems since Ruby 3.4.0.
+# Gems no longer loaded from standard library
 gem "bigdecimal"
 gem "drb"
+gem "logger"
 gem "mutex_m"
+gem "ostruct"
 
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"

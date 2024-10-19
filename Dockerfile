@@ -18,7 +18,7 @@ FROM ${BASE_IMAGE} AS ruby-base
 FROM ruby-base AS base-builder
 
 # Use the same version of Bundler in the Gemfile.lock
-ARG BUNDLER_VERSION=2.5.19
+ARG BUNDLER_VERSION=2.5.22
 ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 # Install base build packages needed for both devenv and deploy builders
@@ -88,7 +88,7 @@ RUN bundle config set --local without 'development:test' \
 FROM ruby-base AS deploy
 
 # Use the same version of Bundler in the Gemfile.lock
-ARG BUNDLER_VERSION=2.5.19
+ARG BUNDLER_VERSION=2.5.22
 ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 # Install runtime packages
