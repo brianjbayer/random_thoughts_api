@@ -73,34 +73,16 @@ jobs:
         run: git diff --exit-code swagger
 
   # - End-to-End Tests -
+
   vet-e2e-tests-deployment:
     name: Vet E2E Tests (Deployment Image)
-    runs-on: ubuntu-latest
     needs:
       - image-names
       - buildx-and-push-unvetted-image
-    env:
-      UNVETTED_IMAGE: ${{ needs.image-names.outputs.unvetted_image }}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
-      APP_JWT_SECRET: ${{ secrets.APP_JWT_SECRET }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: dockercomposerun e2e tests against unvetted image
-        run: "APP_IMAGE=${UNVETTED_IMAGE} ./script/dockercomposerun -ce"
-
-  run-e2e-tests-development:
-    name: Run E2E Tests (Development Image)
-    runs-on: ubuntu-latest
-    needs:
-      - image-names
-      - buildx-and-push-dev-image
-    env:
-      DEVENV_IMAGE: ${{ needs.image-names.outputs.dev_image }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: dockercomposerun e2e tests against devenv image
-        run: "APP_IMAGE=${DEVENV_IMAGE} ./script/dockercomposerun -de"
+    # TODO: Use version
+    uses: brianjbayer/random_thoughts_api_e2e/.github/workflows/run_e2e_tests.yml@change-to-run-as-e2e-environment-and-test
+    with:
+      e2e_tests_command_prefix: "RANDOM_THOUGHTS_API_IMAGE=${{ needs.image-names.outputs.unvetted_image }}"
 
   # --- Promote Vetted Image If It Passes ---
 
