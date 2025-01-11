@@ -80,7 +80,7 @@ jobs:
       - image-names
       - buildx-and-push-unvetted-image
     # TODO: Use version
-    uses: brianjbayer/random_thoughts_api_e2e/.github/workflows/run_e2e_tests.yml@change-to-run-as-e2e-environment-and-test
+    uses: brianjbayer/random_thoughts_api_e2e/.github/workflows/run_e2e_tests.yml@e2e-tests-reusable-workflow
     with:
       e2e_tests_command_prefix: "RANDOM_THOUGHTS_API_IMAGE=${{ needs.image-names.outputs.unvetted_image }}"
 
