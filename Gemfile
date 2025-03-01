@@ -6,6 +6,10 @@ ruby "3.3.5"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.8"
 
+# Pin concurrent-ruby to 1.3.4 until upgrade to Rails 7.1
+# https://stackoverflow.com/questions/79360526/uninitialized-constant-activesupportloggerthreadsafelevellogger-nameerror
+gem 'concurrent-ruby', '1.3.4'
+
 # Gems no longer loaded from standard library
 gem "bigdecimal"
 gem "drb"
