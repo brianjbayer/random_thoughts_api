@@ -11,7 +11,7 @@
 
 # --- Base Image ---
 # Ruby version must mttch that in Gemfile.lock
-ARG BASE_IMAGE=ruby:3.3.5-slim-bookworm
+ARG BASE_IMAGE=ruby:3.4.2-slim-bookworm
 FROM ${BASE_IMAGE} AS ruby-base
 
 #--- Base Builder Stage ---
@@ -22,7 +22,7 @@ ARG BUNDLER_VERSION=2.6.5
 ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 # Install base build packages needed for both devenv and deploy builders
-ARG BASE_BUILD_PACKAGES='build-essential libpq-dev'
+ARG BASE_BUILD_PACKAGES='build-essential libpq-dev libyaml-dev'
 
 RUN apt-get update \
   && apt-get -y dist-upgrade \

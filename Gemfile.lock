@@ -72,6 +72,7 @@ GEM
     ast (2.4.2)
     base64 (0.2.0)
     bcrypt (3.1.20)
+    benchmark (0.4.0)
     bigdecimal (3.1.9)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
@@ -307,6 +308,7 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt (~> 3.1.7)
+  benchmark
   bigdecimal
   bootsnap
   brakeman
@@ -340,7 +342,7 @@ DEPENDENCIES
   tzinfo-data
 
 RUBY VERSION
-   ruby 3.3.5p100
+   ruby 3.4.2p28
 
 BUNDLED WITH
-   2.6.2
+   2.6.5
