@@ -17,7 +17,26 @@
       "cwe_id": [
         311
       ],
-      "note": "Currently HTTPS not required"
+      "note": "This is a false warning here as force_ssl is controlled by environment variable in default config"
+    },
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 122,
+      "fingerprint": "98b26f60d776fd41ee6f088c833725145be9aac2d7c5b33780241c273622db42",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 7.0.8.7 ends on 2025-04-01",
+      "file": "Gemfile.lock",
+      "line": 187,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        1104
+      ],
+      "note": "TODO: Update Rails"
     },
     {
       "warning_type": "Unscoped Find",
@@ -40,9 +59,8 @@
       "cwe_id": [
         285
       ],
-      "note": "Authorization not required to view Random Thoughts"
+      "note": "This is intended behavior and a false warning here"
     }
   ],
-  "updated": "2023-04-20 19:29:35 +0000",
-  "brakeman_version": "5.4.1"
+  "brakeman_version": "7.0.0"
 }
