@@ -1,12 +1,7 @@
 inherit_from: .rubocop_todo.yml
 
-# Extensions
-# require: is being deprecated for plugins:
-# https://docs.rubocop.org/rubocop/plugin_migration_guide.html.
-require:
-  - rubocop-factory_bot
-
 plugins:
+  - rubocop-factory_bot
   - rubocop-rails
   - rubocop-rspec
 
