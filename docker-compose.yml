@@ -10,11 +10,13 @@ services:
       - PORT
       - RACK_ENV
       - RAILS_ENV
+      - RAILS_ASSUME_SSL
       - RAILS_FORCE_SSL
       - RAILS_LOG_LEVEL
       - RAILS_LOG_TO_STDOUT
       - RAILS_MAX_THREADS
       - RAILS_MIN_THREADS
+      - RAILS_SERVE_STATIC_FILES
       - SECRET_KEY_BASE
       - WEB_CONCURRENCY
     ports:

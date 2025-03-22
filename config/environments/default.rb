@@ -14,7 +14,11 @@ require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   #--- SSL/HTTPS ---
-  # Note this is modified from config/environments/production.rb
+  # Note this is modified from config/environments/production.rb (Rails 7.1)
+  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
+  # Can be used together with config.force_ssl for Strict-Transport-Security and secure cookies.
+  config.assume_ssl = ENV.include?('RAILS_ASSUME_SSL')
+
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = ENV.include?('RAILS_FORCE_SSL')
 
@@ -29,9 +33,9 @@ Rails.application.configure do
   config.log_formatter = Logger::Formatter.new
 
   if ENV.include?('RAILS_LOG_TO_STDOUT')
-    logger           = ActiveSupport::Logger.new($stdout)
-    logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+    config.logger = ActiveSupport::Logger.new($stdout)
+                                         .tap  { |logger| logger.formatter = Logger::Formatter.new }
+                                         .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
   end
 
   # --- SECRET KEY BASE ---
