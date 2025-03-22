@@ -26,7 +26,7 @@ module Rack
     end
 
     def database_migrations?
-      ActiveRecord::Migration.check_pending!
+      ActiveRecord::Migration.check_all_pending!
       @body_details[:database_migrations] = 'ok'
     rescue StandardError
       @body_details[:database_migrations] = 'pending'
