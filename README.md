@@ -147,7 +147,7 @@ container-based development environment which includes
 ## Specifications
 ### Versions
 
-* Rails: 7.1.5
+* Rails: 7.2.2
 * Ruby: 3.4.2
 
 ### Support
