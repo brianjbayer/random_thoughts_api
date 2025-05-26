@@ -20,7 +20,8 @@ services:
       - SECRET_KEY_BASE
       - WEB_CONCURRENCY
     ports:
-      - ${PORT:-3000}:${PORT:-3000}
+      # Set localhost port to not conflict with e2e environment
+      - ${APP_LOCALHOST_PORT:-13000}:${PORT:-3000}
     expose:
       - ${PORT:-3000}
     healthcheck:

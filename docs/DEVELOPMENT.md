@@ -93,25 +93,6 @@ framework, use the `dockercomposerun` script with the `-c`
    APP_IMAGE=rta ./script/dockercomposerun -c
    ```
 
-### Running the End-To-End Tests
-You can also run the
-[random_thoughts_api_e2e](https://github.com/brianjbayer/random_thoughts_api_e2e)
-End-to-End (E2E) tests using the `dockercomposerun` script with
-the `-e` (E2E tests) option.  This will pull the pinned E2E
-tests image and run them against the running application container.
-
-To run the E2E tests against the development environment, run the
-following command...
-```
-RAILS_ENV=development ./script/dockercomposerun -de
-```
-
-To run the E2E tests against your own deployment image, run the
-following command...
-```
-APP_IMAGE=rta ./script/dockercomposerun -ce
-```
-
 ### Running the Perf Tests
 You can also run the Perf(ormance) tests using the `dockercomposerun`
 script with the `-p` (Perf tests) option.  This will pull the
