@@ -20,6 +20,19 @@
    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/cloud/deploy.yaml
    ```
 
+   or using helm...
+   ```helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace --set controller.progressDeadlineSeconds=null
+   ```
+
+   > :bug: the --set controller.progressDeadlineSeconds=null is https://github.com/helm/helm/issues/30878
+
+   > To stop the ingress controller...
+   > ```
+   > helm uninstall ingress-nginx --namespace ingress-nginx
+   > ```
+
 4. Wait for the `ingress-nginx-controller-*` to be `Running`...
    ```
    kubectl get pods --namespace=ingress-nginx
