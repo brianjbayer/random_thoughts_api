@@ -10,16 +10,16 @@
 # docker run -it --rm -v $(pwd):/app -p 3000:3000 rta-dev
 
 # --- Base Image ---
-# Ruby version must mttch that in Gemfile.lock
-ARG BASE_IMAGE=ruby:3.4.4-slim-bookworm
+# Ruby version must match that in Gemfile.lock
+ARG BASE_IMAGE=ruby:3.4.5-slim-trixie
 FROM ${BASE_IMAGE} AS ruby-base
+
+# Use the same version of Bundler in the Gemfile.lock
+ARG BUNDLER_VERSION=2.7.1
+ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 #--- Base Builder Stage ---
 FROM ruby-base AS base-builder
-
-# Use the same version of Bundler in the Gemfile.lock
-ARG BUNDLER_VERSION=2.6.9
-ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 # Install base build packages needed for both devenv and deploy builders
 ARG BASE_BUILD_PACKAGES='build-essential libpq-dev libyaml-dev'
@@ -87,10 +87,6 @@ RUN bundle config set --local without 'development:test' \
 #--- Deploy Image ---
 FROM ruby-base AS deploy
 
-# Use the same version of Bundler in the Gemfile.lock
-ARG BUNDLER_VERSION=2.6.9
-ENV BUNDLER_VERSION=${BUNDLER_VERSION}
-
 # Install runtime packages
 ARG RUNTIME_PACKAGES='postgresql-client'
 # Update package info since this is from base image not builder
@@ -100,7 +96,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # Add user for running app
-RUN adduser --disabled-password --gecos '' deployer
+RUN useradd -m -s /bin/bash -c '' deployer && usermod -L deployer
 USER deployer
 
 WORKDIR /app
