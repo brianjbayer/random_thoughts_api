@@ -84,3 +84,10 @@
    ```
 
    > :hourglass: It may take awhile for this command to complete
+
+### Running with helm
+:construction: WIP
+
+```
+helm install --debug --dry-run lex-rules ./random-thoughts-api-chart
+```
