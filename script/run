@@ -1,28 +1,68 @@
 #!/bin/sh
-# -----------------------------------------------
-# Project run script to run
-#   - server
-#   - rails
-#   - tests
-#   - lint
-#   - depsecscan
-#   - statsecscan
-#   - swaggerize
-#   - or it runs all arguments
-# -----------------------------------------------
+
+# --- Project Default Commands ---
+# Running tests
+tests='rspec'
+
+# Code standards
+lint='rubocop'
+depsecscan='bundle-audit check --update'
+statsecscan='brakeman --run-all-checks --color -o /dev/stdout'
+
+# Rails commands
+rails_cli='bin/rails'
+rails_server="${rails_cli} server -p ${PORT:-3000} -b ${HOST:-0.0.0.0}"
+rails_swaggerize="${rails_cli} rswag:specs:swaggerize"
+
+# Run commands in bundle environment or allow override
+be='bundle exec'
+lint_cmd="${APP_RUN_LINT_CMD:-${be} ${lint}}"
+depsecscan_cmd="${APP_RUN_DEPSECSCAN_CMD:-${be} ${depsecscan}}"
+statsecscan_cmd="${APP_RUN_STATSECSCAN_CMD:-${be} ${statsecscan}}"
+tests_cmd="${APP_RUN_TESTS_CMD:-${be} ${tests}}"
+
+rails_cli_cmd="${APP_RUN_RAILS_CMD:-${be} ${rails_cli}}"
+rails_server_cmd="${APP_RUN_RAILS_SERVER_CMD:-${be} ${rails_server}}"
+rails_swaggerize_cmd="${APP_RUN_SWAGGERIZE_CMD:-${be} ${rails_swaggerize}}"
+
+usage() {
+  cat << USAGE
+Usage: $0 [-h] [COMMAND] [ARG...]
+This is the project "run" script, executing common application tasks.
+
+If the COMMAND is not recognized, it runs all arguments as a command:
+
+COMMANDS:
+  lint:        Run the linter [$lint_cmd]
+  depsecscan:  Run the dependency security scanner [$secscan_cmd]
+  statsecscan: Run the static security scanner [$statsecscan_cmd]
+  tests:       Run the tests [$tests_cmd]
+
+  rails:       Run any rails command with arguments [$rails_cli_cmd [RAILS-COMMAND]]
+  server:      Run the rails server [$rails_server_cmd]
+  swaggerize:  Generate swagger files from specs [$rails_swaggerize_cmd]
+
+  [COMMAND] [ARG...]: Run any other command with arguments
+
+OPTIONS:
+  -h: Show this help message
+USAGE
+}
 
 # --- Functions ---
+err_exit() {
+  err_code=$1
+  err_msg="$2"
+  echo "${err_msg} (${err_code})" 1>&2
+  exit $err_code
+}
+
 run_and_exit_return_code () {
   # Exit script on any errors
   set -e
 
-  # Set to all positional parameters each expanding
-  # to a separate word
   command_to_run="$@"
-  if [ -z "$command_to_run" ]; then
-    echo "ERROR: Function requires a command argument (86)"
-    exit 86
-  fi
+  [ -z "$command_to_run" ] && err_exit 1 "Missing argument"
 
   # Run the command and preserve exit code
   echo "RUNNING [${command_to_run} ]..."
@@ -38,59 +78,45 @@ run_and_exit_return_code () {
   exit $run_return_code
 }
 
-# ------------
 # --- MAIN ---
-# ------------
 # Exit script on any errors
 set -e
 
-# set run command if recognized action
-action="${1}"
-case "$action" in
-  "server")
-    shift
-    run_command="bundle exec bin/rails server -p ${PORT:-3000} -b ${HOST:-0.0.0.0} $@"
-  ;;
+while getopts ":h" options; do
+  case "${options}" in
+    h)
+      usage ; exit
+      ;;
+    \?)
+      usage
+      err_exit 1 "Invalid Option: -$OPTARG"
+      ;;
+  esac
+done
+shift $((OPTIND-1))
 
-  "rails")
-    shift
-    run_command="bundle exec bin/rails $@"
-  ;;
+# Set command to run if recognized COMMAND
+command="${1}"
 
-  "tests")
-    shift
-    run_command="bundle exec rspec $@"
-  ;;
+[ "$command" = 'lint' ] && run_command="${lint_cmd}"
+[ "$command" = 'depsecscan' ] && run_command="${depsecscan_cmd}"
+[ "$command" = 'statsecscan' ] && run_command="${statsecscan_cmd}"
+[ "$command" = 'tests' ] && run_command="${tests_cmd}"
 
-  "lint")
-    shift
-    run_command="bundle exec rubocop $@"
-  ;;
+# Rails commands
+[ "$command" = 'rails' ] && run_command="${rails_cli_cmd}"
+[ "$command" = 'server' ] && run_command="${rails_server_cmd}"
+[ "$command" = 'swaggerize' ] && run_command="${rails_swaggerize_cmd}"
 
-  "depsecscan")
-    shift
-    run_command="bundle exec bundle-audit check --update $@"
-  ;;
-
-    "statsecscan")
-    shift
-    run_command="bundle exec brakeman --run-all-checks --color -o /dev/stdout $@"
-  ;;
-
-  "swaggerize")
-    shift
-    run_command="bundle exec bin/rails rswag:specs:swaggerize $@"
-  ;;
-esac
-
-if [ -z "$run_command" ]; then
-  # No recognized actions so run all the arguments as the command"
-  run_command="$@"
+if [ -n "$run_command" ]; then
+  shift
+  run_command="${run_command} $@"
+  echo "RUNNING COMMAND [${action}]"
 else
-  echo "RUNNING Action [${action}]"
+# No recognized actions so run all the arguments as the command"
+  run_command="$@"
 fi
 
 # Run the command and exit passing any arguments
 run_and_exit_return_code "$run_command"
-echo "ERROR: should have exited!!! (99)"
-exit 99
+err_exit 99 "LOGIC ERROR"
