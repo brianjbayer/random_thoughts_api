@@ -1,6 +1,7 @@
 services:
   app:
     image: brianjbayer/random_thoughts_api:${APP_TAG:-latest}
+    platform: ${APP_IMAGE_PLATFORM:-}
     container_name: ${APP_HOSTNAME:-app}
     environment:
       # App-specific configuration
