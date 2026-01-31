@@ -1,10 +1,12 @@
 # random_thoughts_api
 
 ## What It Is
+
 This is an example of a public
 [Ruby on Rails](https://rubyonrails.org/)
 [Web API](https://wikipedia.org/wiki/Web_API)
 that contains and demonstrates...
+
 * API versioning
 * Self documentation of the API
 * JWT-based authorization (JSON Web Token) with instant
@@ -24,8 +26,10 @@ that contains and demonstrates...
   analysis and dependency scanning
 
 ## What It Does
+
 This API represents *Users* and their *RandomThoughts* which
 are represented in JSON format...
+
 ```json
 {
   "thought": "A random thought",
@@ -40,10 +44,13 @@ are represented in JSON format...
 ---
 
 ## API Versions
+
 The current and latest version of this API is version `v1`.
 
 ## Endpoints
+
 ### API Endpoints
+
 The latest version of this API contains...
 
 * **Authentication** endpoints...
@@ -71,23 +78,26 @@ The latest version of this API contains...
 > for the latest version
 
 ### Self-Documenting Root Endpoint
+
 The root endpoint (i.e. `get /`) returns the latest version of
 the application's Swagger File (i.e. OpenAPI specification) in
 JSON, thus making this application self-documenting.
 
 ### Health Check Endpoints
+
 There are two health-check endpoints for determining the current
 health status of the application:
 
 * `/livez` - a *Liveness* endpoint that indicates that the
   application is running but not necessarily healthy
-  (e.g. http://localhost:3000/livez)
+  (e.g. <http://localhost:3000/livez>)
 
 * `/readyz` - a *Readiness* endpoint that indicates that the
   application is healthy and ready for requests
-  (e.g. http://localhost:3000/readyz)
+  (e.g. <http://localhost:3000/readyz>)
 
 ## Running the Application
+>
 > :apple: The images built for this project are multi-platform
 > images that support both `linux/amd64` (e.g. x86) and
 > `linux/arm64` (i.e. Apple Silicon)
@@ -99,7 +109,9 @@ This will pull the latest docker image of this project and run
 the server along with an orchestrated PostgreSQL container.
 
 ### Prerequisites
+
 In order to run this application...
+
 1. You must have Docker installed and running on your host
    machine
 
@@ -112,19 +124,22 @@ In order to run this application...
 > [PREREQUISITES.md](docs/PREREQUISITES.md)
 
 ### Running the Application Server
+
 To run the server using the docker compose framework, run
 the following command
+
 ```
 ./script/dockercomposerun
 ```
 
 ### Mappings to Host Machine
+
 The containers in the docker compose framework have their
 ports mapped to the host machine (i.e. `localhost`) for
 visibility and access.
 
 * The running Rails server in the application container is mapped to
-  http://localhost:3000 by default
+  <http://localhost:3000> by default
 
 * The PostgreSQL container is mapped to `localhost:5432` and can
   be accessed on the host machine with the database connection string
@@ -132,10 +147,12 @@ visibility and access.
   (e.g. `psql postgresql://random_thoughts_api:banana@localhost:5432/random_thoughts_api`)
 
 ### Swagger UI
+
 Once the application is running, the Swagger UI is located at
-http://localhost:3000/api-docs/
+<http://localhost:3000/api-docs/>
 
 ## Development
+
 This project can be developed using the supplied
 container-based development environment which includes
 `vim`, `git`, `curl`, and `psql`.
@@ -145,6 +162,7 @@ container-based development environment which includes
 ---
 
 ## Specifications
+
 ### Versions
 
 * Rails: 7.2.2
