@@ -78,8 +78,8 @@ RSpec.describe 'v1/random_thoughts', swagger_doc: 'v1/swagger.yaml' do
 
       response(422, 'unprocessable entity') do
         let(:random_thought) { build_random_thought_body(build(:random_thought, :empty)) }
-        msg = "Validation failed: Thought can't be blank, Mood can't be blank"
-        it_behaves_like 'unprocessable entity schema', msg
+        it_behaves_like 'unprocessable entity schema',
+                        "Validation failed: Thought can't be blank, Mood can't be blank"
         run_test!
       end
     end
@@ -141,8 +141,8 @@ RSpec.describe 'v1/random_thoughts', swagger_doc: 'v1/swagger.yaml' do
       end
 
       response(422, 'unprocessable entity') do
-        msg = "Validation failed: Thought can't be blank, Mood can't be blank"
-        it_behaves_like 'unprocessable entity schema', msg
+        it_behaves_like 'unprocessable entity schema',
+                        "Validation failed: Thought can't be blank, Mood can't be blank"
         let(:empty_values) { build_random_thought_body(build(:random_thought, :empty)) }
         let(:update) { empty_values }
         run_test!
