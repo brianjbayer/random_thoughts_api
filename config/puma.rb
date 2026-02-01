@@ -29,6 +29,14 @@ port ENV.fetch("PORT", 3000)
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
 
+# Rails 8: Multi-process workers for container deployments (12-factor app)
+# In development/containers: set to 0 (threads-only mode)
+# In production: scale with CPU count or explicit ENV
+workers ENV.fetch("PUMA_WORKERS", 0)
+
+# Rails 8: Preload app for multi-process mode (improves memory efficiency)
+preload_app! if ENV.include?("PUMA_PRELOAD_APP")
+
 # Specify the PID file. Defaults to tmp/pids/server.pid in development.
 # In other environments, only set the PID file if requested.
 pidfile ENV["PIDFILE"] if ENV["PIDFILE"]

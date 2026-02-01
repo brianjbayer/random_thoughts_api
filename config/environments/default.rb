@@ -49,4 +49,9 @@ Rails.application.configure do
   # Make all (i.e. development) environments the same
   # which is allow all hosts
   config.hosts.clear
+
+  #--- RAILS 8.1 BEHAVIOR ---
+  # Rails 8.1: Preserve timezone when converting to time
+  # See: https://guides.rubyonrails.org/configuring.html#config-active-support-to-time-preserves-timezone
+  config.active_support.to_time_preserves_timezone = :zone
 end

@@ -165,7 +165,7 @@ container-based development environment which includes
 
 ### Versions
 
-* Rails: 7.2.2
+* Rails: 8.0.4
 * Ruby: 4.0.1
 
 ### Support
