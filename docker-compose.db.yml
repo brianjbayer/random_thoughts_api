@@ -4,8 +4,8 @@ services:
       PGPORT: ${PGPORT:-5432}
       # Is (matches) the db service
       POSTGRES_HOST: ${POSTGRES_HOST:-db}
-      POSTGRES_DB: ${POSTGRES_DB:-random_thoughts_api}_${RAILS_ENV:-development}
-      POSTGRES_USER: ${POSTGRES_USER:-random_thoughts_api}_${RAILS_ENV:-development}
+      POSTGRES_DB: ${POSTGRES_DB:-random_thoughts_api}
+      POSTGRES_USER: ${POSTGRES_USER:-random_thoughts_api}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-banana}
     depends_on:
       db:
@@ -18,11 +18,11 @@ services:
       # By default Postgres runs on port 5432
       PGPORT: ${PGPORT:-5432}
       # For happy container (logs), set internal user to POSTGRES_DB/POSTGRES_USER
-      PGUSER: ${PGUSER:-random_thoughts_api}_${RAILS_ENV:-development}
+      PGUSER: ${PGUSER:-random_thoughts_api}
       # Postgres image environment variables
       # To keep the pg container (logs) happy, make db and user the same
-      POSTGRES_DB: ${POSTGRES_DB:-random_thoughts_api}_${RAILS_ENV:-development}
-      POSTGRES_USER: ${POSTGRES_USER:-random_thoughts_api}_${RAILS_ENV:-development}
+      POSTGRES_DB: ${POSTGRES_DB:-random_thoughts_api}
+      POSTGRES_USER: ${POSTGRES_USER:-random_thoughts_api}
       POSTGRES_HOST_AUTH_METHOD: md5
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-banana}
     ports:

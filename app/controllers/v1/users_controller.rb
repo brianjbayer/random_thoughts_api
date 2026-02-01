@@ -42,10 +42,10 @@ module V1
     private
 
     def user_params
-      params.require(:user).permit(:email,
-                                   :display_name,
-                                   :password,
-                                   :password_confirmation)
+      params.expect(user: %i[email
+                             display_name
+                             password
+                             password_confirmation])
     end
 
     def find_user

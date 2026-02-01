@@ -9,6 +9,9 @@ services:
       # Rails (Puma) configuration
       - PIDFILE
       - PORT
+      - PUMA_PRELOAD_APP
+      - PUMA_WORKERS
+      - SOLID_QUEUE_IN_PUMA
       - RACK_ENV
       - RAILS_ENV
       - RAILS_ASSUME_SSL

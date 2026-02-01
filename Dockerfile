@@ -30,7 +30,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/* \
   # Update gem command to latest
   && gem update --system \
-  # install bundler and rails versions
+  # install bundler version
   && gem install bundler:${BUNDLER_VERSION}
 
 # Copy Gemfiles
@@ -43,6 +43,9 @@ FROM base-builder AS devenv-builder
 ARG DEVENV_PACKAGES='git vim curl postgresql-client'
 
 ARG BUNDLER_PATH=/usr/local/bundle
+
+ENV BUNDLE_PATH=/usr/local/bundle \
+    BUNDLE_JOBS=4
 
 # Install dev environment specific build packages
 RUN apt-get update \

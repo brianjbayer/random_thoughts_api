@@ -25,6 +25,7 @@ Layout/CommentIndentation:
 # This cop supports safe autocorrection (--autocorrect).
 Layout/EmptyLines:
   Exclude:
+    - 'config/ci.rb'
     - 'config/environments/development.rb'
 
 # Offense count: 2
@@ -123,6 +124,7 @@ Style/FrozenStringLiteralComment:
     - 'config.ru'
     - 'config/application.rb'
     - 'config/boot.rb'
+    - 'config/ci.rb'
     - 'config/environment.rb'
     - 'config/environments/development.rb'
     - 'config/environments/production.rb'
@@ -176,6 +178,7 @@ Style/StringLiterals:
     - 'config.ru'
     - 'config/application.rb'
     - 'config/boot.rb'
+    - 'config/ci.rb'
     - 'config/environment.rb'
     - 'config/environments/development.rb'
     - 'config/environments/production.rb'

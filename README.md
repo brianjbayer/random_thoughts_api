@@ -90,11 +90,11 @@ health status of the application:
 
 * `/livez` - a *Liveness* endpoint that indicates that the
   application is running but not necessarily healthy
-  (e.g. <http://localhost:3000/livez>)
+  (e.g. <http://localhost:13000/livez>)
 
 * `/readyz` - a *Readiness* endpoint that indicates that the
   application is healthy and ready for requests
-  (e.g. <http://localhost:3000/readyz>)
+  (e.g. <http://localhost:13000/readyz>)
 
 ## Running the Application
 >
@@ -139,17 +139,17 @@ ports mapped to the host machine (i.e. `localhost`) for
 visibility and access.
 
 * The running Rails server in the application container is mapped to
-  <http://localhost:3000> by default
+  <http://localhost:13000> by default
 
-* The PostgreSQL container is mapped to `localhost:5432` and can
+* The PostgreSQL container is mapped to `localhost:15432` and can
   be accessed on the host machine with the database connection string
-  `postgresql://random_thoughts_api:${POSTGRES_PASSWORD:-banana}@db:5432/random_thoughts_api`
-  (e.g. `psql postgresql://random_thoughts_api:banana@localhost:5432/random_thoughts_api`)
+  `postgresql://random_thoughts_api:${POSTGRES_PASSWORD:-banana}@db:15432/random_thoughts_api`
+  (e.g. `psql postgresql://random_thoughts_api:banana@localhost:15432/random_thoughts_api`)
 
 ### Swagger UI
 
 Once the application is running, the Swagger UI is located at
-<http://localhost:3000/api-docs/>
+<http://localhost:13000/api-docs/>
 
 ## Development
 
@@ -165,7 +165,7 @@ container-based development environment which includes
 
 ### Versions
 
-* Rails: 7.2.2
+* Rails: 8.0.4
 * Ruby: 4.0.1
 
 ### Support
