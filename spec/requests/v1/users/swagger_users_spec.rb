@@ -34,7 +34,7 @@ RSpec.describe 'v1/users', swagger_doc: 'v1/swagger.yaml' do
     get('list users') do
       consumes 'application/json'
       produces 'application/json'
-      security [bearer: []]
+      security [{ bearer: [] }]
       parameter name: 'page',
                 in: :query,
                 type: :integer,
@@ -98,7 +98,7 @@ RSpec.describe 'v1/users', swagger_doc: 'v1/swagger.yaml' do
     get('show user') do
       consumes 'application/json'
       produces 'application/json'
-      security [bearer: []]
+      security [{ bearer: [] }]
 
       response(200, 'successful') do
         # NOTE: This is intended to test different users
@@ -124,7 +124,7 @@ RSpec.describe 'v1/users', swagger_doc: 'v1/swagger.yaml' do
     patch('update user') do
       consumes 'application/json'
       produces 'application/json'
-      security [bearer: []]
+      security [{ bearer: [] }]
       parameter name: :update,
                 in: :body,
                 schema: { '$ref' => '#/components/schemas/update_user' }
@@ -165,7 +165,7 @@ RSpec.describe 'v1/users', swagger_doc: 'v1/swagger.yaml' do
     delete('delete user') do
       consumes 'application/json'
       produces 'application/json'
-      security [bearer: []]
+      security [{ bearer: [] }]
 
       response(200, 'successful') do
         let(:jwt) { valid_jwt(user) }
