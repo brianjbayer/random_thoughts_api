@@ -15,7 +15,7 @@ ARG BASE_IMAGE=ruby:4.0.1-slim-trixie
 FROM ${BASE_IMAGE} AS ruby-base
 
 # Use the same version of Bundler in the Gemfile.lock
-ARG BUNDLER_VERSION=4.0.5
+ARG BUNDLER_VERSION=4.0.6
 ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 
 #--- Base Builder Stage ---

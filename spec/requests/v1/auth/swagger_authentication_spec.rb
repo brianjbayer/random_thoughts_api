@@ -40,7 +40,7 @@ RSpec.describe 'v1/authentication', swagger_doc: 'v1/swagger.yaml' do
     delete('logout user') do
       consumes 'application/json'
       produces 'application/json'
-      security [bearer: []]
+      security [{ bearer: [] }]
 
       response(200, 'logged out') do
         # rubocop:disable RSpec/VariableName

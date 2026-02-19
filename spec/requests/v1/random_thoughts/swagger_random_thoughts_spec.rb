@@ -52,7 +52,7 @@ RSpec.describe 'v1/random_thoughts', swagger_doc: 'v1/swagger.yaml' do
     post('create random_thought') do
       consumes 'application/json'
       produces 'application/json'
-      security [bearer: []]
+      security [{ bearer: [] }]
       parameter name: :random_thought,
                 in: :body,
                 schema: { '$ref' => '#/components/schemas/create_random_thought' }
@@ -110,7 +110,7 @@ RSpec.describe 'v1/random_thoughts', swagger_doc: 'v1/swagger.yaml' do
     patch('update random_thought') do
       consumes 'application/json'
       produces 'application/json'
-      security [bearer: []]
+      security [{ bearer: [] }]
       parameter name: :update,
                 in: :body,
                 schema: { '$ref' => '#/components/schemas/update_random_thought' }
@@ -152,7 +152,7 @@ RSpec.describe 'v1/random_thoughts', swagger_doc: 'v1/swagger.yaml' do
     delete('delete random_thought') do
       consumes 'application/json'
       produces 'application/json'
-      security [bearer: []]
+      security [{ bearer: [] }]
 
       response(200, 'successful') do
         schema '$ref' => '#/components/schemas/random_thought_response'
