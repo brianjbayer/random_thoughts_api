@@ -1,0 +1,114 @@
+#!/bin/sh
+set -e
+
+usage() {
+  cat << USAGE
+This script orchestrates the app's kubernetes environment
+
+COMMANDS:
+  up: Start the app kubernetes environment
+  down: Stop the app kubernetes environment
+
+OPTIONS:
+  -o: Do not apply to  nginx-ingress controller
+  -h: Help information
+
+Usage: $0 [-ho] COMMAND
+USAGE
+}
+
+err_exit() {
+  err_code=$1
+  err_msg="$2"
+  echo "${err_msg}  --  Exit:[${err_code}]" 1>&2
+  exit $err_code
+}
+
+ingress_nginx_up() {
+  echo "STARTING NGINX INGRESS CONTROLLER VERSION [${INGRESS_NGINX_VERSION}]..."
+  ${kubectl_apply} -f "${INGRESS_NGINX}"
+
+  echo "WAITING FOR NGINX INGRESS POD..."
+  # FROM https://kubernetes.github.io/ingress-nginx/deploy/#pre-flight-check
+  ${kubectl} wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=120s
+
+  # Still give it a few
+  INGRESS_NGINX_SLEEP=${INGRESS_NGINX_SLEEP:=15}
+  i=${INGRESS_NGINX_SLEEP}
+  while [ "$i" -gt 1 ]; do printf "."; sleep 1 ; i=$((i-1)); done ; echo ''
+
+  echo "NGINX INGRESS CONTROLLER IS READY"
+}
+
+ingress_nginx_down() {
+  echo "STOPPING NGINX INGRESS CONTROLLER VERSION [${INGRESS_NGINX_VERSION}]..."
+  ${kubectl} delete -f "${INGRESS_NGINX}"
+}
+
+
+k8s_up() {
+  echo "STARTING APP K8S ENVIRONMENT..."
+  [ -z "${no_ingress}" ] && ingress_nginx_up
+
+}
+
+k8s_down() {
+  echo "STOPPING APP K8S ENVIRONMENT..."
+  [ -z "${no_ingress}" ] && ingress_nginx_down
+}
+
+
+# -- MAIN --
+
+# Handle options
+while getopts ":ho" options; do
+  case "${options}" in
+    h)
+      usage ; exit
+      ;;
+    o)
+      no_ingress=1
+      ;;
+    \?)
+      usage
+      err_exit 1 "Invalid Option: -$OPTARG"
+      ;;
+  esac
+done
+shift $((OPTIND-1))
+
+# Handle commands
+if [ $# -ne 1 ]; then
+  usage
+  err_exit 1 "missing command"
+fi
+command="$1"
+shift
+
+# This script relies on kubectl
+kubectl='kubectl'
+${kubectl} version || err_exit 127 "The ${kubectl} command is required"
+kubectl_apply="${kubectl} apply"
+
+# TODO: Use helm
+INGRESS_NGINX_VERSION="${INGRESS_NGINX_VERSION:=v1.12.2}"
+# kubectl apply -f
+#              https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.2/deploy/static/provider/cloud/deploy.yaml
+INGRESS_NGINX="https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-${INGRESS_NGINX_VERSION}/deploy/static/provider/cloud/deploy.yaml"
+
+case "${command}" in
+  up)
+    k8s_up
+    ;;
+  down)
+    k8s_down
+    ;;
+  *)
+    usage
+    err_exit 1 "Invalid command: ${command}"
+    ;;
+esac
+
