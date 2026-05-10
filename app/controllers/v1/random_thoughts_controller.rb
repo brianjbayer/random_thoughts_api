@@ -49,7 +49,9 @@ module V1
     end
 
     def find_random_thought
+      # rubocop:disable Rails/StrongParametersExpect
       @random_thought = RandomThought.find(params[:id])
+      # rubocop:enable Rails/StrongParametersExpect
     end
 
     def find_random_thought_user
