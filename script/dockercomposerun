@@ -3,12 +3,13 @@ set -e
 
 usage() {
   cat << USAGE
-Usage: $0 [-cdhop] [CMD]
+Usage: $0 [-cdhkop] [CMD]
 This script orchestrates 'docker compose run app' using the docker compose framework
   * Arguments are passed to the app service as the CMD (entrypoint)
   * Environment variables override app and framework defaults
 
 OPTIONS: (in override order)
+  -k: docker compose down (kills) the specified environment
   -o: Run only the application (no other services)
   -d: Run the docker-compose Dev environment
   -c: Run the docker-compose CI environment (must specify APP_IMAGE)
@@ -26,7 +27,7 @@ err_exit() {
 }
 
 # Handle options
-while getopts ":cdhop" options; do
+while getopts ":cdhkop" options; do
   case "${options}" in
     c)
       ci=1
@@ -36,6 +37,9 @@ while getopts ":cdhop" options; do
       ;;
     h)
       usage ; exit
+      ;;
+    k)
+      kill=1
       ;;
     o)
       app_only=1
@@ -72,6 +76,14 @@ echo "DOCKER COMPOSE RUN COMMAND: [${docker_compose_run_command}]"
 
 echo 'DOCKER COMPOSE CONFIGURATION...'
 $docker_compose_command config
+
+if [ -n "${kill}" ] ; then
+  echo 'KILLING: DOCKER-COMPOSE DOWN...'
+  set +e
+  $docker_compose_command down
+  set -e
+  exit
+fi
 
 echo 'DOCKER COMPOSE PULLING...'
 set +e ; $docker_compose_command pull ; set -e
