@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-postgresConfig
+  # namespace: random-thoughts-api
+data:
+  PGPORT: {{ .Values.postgresConfig.PGPORT | quote }}
+  POSTGRES_DB: {{ .Values.postgresConfig.POSTGRES_DB | quote }}
+  # These should be secrets
+  POSTGRES_USER: {{ .Values.postgresConfig.POSTGRES_USER | quote }}
+  POSTGRES_PASSWORD: {{ .Values.postgresConfig.POSTGRES_PASSWORD | quote }}

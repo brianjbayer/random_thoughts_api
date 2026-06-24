@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: random-thoughts-api
+data:
+  RAILS_ENV: production
+  RAILS_LOG_TO_STDOUT: enabled
+  # These should be secrets
+  APP_JWT_SECRET: 69237b2ca6f9e38b1bf7a56e2e68e311f356d413f52f9ec1d0a6be1d72dcb036e3b7c97f275318be65022bbf20e97c8c6c9d71d3d6f9a49488296e5f919c2f98
+  SECRET_KEY_BASE: dc18e6b39871748ffc19280814f8df7b7b212d9dbc403c6eb7dfab4802bca1cd50c2f65e1bbcedcfdfe3072ab54f593b2a178b2bea689dc8b75a20fef1220951
