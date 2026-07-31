@@ -17,8 +17,10 @@ module V1
       end
 
       def render_error_response(error, message)
-        status = Rack::Utils.status_code(error)
-        json = { status:, error:, message: }.to_json
+        error_name = error.to_s
+        rack_error = error_name == 'unprocessable_entity' ? :unprocessable_content : error
+        status = Rack::Utils.status_code(rack_error)
+        json = { status:, error: error_name, message: }.to_json
         render json:, status:
       end
     end
