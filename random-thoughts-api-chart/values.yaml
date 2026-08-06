@@ -1,0 +1,7 @@
+postgresConfig:
+  PGPORT: "5432"
+  POSTGRES_DB: random_thoughts_api
+  # These should be secrets
+  POSTGRES_USER: random_thoughts_api
+  POSTGRES_PASSWORD: banana
+
