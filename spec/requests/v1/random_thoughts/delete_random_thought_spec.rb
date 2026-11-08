@@ -28,9 +28,8 @@ RSpec.describe 'delete /v1/random_thoughts/{id}' do
 
   context "when {id} is current user's id" do
     # Ensure object to delete is created before expect block in 'is deleted...'
-    # rubocop:disable RSpec/LetSetup
+    # rubocop:disable-next RSpec/LetSetup
     let!(:object_to_delete) { random_thought }
-    # rubocop:enable RSpec/LetSetup
     let(:delete_request) { delete_random_thought(random_thought, valid_auth_jwt) }
 
     before do |example|
@@ -48,9 +47,8 @@ RSpec.describe 'delete /v1/random_thoughts/{id}' do
 
   context "when {id} is different user's id" do
     # Ensure objects are created before expect block in 'is not deleted...'
-    # rubocop:disable RSpec/LetSetup
+    # rubocop:disable-next RSpec/LetSetup
     let!(:requesting_user) { user }
-    # rubocop:enable RSpec/LetSetup
     let!(:other_user_random_thought) { create(:random_thought, user: create(:user)) }
 
     let(:delete_request) { delete_random_thought(other_user_random_thought, valid_auth_jwt) }

@@ -26,9 +26,8 @@ RSpec.describe 'v1/users', swagger_doc: 'v1/swagger.yaml' do
   include UserHelper
   include JwtHelper
 
-  # rubocop:disable RSpec/VariableName
+  # rubocop:disable-next RSpec/VariableName
   let(:Authorization) { "Bearer #{jwt}" }
-  # rubocop:enable RSpec/VariableName
 
   path '/v1/users' do
     get('list users') do
