@@ -19,9 +19,8 @@ RSpec.describe 'v1/random_thoughts', swagger_doc: 'v1/swagger.yaml' do
   include JwtHelper
   include RandomThoughtHelper
 
-  # rubocop:disable RSpec/VariableName
+  # rubocop:disable-next RSpec/VariableName
   let(:Authorization) { "Bearer #{jwt}" }
-  # rubocop:enable RSpec/VariableName
   let(:user) { create(:user) }
   let(:jwt) { valid_jwt(user) }
 
@@ -41,9 +40,8 @@ RSpec.describe 'v1/random_thoughts', swagger_doc: 'v1/swagger.yaml' do
                 required: false
 
       response(200, 'successful') do
-        # rubocop:disable RSpec/LetSetup
+        # rubocop:disable-next RSpec/LetSetup
         let!(:random_thought) { create(:random_thought) }
-        # rubocop:enable RSpec/LetSetup
         schema '$ref' => '#/components/schemas/paginated_random_thoughts'
         run_test!
       end

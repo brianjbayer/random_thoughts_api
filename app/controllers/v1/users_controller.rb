@@ -49,9 +49,8 @@ module V1
     end
 
     def find_user
-      # rubocop:disable Rails/StrongParametersExpect
+      # rubocop:disable-next Rails/StrongParametersExpect
       @user = User.find(params[:id])
-      # rubocop:enable Rails/StrongParametersExpect
     end
   end
 end

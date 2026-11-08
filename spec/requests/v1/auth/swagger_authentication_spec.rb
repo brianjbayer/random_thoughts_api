@@ -43,9 +43,8 @@ RSpec.describe 'v1/authentication', swagger_doc: 'v1/swagger.yaml' do
       security [{ bearer: [] }]
 
       response(200, 'logged out') do
-        # rubocop:disable RSpec/VariableName
+        # rubocop:disable-next RSpec/VariableName
         let(:Authorization) { "Bearer #{jwt}" }
-        # rubocop:enable RSpec/VariableName
         let(:jwt) { valid_jwt(create(:user)) }
 
         schema '$ref' => '#/components/schemas/logout_response'
@@ -56,9 +55,8 @@ RSpec.describe 'v1/authentication', swagger_doc: 'v1/swagger.yaml' do
       end
 
       response(401, 'unauthorized') do
-        # rubocop:disable RSpec/VariableName
+        # rubocop:disable-next RSpec/VariableName
         let(:Authorization) { '' }
-        # rubocop:enable RSpec/VariableName
         it_behaves_like 'unauthorized schema', 'Nil JSON web token'
         run_test!
       end

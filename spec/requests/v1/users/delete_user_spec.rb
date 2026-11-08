@@ -26,9 +26,8 @@ RSpec.describe 'delete /users/{id}' do
 
     context "when {id} is current user's id" do
       # Ensure object to delete is created before expect block in 'is deleted...'
-      # rubocop:disable RSpec/LetSetup
+      # rubocop:disable-next RSpec/LetSetup
       let!(:object_to_delete) { user }
-      # rubocop:enable RSpec/LetSetup
       let(:delete_request) { delete_user(user, valid_auth_jwt) }
 
       before do |example|
@@ -46,9 +45,8 @@ RSpec.describe 'delete /users/{id}' do
 
     context "when {id} is different user's id" do
       # Ensure objects are created before expect block in 'is not deleted...'
-      # rubocop:disable RSpec/LetSetup
+      # rubocop:disable-next RSpec/LetSetup
       let!(:requesting_user) { user }
-      # rubocop:enable RSpec/LetSetup
       let!(:requested_user) { create(:user) }
       let(:delete_request) { delete_user(requested_user, valid_auth_jwt) }
 
